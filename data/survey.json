@@ -1,0 +1,1692 @@
+{
+    "Personal Info": [
+        {
+            "qtype": "radio",
+            "qid": "QID74",
+            "did": "Age",
+            "qtext": "What range does your age fall into?(You can select only a single option)",
+            "qoptions": [
+                "0 - 10",
+                "11 - 20",
+                "21 - 30",
+                "31 - 40",
+                "41 - 50",
+                "51 - 60",
+                "61 - 70",
+                "71 - 80",
+                "81 - 90",
+                "91 - 100",
+                "101+"
+            ],
+            "matches": []
+        },
+        {
+            "qtype": "radio",
+            "qid": "QID75",
+            "did": "Gender",
+            "qtext": "What is your gender?(You can select only a single option)",
+            "qoptions": [
+                "Male",
+                "Female",
+                "Other"
+            ],
+            "matches": []
+        },
+        {
+            "qtype": "radio",
+            "qid": "QID76",
+            "did": "Nationality",
+            "qtext": "What region best represents your nationality?(You can select only a single option)",
+            "qoptions": [
+                "North America",
+                "South America",
+                "Europe",
+                "Africa",
+                "Middle East",
+                "South Asia",
+                "East Asia",
+                "Oceania"
+            ],
+            "matches": []
+        }
+    ],
+    "Ethnicity": [
+        {
+            "qtype": "radio",
+            "qid": "QID23",
+            "did": "ETH1",
+            "qtext": "Would you describe your ethnicity as:(You can select only a single option)",
+            "qoptions": [
+                "White",
+                "Black",
+                "Hispanic",
+                "Asian",
+                "Other",
+                "Prefer not to answer"
+            ],
+            "matches": []
+        },
+        {
+            "qid": "QID226",
+            "did": "ETHCHOOSE",
+            "qtext": "Which of these choices about ethnicity is the one that best describes you?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID133",
+            "did": "ETH2",
+            "qtext": "How important is your ethnicity to your personal identity, on a scale from Not Important (1) to Extremely Important (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Not Important",
+                "Extremely Important"
+            ]
+        }
+    ],
+    "Sexual Orientation": [
+        {
+            "qtype": "radio",
+            "qid": "QID24",
+            "did": "SOR2",
+            "qtext": "Would you describe yourself as:(You can select only a single option)",
+            "qoptions": [
+                "Heterosexual",
+                "LGBTQI+",
+                "Other",
+                "Prefer not to answer"
+            ],
+            "matches": []
+        },
+        {
+            "qid": "QID227",
+            "did": "SORCHOOSE",
+            "qtext": "Which of these choices about sexual orientation is the one that best describes you?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID112",
+            "did": "SOR1",
+            "qtext": "How important is your sexual orientation to your personal identity, on a scale from Not Important (1) to Extremely Important (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Not Important",
+                "Extremely Important"
+            ]
+        }
+    ],
+    "Family Relations": [
+        {
+            "qtype": "checkbox",
+            "qid": "QID2",
+            "did": "FAM2",
+            "qtext": "Which of these relationship roles are big parts of who you are (i.e. your self identity):(You can select one or more than one option)",
+            "qoptions": [
+                "Son/Daughter",
+                "Brother/Sister",
+                "Mother/Father",
+                "Husband/Wife/Partner",
+                "Grandfather/Grandmother",
+                "Friend"
+            ],
+            "matches": []
+        },
+        {
+            "qid": "QID225",
+            "did": "FAMCHOOSE",
+            "qtext": "Which of these choices about family relationships is the one that best describes you?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID1",
+            "did": "FAM1",
+            "qtext": "How important are your relationship roles to your personal identity, on a scale from Not Important (1) to Extremely Important (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Not Important",
+                "Extremely Important"
+            ]
+        }
+    ],
+    "Occupation": [
+        {
+            "qtype": "radio",
+            "qid": "QID15",
+            "did": "OCC2",
+            "qtext": "What type of professional occupation best describes what you do?(You can select only a single option)",
+            "qoptions": [
+                "Student",
+                "Professional",
+                "Worker/Laborer",
+                "Service",
+                "Business",
+                "Caregiver",
+                "Retired",
+                "Other"
+            ],
+            "matches": []
+        },
+        {
+            "qid": "QID16",
+            "did": "OCC3",
+            "qtext": "What is your most recent job title?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qtype": "radio",
+            "qid": "QID48",
+            "did": "OCC4",
+            "qtext": "What level would you say you work at?(You can select only a single option)",
+            "qoptions": [
+                "Junior level",
+                "Mid-level manager",
+                "Executive level",
+                "None applicable"
+            ],
+            "matches": []
+        },
+        {
+            "qid": "QID228",
+            "did": "OCCCHOOSE",
+            "qtext": "Which of these choices about occupation is the one that best describes you?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID14",
+            "did": "OCC1",
+            "qtext": "How important is your professional occupation to your personal identity, on a scale from Not Important (1) to Extremely Important (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Not Important",
+                "Extremely Important"
+            ]
+        }
+    ],
+    "Service": [
+        {
+            "qtype": "radio",
+            "qid": "QID127",
+            "did": "SER1",
+            "qtext": "Which of these forms of service are a big part of who you are (i.e your self identity)?(You can select only a single option)",
+            "qoptions": [
+                "Community Service",
+                "Military Service",
+                "Public Service",
+                "Caregiving",
+                "Volunteering",
+                "Other",
+                "None"
+            ],
+            "matches": []
+        },
+        {
+            "qtype": "radio",
+            "qid": "QID109",
+            "did": "SER2",
+            "qtext": "Which branch of the military did you serve in?(You can select only a single option)",
+            "qoptions": [
+                "Army",
+                "Air Force",
+                "Navy",
+                "Marine Corps",
+                "Coast Guard",
+                "Other",
+                "None"
+            ],
+            "matches": []
+        },
+        {
+            "qid": "QID230",
+            "did": "SERCHOOSE",
+            "qtext": "Which of these choices about service is the one that best describes you?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID129",
+            "did": "SER0",
+            "qtext": "How important is your service work to your personal identity, on a scale from Not Important (1) to Extremely Important (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Not Important",
+                "Extremely Important"
+            ]
+        }
+    ],
+    "Education Level": [
+        {
+            "qtype": "radio",
+            "qid": "QID34",
+            "did": "ED2",
+            "qtext": "Which of the following best describes your education level?(You can select only a single option)",
+            "qoptions": [
+                "High school",
+                "College/University",
+                "Graduate/Professional school",
+                "None"
+            ],
+            "matches": []
+        },
+        {
+            "qtype": "radio",
+            "qid": "QID35",
+            "did": "ED3",
+            "qtext": "Which of the following subjects best describes the focus of your education?(You can select only a single option)",
+            "qoptions": [
+                "Arts",
+                "Science & Technology",
+                "Humanities",
+                "Business",
+                "Social Sciences",
+                "None applicable"
+            ],
+            "matches": []
+        },
+        {
+            "qid": "QID231",
+            "did": "EDUCHOOSE",
+            "qtext": "Which of these choices about education is the one that best describes you?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID33",
+            "did": "ED1",
+            "qtext": "How important is your education level to your personal identity, on a scale from Not Important (1) to Extremely Important (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Not Important",
+                "Extremely Important"
+            ]
+        }
+    ],
+    "Economic Role and Status": [
+        {
+            "qtype": "radio",
+            "qid": "QID26",
+            "did": "ERS1",
+            "qtext": "Would you describe yourself as:(You can select only a single option)",
+            "qoptions": [
+                "Rich",
+                "Middle-class",
+                "Poor"
+            ],
+            "matches": []
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID126",
+            "did": "ERS2",
+            "qtext": "How do you see yourself, on a scale from Caregiver (1) to Provider (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Caregiver",
+                "Provider"
+            ]
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID82",
+            "did": "ERS3",
+            "qtext": "How do you see yourself on a scale from Lazy (1) to Hardworking (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Lazy",
+                "Hardworking"
+            ]
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID85",
+            "did": "ERS4",
+            "qtext": "How do you see yourself, on a scale from Unsuccessful (1) to Successful (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Unsuccessful",
+                "Successful"
+            ]
+        },
+        {
+            "qid": "QID253",
+            "did": "ERSCHOOSE",
+            "qtext": "Which of these choices about economic role and status is the one that best describes you?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID241",
+            "did": "ERS0",
+            "qtext": "How important is your economic role and status to your personal identity, on a scale from Not Important (1) to Extremely Important (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Not Important",
+                "Extremely Important"
+            ]
+        }
+    ],
+    "Appearance and Age": [
+        {
+            "qtype": "radio",
+            "qid": "QID27",
+            "did": "AA1",
+            "qtext": "Would you describe yourself as:(You can select only a single option)",
+            "qoptions": [
+                "Young",
+                "Middle-aged",
+                "Old"
+            ],
+            "matches": []
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID87",
+            "did": "AA2",
+            "qtext": "How do you see yourself, on a scale from Ugly (1) to Good Looking (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Ugly",
+                "Good Looking"
+            ]
+        },
+        {
+            "qid": "QID254",
+            "did": "AACHOOSE",
+            "qtext": "Which of these choices about appearance and age is the one that best describes you?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID246",
+            "did": "AA0",
+            "qtext": "How important is your appearance and age to your personal identity, on a scale from Not Important (1) to Extremely Important (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Not Important",
+                "Extremely Important"
+            ]
+        }
+    ],
+    "Personality Traits": [
+        {
+            "qtype": "likert",
+            "qid": "QID78",
+            "did": "PER1",
+            "qtext": "How do you see yourself on a scale from Introvert (1) to Extrovert (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Introvert",
+                "Extrovert"
+            ]
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID80",
+            "did": "PER2",
+            "qtext": "How do you see yourself on a scale from Thinking (1) to Feeling (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Thinking",
+                "Feeling"
+            ]
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID83",
+            "did": "PER3",
+            "qtext": "How do you see yourself on a scale from Cautious (1) to Adventurous (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Cautious",
+                "Adventurous"
+            ]
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID84",
+            "did": "PER4",
+            "qtext": "How do you see yourself on a scale from Fragile (1) to Resilient (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Fragile",
+                "Resilient"
+            ]
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID86",
+            "did": "PER5",
+            "qtext": "How do you see yourself, on a scale from Dumb (1) to Smart (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Dumb",
+                "Smart"
+            ]
+        },
+        {
+            "qid": "QID255",
+            "did": "PERCHOOSE",
+            "qtext": "Which of these choices about personality traits is the one that best describes you?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID248",
+            "did": "PER0",
+            "qtext": "How important are your personality traits to your personal identity, on a scale from Not Important (1) to Extremely Important (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Not Important",
+                "Extremely Important"
+            ]
+        }
+    ],
+    "Lifestyle": [
+        {
+            "qtype": "likert",
+            "qid": "QID88",
+            "did": "LIF1",
+            "qtext": "How do you see yourself, on a scale from Couch Potato (1) to Athletic (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Couch Potato",
+                "Athletic"
+            ]
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID91",
+            "did": "LIF2",
+            "qtext": "How do you see yourself, on a scale from Cheap (1) to Extravagant (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Cheap",
+                "Extravagant"
+            ]
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID92",
+            "did": "LIF3",
+            "qtext": "How do you see yourself, on a scale from Chaotic (1) to Structured (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Chaotic",
+                "Structured"
+            ]
+        },
+        {
+            "qtype": "radio",
+            "qid": "QID25",
+            "did": "LIF4",
+            "qtext": "Would you describe yourself as a:(You can select only a single option)",
+            "qoptions": [
+                "Dog person",
+                "Cat person",
+                "Other pet person",
+                "Not an animal person"
+            ],
+            "matches": []
+        },
+        {
+            "qid": "QID256",
+            "did": "LIFCHOOSE",
+            "qtext": "Which of these choices about lifestyle is the one that best describes you?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID250",
+            "did": "LIF0",
+            "qtext": "How important is your lifestyle to your personal identity, on a scale from Not Important (1) to Extremely Important (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Not Important",
+                "Extremely Important"
+            ]
+        }
+    ],
+    "Self Perception": [
+        {
+            "qtype": "likert",
+            "qid": "QID89",
+            "did": "SEP1",
+            "qtext": "How do you see yourself, on a scale from Sad (1) to Happy (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Sad",
+                "Happy"
+            ]
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID90",
+            "did": "SEP2",
+            "qtext": "How do you see yourself, on a scale from Bad Person (1) to Good Person (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Bad Person",
+                "Good Person"
+            ]
+        },
+        {
+            "qid": "QID257",
+            "did": "SEPCHOOSE",
+            "qtext": "Which of these choices about self-perception is the one that best describes you?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID243",
+            "did": "SEP0",
+            "qtext": "How important is your self-perception to your personal identity, on a scale from Not Important (1) to Extremely Important (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Not Important",
+                "Extremely Important"
+            ]
+        }
+    ],
+    "Health": [
+        {
+            "qtype": "radio",
+            "qid": "QID36",
+            "did": "HEL1",
+            "qtext": "Which of the following best describes how you see yourself?(You can select only a single option)",
+            "qoptions": [
+                "Healthy",
+                "Sick",
+                "Survivor",
+                "None applicable"
+            ],
+            "matches": []
+        },
+        {
+            "qtype": "radio",
+            "qid": "QID37",
+            "did": "HEL2",
+            "qtext": "Which of the following best describes how you see yourself?(You can select only a single option)",
+            "qoptions": [
+                "Neurotypical",
+                "Neurodivergent",
+                "Neither"
+            ],
+            "matches": []
+        },
+        {
+            "qtype": "radio",
+            "qid": "QID38",
+            "did": "HEL3",
+            "qtext": "Which of the following best describes how you see yourself?(You can select only a single option)",
+            "qoptions": [
+                "Able Bodied",
+                "Disabled",
+                "Neither"
+            ],
+            "matches": []
+        },
+        {
+            "qtype": "checkbox",
+            "qid": "QID40",
+            "did": "HEL4",
+            "qtext": "Which of the following medical/health conditions is a big part of who you are?(You can select one or more than one option)",
+            "qoptions": [
+                "Anxiety",
+                "Depression",
+                "Chronic Pain",
+                "Cancer",
+                "Heart Disease",
+                "Diabetes",
+                "Addiction",
+                "Other",
+                "None"
+            ],
+            "matches": []
+        },
+        {
+            "qid": "QID232",
+            "did": "HELCHOOSE",
+            "qtext": "Which of these choices about health is the one that best describes you?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID69",
+            "did": "HEL0",
+            "qtext": "How important is your current health status to your personal identity, on a scale from Not Important (1) to Extremely Important (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Not Important",
+                "Extremely Important"
+            ]
+        }
+    ],
+    "Location Identity": [
+        {
+            "qtype": "radio",
+            "qid": "QID41",
+            "did": "LOC1",
+            "qtext": "Is your self-identity most linked to your:(You can select only a single option)",
+            "qoptions": [
+                "Country",
+                "State",
+                "City",
+                "Region",
+                "None applicable"
+            ],
+            "matches": []
+        },
+        {
+            "qid": "QID113",
+            "did": "LOC6",
+            "qtext": "Please select your country(You can select only a single option)",
+            "qoptions": [
+                "United States of America",
+                "Other"
+            ],
+            "matches": []
+        },
+        {
+            "qid": "QID120",
+            "did": "LOC12",
+            "qtext": "Please select your country from this dropdown",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qid": "QID114",
+            "did": "LOC7",
+            "qtext": "Please select your state from this dropdown",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qid": "QID115",
+            "did": "LOC8",
+            "qtext": "Please select your city(You can select only a single option)",
+            "qoptions": [
+                "Boston",
+                "Chicago",
+                "Los Angeles",
+                "New York",
+                "Washington",
+                "Other"
+            ],
+            "matches": []
+        },
+        {
+            "qid": "QID121",
+            "did": "LOC13",
+            "qtext": "Please enter your city",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qid": "QID122",
+            "did": "LOC14",
+            "qtext": "Please select your regional identity(You can select only a single option)",
+            "qoptions": [
+                "Westerner",
+                "Southwesterner",
+                "Midwesterner",
+                "Northeasterner",
+                "Southerner",
+                "None applicable",
+                "New Englander"
+            ],
+            "matches": []
+        },
+        {
+            "qtype": "radio",
+            "qid": "QID42",
+            "did": "LOC2",
+            "qtext": "Is your self-identity most linked to:(You can select only a single option)",
+            "qoptions": [
+                "Where your ancestors came from",
+                "Where you were born",
+                "Where you are now",
+                "None applicable"
+            ],
+            "matches": []
+        },
+        {
+            "qid": "QID116",
+            "did": "LOC9",
+            "qtext": "Where did your ancestors come from?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qid": "QID117",
+            "did": "LOC10",
+            "qtext": "Where were you born?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qid": "QID118",
+            "did": "LOC11",
+            "qtext": "Where are you currently located?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID93",
+            "did": "LOC3",
+            "qtext": "How do you see yourself, on a scale from Immigrant (1) to Native (7)",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Immigrant",
+                "Native"
+            ]
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID94",
+            "did": "LOC4",
+            "qtext": "How do you see yourself, on a scale from Ambivalent (1) to Very Patriotic (7)",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Ambivalent",
+                "Very Patriotic"
+            ]
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID95",
+            "did": "LOC5",
+            "qtext": "How do you see yourself, on a scale from Homebody (1) to Wanderer (7)",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Homebody",
+                "Wanderer"
+            ]
+        },
+        {
+            "qid": "QID233",
+            "did": "LOCCHOOSE",
+            "qtext": "Which of these choices about location is the one that best describes you?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID70",
+            "did": "LOC0",
+            "qtext": "How important is Location Choice to your personal identity, on a scale from Not Important (1) to Extremely Important (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Not Important",
+                "Extremely Important"
+            ]
+        }
+    ],
+    "Sports": [
+        {
+            "qtype": "likert",
+            "qid": "QID96",
+            "did": "SPO2",
+            "qtext": "How do you see yourself, on a scale from Casual Sports Participant (1) to Serious Athlete (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Casual Sports Participant",
+                "Serious Athlete"
+            ]
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID97",
+            "did": "SPO3",
+            "qtext": "How do you see yourself, on a scale from Not a Sports Fan (1) to Sports Fan (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Not a Sports Fan",
+                "Sports Fan"
+            ]
+        },
+        {
+            "qtype": "radio",
+            "qid": "QID51",
+            "did": "SPO4",
+            "qtext": "Which sport is most important to you as an athlete/participant?(You can select only a single option)",
+            "qoptions": [
+                "Baseball",
+                "Basketball",
+                "Hockey",
+                "Football",
+                "Golf",
+                "Gymnastics",
+                "Rugby",
+                "Swimming",
+                "Soccer",
+                "Tennis",
+                "Other",
+                "None applicable"
+            ],
+            "matches": []
+        },
+        {
+            "qtype": "radio",
+            "qid": "QID52",
+            "did": "SPO5",
+            "qtext": "Which sport is most important to you as a fan/spectator?(You can select only a single option)",
+            "qoptions": [
+                "Baseball",
+                "Basketball",
+                "Hockey",
+                "Football",
+                "Golf",
+                "Gymnastics",
+                "Rugby",
+                "Swimming",
+                "Tennis",
+                "Soccer",
+                "Other",
+                "None applicable"
+            ],
+            "matches": []
+        },
+        {
+            "qid": "QID53",
+            "did": "SPO6",
+            "qtext": "What is your favorite sports team?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qid": "QID234",
+            "did": "SPOCHOOSE",
+            "qtext": "Which of these choices about sports is the one that best describes you?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID49",
+            "did": "SPO1",
+            "qtext": "How important are Sports to your personal identity, on a scale from Not Important (1) to Extremely Important (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Not Important",
+                "Extremely Important"
+            ]
+        }
+    ],
+    "Religion": [
+        {
+            "qtype": "radio",
+            "qid": "QID55",
+            "did": "REL2",
+            "qtext": "Which religion do you follow?(You can select only a single option)",
+            "qoptions": [
+                "Buddhism",
+                "Catholic",
+                "Hinduism",
+                "Islam",
+                "Judaism",
+                "Protestantism",
+                "Atheist",
+                "Other",
+                "None applicable"
+            ],
+            "matches": []
+        },
+        {
+            "qid": "QID235",
+            "did": "RELCHOOSE",
+            "qtext": "Which of these choices about religion is the one that best describes you?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID54",
+            "did": "REL1",
+            "qtext": "How important is Religion to your personal identity, on a scale from Not Important (1) to Extremely Important (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Not Important",
+                "Extremely Important"
+            ]
+        }
+    ],
+    "Political Views": [
+        {
+            "qtype": "radio",
+            "qid": "QID57",
+            "did": "POL2",
+            "qtext": "Which political party would you say you most associate with?(You can select only a single option)",
+            "qoptions": [
+                "Democratic",
+                "Republican",
+                "Independent",
+                "None applicable"
+            ],
+            "matches": []
+        },
+        {
+            "qtype": "radio",
+            "qid": "QID58",
+            "did": "POL3",
+            "qtext": "Which of the following categories/labels best describes your political beliefs?(You can select only a single option)",
+            "qoptions": [
+                "Liberal",
+                "Conservative",
+                "Centrist",
+                "None applicable"
+            ],
+            "matches": []
+        },
+        {
+            "qid": "QID236",
+            "did": "POLCHOOSE",
+            "qtext": "Which of these choices about politics is the one that best describes you?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID56",
+            "did": "POL1",
+            "qtext": "How important are your political beliefs to your personal identity, on a scale from Not Important (1) to Extremely Important (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Not Important",
+                "Extremely Important"
+            ]
+        }
+    ],
+    "Hobbies": [
+        {
+            "qtype": "likert",
+            "qid": "QID98",
+            "did": "HOB1",
+            "qtext": "How do you see yourself, on a scale from Indoor Person (1) to Outdoor Person (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Indoor Person",
+                "Outdoor Person"
+            ]
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID99",
+            "did": "HOB2",
+            "qtext": "How do you see yourself, on a scale from Not Creative (1) to Creative (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Not Creative",
+                "Creative"
+            ]
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID101",
+            "did": "HOB3",
+            "qtext": "How do you see yourself, on a scale from Unimaginative (1) to Artistic (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Unimaginative",
+                "Artistic"
+            ]
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID102",
+            "did": "HOB4",
+            "qtext": "How do you see yourself, on a scale from Unrefined (1) to Cultured (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Unrefined",
+                "Cultured"
+            ]
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID103",
+            "did": "HOB5",
+            "qtext": "How do you see yourself, on a scale from Declutterer (1) to Collector (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Declutterer",
+                "Collector"
+            ]
+        },
+        {
+            "qid": "QID237",
+            "did": "HOBCHOOSE",
+            "qtext": "Which of these choices about hobbies is the one that best describes you?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID71",
+            "did": "HOB0",
+            "qtext": "How important are your Hobbies to your personal identity, on a scale from Not Important (1) to Extremely Important (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Not Important",
+                "Extremely Important"
+            ]
+        }
+    ],
+    "Generation": [
+        {
+            "qtype": "radio",
+            "qid": "QID63",
+            "did": "GEN1",
+            "qtext": "Which generation do you feel you belong to?(You can select only a single option)",
+            "qoptions": [
+                "Young/MidGeneration Alpha",
+                "Generation Z (Gen Z)",
+                "Millennials (Generation Y)",
+                "Generation X",
+                "Baby Boomers",
+                "Silent Generation",
+                "None applicable"
+            ],
+            "matches": []
+        },
+        {
+            "qid": "QID238",
+            "did": "GENCHOOSE",
+            "qtext": "Which of these choices about generation is the one that best describes you?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID72",
+            "did": "GEN0",
+            "qtext": "How important is your Generation to your personal identity, on a scale from Not Important (1) to Extremely Important (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Not Important",
+                "Extremely Important"
+            ]
+        }
+    ],
+    "Entertainment": [
+        {
+            "qtype": "checkbox",
+            "qid": "QID64",
+            "did": "ENT1",
+            "qtext": "Which of the following entertainment media are important to you?(You can select one or more than one option)",
+            "qoptions": [
+                "Books",
+                "Movies and TV Shows",
+                "Music",
+                "Podcasts",
+                "Video Games",
+                "Other",
+                "None"
+            ],
+            "matches": []
+        },
+        {
+            "qtype": "radio",
+            "qid": "QID104",
+            "did": "ENT2",
+            "qtext": "Which is your favorite genre of books?(You can select only a single option)",
+            "qoptions": [
+                "Fiction",
+                "Horror",
+                "Mystery",
+                "Romance",
+                "Science Fiction",
+                "Non Fiction",
+                "Other",
+                "None"
+            ],
+            "matches": []
+        },
+        {
+            "qtype": "radio",
+            "qid": "QID105",
+            "did": "ENT3",
+            "qtext": "Which is your favorite genre of movies and TV shows?(You can select only a single option)",
+            "qoptions": [
+                "Action",
+                "Animation",
+                "Comedy",
+                "Horror",
+                "Historical",
+                "Romance",
+                "Science Fiction",
+                "Other",
+                "None"
+            ],
+            "matches": []
+        },
+        {
+            "qtype": "radio",
+            "qid": "QID106",
+            "did": "ENT4",
+            "qtext": "What is your favorite type of music?(You can select only a single option)",
+            "qoptions": [
+                "Classical",
+                "Dance",
+                "Hip-Hop",
+                "Rock",
+                "Pop",
+                "Other",
+                "None"
+            ],
+            "matches": []
+        },
+        {
+            "qtype": "radio",
+            "qid": "QID107",
+            "did": "ENT5",
+            "qtext": "Which is your favorite podcast genre?(You can select only a single option)",
+            "qoptions": [
+                "Arts",
+                "Comedy",
+                "Education",
+                "Heatlh and Fitness",
+                "Politics",
+                "Religion and Spirituality",
+                "Other",
+                "None"
+            ],
+            "matches": []
+        },
+        {
+            "qtype": "radio",
+            "qid": "QID108",
+            "did": "ENT6",
+            "qtext": "Which is your favorite video game category?(You can select only a single option)",
+            "qoptions": [
+                "Action",
+                "Adventure",
+                "Puzzle",
+                "Racing",
+                "Horror",
+                "Sports",
+                "Other",
+                "None"
+            ],
+            "matches": []
+        },
+        {
+            
+            "qid": "QID239",
+            "did": "ENTCHOOSE",
+            "qtext": "Which of these choices about entertainment is the one that best describes you?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID123",
+            "did": "ENT7",
+            "qtext": "How important are your entertainment preferences to your personal identity, on a scale from Not Important (1) to Extremely Important (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Not Important",
+                "Extremely Important"
+            ]
+        }
+    ],
+    "Social Media": [
+        {
+            "qtype": "radio",
+            "qid": "QID66",
+            "did": "SM2",
+            "qtext": "With respect to social media, would you best describe yourself as a:(You can select only a single option)",
+            "qoptions": [
+                "Creator",
+                "Influencer",
+                "Follower",
+                "None applicable"
+            ],
+            "matches": []
+        },
+        {
+            "qid": "QID240",
+            "did": "SMCHOOSE",
+            "qtext": "Which of these choices about social media is the one that best describes you?",
+            "qoptions": [],
+            "matches": []
+        },
+        {
+            "qtype": "likert",
+            "qid": "QID65",
+            "did": "SM1",
+            "qtext": "How important is social media to your personal identity, on a scale from Not Important (1) to Extremely Important (7)?",
+            "qoptions": [
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+            ],
+            "matches": [
+                "Not Important",
+                "Extremely Important"
+            ]
+        }
+    ],
+    "TopFive": [
+        {
+            "qid": "QID46",
+            "did": "T5",
+            "qtext": "From the list of categories provided, please select the five that are most important to your self-identity:",
+            "qoptions": [
+                "Ethnicity",
+                "Sexual Orientation",
+                "Family Relations",
+                "Occupation",
+                "Service",
+                "Education Level",
+                "Economic Role and Status",
+                "Appearance and Age",
+                "Personality Traits",
+                "Lifestyle",
+                "Self Perception",
+                "Health",
+                "Location Identity",
+                "Sports",
+                "Religion",
+                "Political Views",
+                "Hobbies",
+                "Generation",
+                "Entertainment",
+                "Social Media"
+            ],
+            "matches": []
+        }
+    ],
+    "Review": [
+        {
+            "qid": "QID13",
+            "did": "Review",
+            "qtext": "To help us understand which aspects are most important to your identity, please select which one in each pair is more important to you",
+            "qoptions": [
+                "Family Relations v/s Personality Traits",
+                "Health v/s Self Perception",
+                "Family Relations v/s Lifestyle",
+                "Personality Traits v/s Health",
+                "Self Perception v/s Lifestyle",
+                "Family Relations v/s Health",
+                "Personality Traits v/s Self Perception",
+                "Health v/s Lifestyle",
+                "Family Relations v/s Self Perception",
+                "Personality Traits v/s Lifestyle"
+            ],
+            "matches": []
+        }
+    ],
+    "Additional Question": [
+        {
+            "qid": "QID222",
+            "did": "AQ1",
+            "qtext": "Is there anything you would like to tell us about yourself or the survey?",
+            "qoptions": [],
+            "matches": []
+        }
+    ]
+}
