@@ -4,7 +4,7 @@
             "qtype": "radio",
             "qid": "QID74",
             "did": "Age",
-            "qtext": "What range does your age fall into?(You can select only a single option)",
+            "qtext": "What range does your age fall into?",
             "qoptions": [
                 "0 - 10",
                 "11 - 20",
@@ -24,7 +24,7 @@
             "qtype": "radio",
             "qid": "QID75",
             "did": "Gender",
-            "qtext": "What is your gender?(You can select only a single option)",
+            "qtext": "What is your gender?",
             "qoptions": [
                 "Male",
                 "Female",
@@ -36,7 +36,7 @@
             "qtype": "radio",
             "qid": "QID76",
             "did": "Nationality",
-            "qtext": "What region best represents your nationality?(You can select only a single option)",
+            "qtext": "What region best represents your nationality?",
             "qoptions": [
                 "North America",
                 "South America",
@@ -55,7 +55,7 @@
             "qtype": "radio",
             "qid": "QID23",
             "did": "ETH1",
-            "qtext": "Would you describe your ethnicity as:(You can select only a single option)",
+            "qtext": "Would you describe your ethnicity as:",
             "qoptions": [
                 "White",
                 "Black",
@@ -98,7 +98,7 @@
             "qtype": "radio",
             "qid": "QID24",
             "did": "SOR2",
-            "qtext": "Would you describe yourself as:(You can select only a single option)",
+            "qtext": "Would you describe yourself as:",
             "qoptions": [
                 "Heterosexual",
                 "LGBTQI+",
@@ -182,7 +182,7 @@
             "qtype": "radio",
             "qid": "QID15",
             "did": "OCC2",
-            "qtext": "What type of professional occupation best describes what you do?(You can select only a single option)",
+            "qtext": "What type of professional occupation best describes what you do?",
             "qoptions": [
                 "Student",
                 "Professional",
@@ -193,6 +193,10 @@
                 "Retired",
                 "Other"
             ],
+            "jump": {
+                "Student": "OCC1",
+                "Caregiver": "OCC1"
+            },
             "matches": []
         },
         {
@@ -206,7 +210,7 @@
             "qtype": "radio",
             "qid": "QID48",
             "did": "OCC4",
-            "qtext": "What level would you say you work at?(You can select only a single option)",
+            "qtext": "What level would you say you work at?",
             "qoptions": [
                 "Junior level",
                 "Mid-level manager",
@@ -247,7 +251,7 @@
             "qtype": "radio",
             "qid": "QID127",
             "did": "SER1",
-            "qtext": "Which of these forms of service are a big part of who you are (i.e your self identity)?(You can select only a single option)",
+            "qtext": "Which of these forms of service are a big part of who you are (i.e your self identity)?",
             "qoptions": [
                 "Community Service",
                 "Military Service",
@@ -263,7 +267,10 @@
             "qtype": "radio",
             "qid": "QID109",
             "did": "SER2",
-            "qtext": "Which branch of the military did you serve in?(You can select only a single option)",
+            "showOnly": {
+                "SER1": "Military Service"
+            },
+            "qtext": "Which branch of the military did you serve in?",
             "qoptions": [
                 "Army",
                 "Air Force",
@@ -307,7 +314,7 @@
             "qtype": "radio",
             "qid": "QID34",
             "did": "ED2",
-            "qtext": "Which of the following best describes your education level?(You can select only a single option)",
+            "qtext": "Which of the following best describes your education level?",
             "qoptions": [
                 "High school",
                 "College/University",
@@ -320,7 +327,7 @@
             "qtype": "radio",
             "qid": "QID35",
             "did": "ED3",
-            "qtext": "Which of the following subjects best describes the focus of your education?(You can select only a single option)",
+            "qtext": "Which of the following subjects best describes the focus of your education?",
             "qoptions": [
                 "Arts",
                 "Science & Technology",
@@ -363,7 +370,7 @@
             "qtype": "radio",
             "qid": "QID26",
             "did": "ERS1",
-            "qtext": "Would you describe yourself as:(You can select only a single option)",
+            "qtext": "Would you describe yourself as:",
             "qoptions": [
                 "Rich",
                 "Middle-class",
@@ -372,7 +379,7 @@
             "matches": []
         },
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID126",
             "did": "ERS2",
             "qtext": "How do you see yourself, on a scale from Caregiver (1) to Provider (7)?",
@@ -391,7 +398,7 @@
             ]
         },
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID82",
             "did": "ERS3",
             "qtext": "How do you see yourself on a scale from Lazy (1) to Hardworking (7)?",
@@ -410,7 +417,7 @@
             ]
         },
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID85",
             "did": "ERS4",
             "qtext": "How do you see yourself, on a scale from Unsuccessful (1) to Successful (7)?",
@@ -460,7 +467,7 @@
             "qtype": "radio",
             "qid": "QID27",
             "did": "AA1",
-            "qtext": "Would you describe yourself as:(You can select only a single option)",
+            "qtext": "Would you describe yourself as:",
             "qoptions": [
                 "Young",
                 "Middle-aged",
@@ -469,7 +476,7 @@
             "matches": []
         },
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID87",
             "did": "AA2",
             "qtext": "How do you see yourself, on a scale from Ugly (1) to Good Looking (7)?",
@@ -516,7 +523,7 @@
     ],
     "Personality Traits": [
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID78",
             "did": "PER1",
             "qtext": "How do you see yourself on a scale from Introvert (1) to Extrovert (7)?",
@@ -535,7 +542,7 @@
             ]
         },
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID80",
             "did": "PER2",
             "qtext": "How do you see yourself on a scale from Thinking (1) to Feeling (7)?",
@@ -554,7 +561,7 @@
             ]
         },
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID83",
             "did": "PER3",
             "qtext": "How do you see yourself on a scale from Cautious (1) to Adventurous (7)?",
@@ -573,7 +580,7 @@
             ]
         },
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID84",
             "did": "PER4",
             "qtext": "How do you see yourself on a scale from Fragile (1) to Resilient (7)?",
@@ -592,7 +599,7 @@
             ]
         },
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID86",
             "did": "PER5",
             "qtext": "How do you see yourself, on a scale from Dumb (1) to Smart (7)?",
@@ -639,7 +646,7 @@
     ],
     "Lifestyle": [
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID88",
             "did": "LIF1",
             "qtext": "How do you see yourself, on a scale from Couch Potato (1) to Athletic (7)?",
@@ -658,7 +665,7 @@
             ]
         },
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID91",
             "did": "LIF2",
             "qtext": "How do you see yourself, on a scale from Cheap (1) to Extravagant (7)?",
@@ -677,7 +684,7 @@
             ]
         },
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID92",
             "did": "LIF3",
             "qtext": "How do you see yourself, on a scale from Chaotic (1) to Structured (7)?",
@@ -699,7 +706,7 @@
             "qtype": "radio",
             "qid": "QID25",
             "did": "LIF4",
-            "qtext": "Would you describe yourself as a:(You can select only a single option)",
+            "qtext": "Would you describe yourself as a:",
             "qoptions": [
                 "Dog person",
                 "Cat person",
@@ -737,7 +744,7 @@
     ],
     "Self Perception": [
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID89",
             "did": "SEP1",
             "qtext": "How do you see yourself, on a scale from Sad (1) to Happy (7)?",
@@ -756,7 +763,7 @@
             ]
         },
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID90",
             "did": "SEP2",
             "qtext": "How do you see yourself, on a scale from Bad Person (1) to Good Person (7)?",
@@ -806,7 +813,7 @@
             "qtype": "radio",
             "qid": "QID36",
             "did": "HEL1",
-            "qtext": "Which of the following best describes how you see yourself?(You can select only a single option)",
+            "qtext": "Which of the following best describes how you see yourself?",
             "qoptions": [
                 "Healthy",
                 "Sick",
@@ -819,7 +826,7 @@
             "qtype": "radio",
             "qid": "QID37",
             "did": "HEL2",
-            "qtext": "Which of the following best describes how you see yourself?(You can select only a single option)",
+            "qtext": "Which of the following best describes how you see yourself?",
             "qoptions": [
                 "Neurotypical",
                 "Neurodivergent",
@@ -831,7 +838,7 @@
             "qtype": "radio",
             "qid": "QID38",
             "did": "HEL3",
-            "qtext": "Which of the following best describes how you see yourself?(You can select only a single option)",
+            "qtext": "Which of the following best describes how you see yourself?",
             "qoptions": [
                 "Able Bodied",
                 "Disabled",
@@ -889,7 +896,7 @@
             "qtype": "radio",
             "qid": "QID41",
             "did": "LOC1",
-            "qtext": "Is your self-identity most linked to your:(You can select only a single option)",
+            "qtext": "Is your self-identity most linked to your:",
             "qoptions": [
                 "Country",
                 "State",
@@ -902,7 +909,10 @@
         {
             "qid": "QID113",
             "did": "LOC6",
-            "qtext": "Please select your country(You can select only a single option)",
+            "showOnly": {
+                "LOC1": "Country"
+            },
+            "qtext": "Please select your country",
             "qoptions": [
                 "United States of America",
                 "Other"
@@ -912,6 +922,9 @@
         {
             "qid": "QID120",
             "did": "LOC12",
+            "showOnly": {
+                "LOC6": "Other"
+            },
             "qtext": "Please select your country from this dropdown",
             "qoptions": [],
             "matches": []
@@ -919,6 +932,9 @@
         {
             "qid": "QID114",
             "did": "LOC7",
+            "showOnly": {
+                "LOC1": "State"
+            },
             "qtext": "Please select your state from this dropdown",
             "qoptions": [],
             "matches": []
@@ -926,7 +942,10 @@
         {
             "qid": "QID115",
             "did": "LOC8",
-            "qtext": "Please select your city(You can select only a single option)",
+            "qtext": "Please select your city",
+            "showOnly": {
+                "LOC1": "City"
+            },
             "qoptions": [
                 "Boston",
                 "Chicago",
@@ -940,6 +959,9 @@
         {
             "qid": "QID121",
             "did": "LOC13",
+            "showOnly": {
+                "LOC8": "Other"
+            },
             "qtext": "Please enter your city",
             "qoptions": [],
             "matches": []
@@ -947,7 +969,10 @@
         {
             "qid": "QID122",
             "did": "LOC14",
-            "qtext": "Please select your regional identity(You can select only a single option)",
+            "showOnly": {
+                "LOC1": "Region"
+            },
+            "qtext": "Please select your regional identity",
             "qoptions": [
                 "Westerner",
                 "Southwesterner",
@@ -963,7 +988,7 @@
             "qtype": "radio",
             "qid": "QID42",
             "did": "LOC2",
-            "qtext": "Is your self-identity most linked to:(You can select only a single option)",
+            "qtext": "Is your self-identity most linked to:",
             "qoptions": [
                 "Where your ancestors came from",
                 "Where you were born",
@@ -976,6 +1001,9 @@
             "qid": "QID116",
             "did": "LOC9",
             "qtext": "Where did your ancestors come from?",
+            "showOnly": {
+                "LOC2": "Where your ancestors came from"
+            },
             "qoptions": [],
             "matches": []
         },
@@ -983,6 +1011,9 @@
             "qid": "QID117",
             "did": "LOC10",
             "qtext": "Where were you born?",
+            "showOnly": {
+                "LOC2": "Where you were born"
+            },
             "qoptions": [],
             "matches": []
         },
@@ -990,11 +1021,14 @@
             "qid": "QID118",
             "did": "LOC11",
             "qtext": "Where are you currently located?",
+            "showOnly": {
+                "LOC2": "Where you are now"
+            },
             "qoptions": [],
             "matches": []
         },
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID93",
             "did": "LOC3",
             "qtext": "How do you see yourself, on a scale from Immigrant (1) to Native (7)",
@@ -1013,7 +1047,7 @@
             ]
         },
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID94",
             "did": "LOC4",
             "qtext": "How do you see yourself, on a scale from Ambivalent (1) to Very Patriotic (7)",
@@ -1032,7 +1066,7 @@
             ]
         },
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID95",
             "did": "LOC5",
             "qtext": "How do you see yourself, on a scale from Homebody (1) to Wanderer (7)",
@@ -1079,7 +1113,7 @@
     ],
     "Sports": [
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID96",
             "did": "SPO2",
             "qtext": "How do you see yourself, on a scale from Casual Sports Participant (1) to Serious Athlete (7)?",
@@ -1098,7 +1132,7 @@
             ]
         },
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID97",
             "did": "SPO3",
             "qtext": "How do you see yourself, on a scale from Not a Sports Fan (1) to Sports Fan (7)?",
@@ -1120,7 +1154,7 @@
             "qtype": "radio",
             "qid": "QID51",
             "did": "SPO4",
-            "qtext": "Which sport is most important to you as an athlete/participant?(You can select only a single option)",
+            "qtext": "Which sport is most important to you as an athlete/participant?",
             "qoptions": [
                 "Baseball",
                 "Basketball",
@@ -1141,7 +1175,7 @@
             "qtype": "radio",
             "qid": "QID52",
             "did": "SPO5",
-            "qtext": "Which sport is most important to you as a fan/spectator?(You can select only a single option)",
+            "qtext": "Which sport is most important to you as a fan/spectator?",
             "qoptions": [
                 "Baseball",
                 "Basketball",
@@ -1197,7 +1231,7 @@
             "qtype": "radio",
             "qid": "QID55",
             "did": "REL2",
-            "qtext": "Which religion do you follow?(You can select only a single option)",
+            "qtext": "Which religion do you follow?",
             "qoptions": [
                 "Buddhism",
                 "Catholic",
@@ -1243,7 +1277,7 @@
             "qtype": "radio",
             "qid": "QID57",
             "did": "POL2",
-            "qtext": "Which political party would you say you most associate with?(You can select only a single option)",
+            "qtext": "Which political party would you say you most associate with?",
             "qoptions": [
                 "Democratic",
                 "Republican",
@@ -1256,7 +1290,7 @@
             "qtype": "radio",
             "qid": "QID58",
             "did": "POL3",
-            "qtext": "Which of the following categories/labels best describes your political beliefs?(You can select only a single option)",
+            "qtext": "Which of the following categories/labels best describes your political beliefs?",
             "qoptions": [
                 "Liberal",
                 "Conservative",
@@ -1294,7 +1328,7 @@
     ],
     "Hobbies": [
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID98",
             "did": "HOB1",
             "qtext": "How do you see yourself, on a scale from Indoor Person (1) to Outdoor Person (7)?",
@@ -1313,7 +1347,7 @@
             ]
         },
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID99",
             "did": "HOB2",
             "qtext": "How do you see yourself, on a scale from Not Creative (1) to Creative (7)?",
@@ -1332,7 +1366,7 @@
             ]
         },
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID101",
             "did": "HOB3",
             "qtext": "How do you see yourself, on a scale from Unimaginative (1) to Artistic (7)?",
@@ -1351,7 +1385,7 @@
             ]
         },
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID102",
             "did": "HOB4",
             "qtext": "How do you see yourself, on a scale from Unrefined (1) to Cultured (7)?",
@@ -1370,7 +1404,7 @@
             ]
         },
         {
-            "qtype": "likert",
+            "qtype": "likertTrait",
             "qid": "QID103",
             "did": "HOB5",
             "qtext": "How do you see yourself, on a scale from Declutterer (1) to Collector (7)?",
@@ -1420,7 +1454,7 @@
             "qtype": "radio",
             "qid": "QID63",
             "did": "GEN1",
-            "qtext": "Which generation do you feel you belong to?(You can select only a single option)",
+            "qtext": "Which generation do you feel you belong to?",
             "qoptions": [
                 "Young/MidGeneration Alpha",
                 "Generation Z (Gen Z)",
@@ -1480,7 +1514,10 @@
             "qtype": "radio",
             "qid": "QID104",
             "did": "ENT2",
-            "qtext": "Which is your favorite genre of books?(You can select only a single option)",
+            "showOnly": {
+                "ENT1": "Books"
+            },
+            "qtext": "Which is your favorite genre of books?",
             "qoptions": [
                 "Fiction",
                 "Horror",
@@ -1497,7 +1534,10 @@
             "qtype": "radio",
             "qid": "QID105",
             "did": "ENT3",
-            "qtext": "Which is your favorite genre of movies and TV shows?(You can select only a single option)",
+            "qtext": "Which is your favorite genre of movies and TV shows?",
+            "showOnly": {
+                "ENT1": "Movies and TV Shows"
+            },
             "qoptions": [
                 "Action",
                 "Animation",
@@ -1515,7 +1555,10 @@
             "qtype": "radio",
             "qid": "QID106",
             "did": "ENT4",
-            "qtext": "What is your favorite type of music?(You can select only a single option)",
+            "qtext": "What is your favorite type of music?",
+            "showOnly": {
+                "ENT1": "Music"
+            },
             "qoptions": [
                 "Classical",
                 "Dance",
@@ -1531,7 +1574,10 @@
             "qtype": "radio",
             "qid": "QID107",
             "did": "ENT5",
-            "qtext": "Which is your favorite podcast genre?(You can select only a single option)",
+            "qtext": "Which is your favorite podcast genre?",
+            "showOnly": {
+                "ENT1": "Podcasts"
+            },
             "qoptions": [
                 "Arts",
                 "Comedy",
@@ -1548,7 +1594,10 @@
             "qtype": "radio",
             "qid": "QID108",
             "did": "ENT6",
-            "qtext": "Which is your favorite video game category?(You can select only a single option)",
+            "qtext": "Which is your favorite video game category?",
+            "showOnly": {
+                "ENT1": "Video Games"
+            },
             "qoptions": [
                 "Action",
                 "Adventure",
@@ -1562,7 +1611,6 @@
             "matches": []
         },
         {
-            
             "qid": "QID239",
             "did": "ENTCHOOSE",
             "qtext": "Which of these choices about entertainment is the one that best describes you?",
@@ -1594,7 +1642,7 @@
             "qtype": "radio",
             "qid": "QID66",
             "did": "SM2",
-            "qtext": "With respect to social media, would you best describe yourself as a:(You can select only a single option)",
+            "qtext": "With respect to social media, would you best describe yourself as a:",
             "qoptions": [
                 "Creator",
                 "Influencer",

@@ -13,7 +13,7 @@ export default function RadioQuestion({ question, options, selectedValue, onSele
             <h2 className="text-3xl font-bold text-slate-900 mb-8 leading-tight">
                 {question}
             </h2>
-
+            <p className="text-gray-500 mb-8">Select a Single Option</p>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {options.map((option) => (
                     <button key={option} onClick={() => onSelect(option)} className={`group relative p-6 text-left border-2 rounded-xl transition-all duration-200 ${selectedValue === option ? "border-slate-900 bg-(--brand-dark) text-white shadow-lg transform-scale-[1.05]" : "border-gray-100 bg-gray-50 text-gray-700 hover:border-slate-300 hover:bg-white"}`}>

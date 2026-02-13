@@ -8,14 +8,17 @@ export const transformSurveyData = (data: any) => {
                     id: q.did,
                     slug: q.qid,
                     type: q.qtype,
-                    question: q.qtext
+                    section: section,
+                    question: q.qtext,
+                    jump: q.jump || null,
+                    showOnly: q.showOnly || null,
                 }
 
-                if (q.qtype == "radio" || q.qtype == "checkbox"){
+                if (q.qtype === "radio" || q.qtype === "checkbox"){
                     transformed.options = q.qoptions
                 }
 
-                if (q.qtype == "likert"){
+                if (q.qtype === "likert" || q.qtype === "likertTrait"){
                     transformed.labels = {
                         left: q.matches[0] || "1",
                         right: q.matches[1] || "2"
@@ -24,9 +27,22 @@ export const transformSurveyData = (data: any) => {
 
                 flatQuestions.push(transformed)
             }
+
+            else if (q.did.includes('CHOOSE')) {
+                const transformed: any = {
+                    id: q.did,
+                    slug: q.qid,
+                    type: "choose",
+                    section: section,
+                    question: q.qtext,
+                    options: []
+                }
+
+                flatQuestions.push(transformed)
+            }
         })
     }) 
 
-    console.log(flatQuestions)
+    // console.log(flatQuestions)
     return flatQuestions;
 }

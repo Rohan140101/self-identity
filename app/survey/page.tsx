@@ -5,7 +5,7 @@ import LikertQuestion from "../components/survey/LikertQuestion";
 import CheckBoxQuestion from "../components/survey/CheckBoxQuestion";
 import Header from "../components/header";
 import Footer from "../components/footer";
-import { transformSurveyData } from "@/utils/surveyUtils"; 
+import { transformSurveyData } from "@/utils/surveyUtils";
 import rawSurveyData from "@/data/survey.json"
 
 // const mockQuestions = [
@@ -29,6 +29,10 @@ import rawSurveyData from "@/data/survey.json"
 //   }
 // ];
 
+const isValidIdentityTrait = (val: string) => {
+    const junk = ["other", "none", "none applicable", "prefer not to answer", "neither"]
+    return val && !junk.includes(val.toLowerCase())
+}
 
 export default function SurveyPage() {
     const questions = useMemo(() => transformSurveyData(rawSurveyData), [])
@@ -38,27 +42,86 @@ export default function SurveyPage() {
     const currentQuestion = questions[currentIndex];
     const currentAnswer = answers[currentQuestion.id];
 
-    const handleSelect = (value: any) => {
-        if (currentQuestion.type == "checkbox"){
-            const currentArray = (currentAnswer as string[]) || [];
-            const updatedArray = currentArray.includes(value) ? currentArray.filter((item) => item!==value):
-            [...currentArray, value];
+    const getSectionTraits = (sectionName: string) => {
+        const traits: string[] = []
+        questions.forEach((q) => {
+            const answer = answers[q.id]
+            if (q.type != "choose" && answer && q.section == sectionName){
+                if (q.type === "checkbox"){
+                if (Array.isArray(answer)) {
+                    answer.forEach((a) => {
+                        if (isValidIdentityTrait(a)) {
+                            traits.push(a);
+                        }
+                    })
+                }
+            } else if (q.type === "radio") {
+                if (typeof (answer) == "string" && isValidIdentityTrait(answer)) {
+                    traits.push(answer)
+                }
+            } else if (q.type === "likertTrait") {
+                const score = Number(answer)
+                if (score >= 1 && score <= 2){
+                    traits.push(q.labels.left)
+                } else if (score >= 6 && score <= 7) {
+                    traits.push(q.labels.right)
+                }
 
-            setAnswers({...answers, [currentQuestion.id]: updatedArray})
+            }
+            }
+
+            
+            
+        })
+        return Array.from(new Set(traits))
+
+    }
+
+
+    const handleSelect = (value: any) => {
+        if (currentQuestion.type == "checkbox") {
+            const currentArray = (currentAnswer as string[]) || [];
+            const updatedArray = currentArray.includes(value) ? currentArray.filter((item) => item !== value) :
+                [...currentArray, value];
+
+            setAnswers({ ...answers, [currentQuestion.id]: updatedArray })
         } else {
-            setAnswers({...answers, [currentQuestion.id]:value})
+            setAnswers({ ...answers, [currentQuestion.id]: value })
         }
 
         
-        
+
+
+
     }
 
     const handleNext = () => {
-        if (currentIndex < questions.length - 1) {
-            setCurrentIndex(currentIndex + 1);
-        } else {
-            console.log("Survey completed with answers:", answers);
+        let nextIndex = currentIndex + 1;
+        
+
+        if (currentQuestion.jump && currentAnswer && currentQuestion.jump[currentAnswer]){
+            const target = currentQuestion.jump[currentAnswer]
+            const foundIndex = questions.findIndex(q => q.id === target)
+            if (foundIndex != -1){
+                nextIndex = foundIndex
+            }
         }
+
+        const nextQuestion = questions[nextIndex];
+        if (nextQuestion?.type === "choose") {
+            const availableTraits = getSectionTraits(nextQuestion.section)
+            if (availableTraits.length <= 1) {
+                if (availableTraits.length === 1) {
+                    setAnswers(prev => ({ ...prev, [nextQuestion.id]: availableTraits[0] }))
+                }
+                setCurrentIndex(nextIndex + 1);
+                console.log(answers)
+                return;
+            }
+        }
+        setCurrentIndex(nextIndex)
+        console.log(answers)
+
     }
 
     const isAnswered = () => {
@@ -66,7 +129,7 @@ export default function SurveyPage() {
             return false
         }
 
-        if (Array.isArray(currentAnswer)){
+        if (Array.isArray(currentAnswer)) {
             return currentAnswer.length > 0
         }
 
@@ -100,11 +163,18 @@ export default function SurveyPage() {
                                 onToggle={handleSelect} />
                         )}
 
-                        {currentQuestion.type === "likert" && (
+                        {(currentQuestion.type === "likert" || currentQuestion.type === "likertTrait") && (
                             <LikertQuestion question={currentQuestion.question}
                                 selectedValue={currentAnswer}
                                 onSelect={handleSelect}
                                 labels={currentQuestion.labels} />
+                        )}
+
+                        {currentQuestion.type === "choose" && (
+                            <RadioQuestion question={currentQuestion.question}
+                                options={getSectionTraits(currentQuestion.section) || []}
+                                selectedValue={currentAnswer}
+                                onSelect={handleSelect} />
                         )}
 
                         {/* Next Button */}
@@ -117,6 +187,8 @@ export default function SurveyPage() {
                                 {currentIndex === questions.length - 1 ? "Finish" : "Next"}
                             </button>
                         </div>
+
+                        
 
 
 
