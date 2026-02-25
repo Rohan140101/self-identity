@@ -16,8 +16,8 @@ export default function LikertQuestion({ question, selectedValue, onSelect, labe
 
 
             <div className="flex flex-col items-center">
-                <div className="flex justify-between items-center w-full max-w-xl gap-2 mb-4">
-                    <span className="text-sm font-medium text-(--brand-dark) uppercase tracking-wider w-24 text-right">
+                <div className="flex justify-between items-center w-full max-w-2xl gap-2 mb-4">
+                    <span className="text-sm font-medium text-(--brand-dark) uppercase tracking-wider w-40 text-right overflow-hidden">
                         {labels?.left || "Disagree"}
                     </span>
 
@@ -34,7 +34,7 @@ export default function LikertQuestion({ question, selectedValue, onSelect, labe
 
                     )}
 
-                    <span className="text-sm font-medium text-(--brand-dark) uppercase tracking-wider w-24 text-left">
+                    <span className="text-sm font-medium text-(--brand-dark) uppercase tracking-wider w-40 text-left overflow-hidden">
                         {labels?.right || "Agree"}
                     </span>
 

@@ -1,4 +1,4 @@
-
+import dropdownData from "@/data/dropdownOptions.json"
 export const transformSurveyData = (data: any) => {
     const flatQuestions: any[] = []
     Object.values(data).forEach((section: any) => {
@@ -6,7 +6,6 @@ export const transformSurveyData = (data: any) => {
             if (q.qtype){
                 const transformed: any = {
                     id: q.did,
-                    slug: q.qid,
                     type: q.qtype,
                     section: section,
                     question: q.qtext,
@@ -14,7 +13,7 @@ export const transformSurveyData = (data: any) => {
                     showOnly: q.showOnly || null,
                 }
 
-                if (q.qtype === "radio" || q.qtype === "checkbox"){
+                if (q.qtype === "radio" || q.qtype === "checkbox" || q.qtype === "T5"){
                     transformed.options = q.qoptions
                 }
 
@@ -23,6 +22,15 @@ export const transformSurveyData = (data: any) => {
                         left: q.matches[0] || "1",
                         right: q.matches[1] || "2"
                     };
+                }
+
+                if (q.qtype === "dropdown"){
+                    const key = q.lookupKey as keyof typeof dropdownData
+                    transformed.options = dropdownData[key] || []
+                }
+
+                if (q.qtype === "text"){
+                    transformed.placeholder = q.placeholder || "Enter Your Response.."
                 }
 
                 flatQuestions.push(transformed)
@@ -43,6 +51,6 @@ export const transformSurveyData = (data: any) => {
         })
     }) 
 
-    // console.log(flatQuestions)
+    console.log(flatQuestions)
     return flatQuestions;
 }

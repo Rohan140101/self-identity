@@ -7,6 +7,12 @@ import Header from "../components/header";
 import Footer from "../components/footer";
 import { transformSurveyData } from "@/utils/surveyUtils";
 import rawSurveyData from "@/data/survey.json"
+import DropdownQuestion from "../components/survey/DropdownQuestion";
+import TextInputQuestion from "../components/survey/TextInputQuestion";
+import TopFiveQuestion from "../components/survey/TopFiveQuestion";
+import ReviewRanking from "../components/survey/ReviewRanking";
+import { saveToGoogleSheets } from "../actions/save-survey";
+import IdentityReport from "../components/survey/IdentityReport";
 
 // const mockQuestions = [
 //   {
@@ -38,40 +44,80 @@ export default function SurveyPage() {
     const questions = useMemo(() => transformSurveyData(rawSurveyData), [])
     const [currentIndex, setCurrentIndex] = useState(0);
     const [answers, setAnswers] = useState<Record<string, any>>({});
+    const [isReportMode, setIsReportMode] = useState(false);
+    const [finalRankedIdentity, setFinalRankedIdentity] = useState<string[]>([])
+    const [analysisResult, setAnalysisResult] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState(false);
 
     const currentQuestion = questions[currentIndex];
     const currentAnswer = answers[currentQuestion.id];
+
+    const shouldShowQuestion = (question: any) => {
+        if (!question.showOnly) {
+            return true
+        }
+
+        const [parentdid, requiredValue] = Object.entries(question.showOnly)[0];
+        console.log('here2', parentdid, requiredValue)
+        const parentQuestion = questions.find(q => q.id === parentdid)
+        console.log('here5', questions)
+        console.log('here4', parentQuestion)
+        if (!parentQuestion) {
+            return true
+        }
+
+        const userSelection = answers[parentQuestion.id]
+
+        const qtype = parentQuestion.type
+        console.log('here5', qtype)
+        if (qtype === "likert" || qtype === "likertTrait") {
+            let selectedChoice = ""
+            if (userSelection >= 1 && userSelection <= 2) {
+                selectedChoice = parentQuestion.labels.left
+            } else if (userSelection >= 6 && userSelection <= 7) {
+                selectedChoice = parentQuestion.labels.right
+            }
+            return selectedChoice === requiredValue
+        }
+        if (Array.isArray(userSelection)) {
+            return userSelection.includes(requiredValue);
+        }
+
+        return userSelection === requiredValue
+
+
+    }
 
     const getSectionTraits = (sectionName: string) => {
         const traits: string[] = []
         questions.forEach((q) => {
             const answer = answers[q.id]
-            if (q.type != "choose" && answer && q.section == sectionName){
-                if (q.type === "checkbox"){
-                if (Array.isArray(answer)) {
-                    answer.forEach((a) => {
-                        if (isValidIdentityTrait(a)) {
-                            traits.push(a);
-                        }
-                    })
-                }
-            } else if (q.type === "radio") {
-                if (typeof (answer) == "string" && isValidIdentityTrait(answer)) {
-                    traits.push(answer)
-                }
-            } else if (q.type === "likertTrait") {
-                const score = Number(answer)
-                if (score >= 1 && score <= 2){
-                    traits.push(q.labels.left)
-                } else if (score >= 6 && score <= 7) {
-                    traits.push(q.labels.right)
-                }
+            if (q.type != "choose" && answer && q.section == sectionName) {
+                if (q.type === "checkbox") {
+                    if (Array.isArray(answer)) {
+                        answer.forEach((a) => {
+                            if (isValidIdentityTrait(a)) {
+                                traits.push(a);
+                            }
+                        })
+                    }
+                } else if (q.type === "radio") {
+                    if (typeof (answer) == "string" && isValidIdentityTrait(answer)) {
+                        traits.push(answer)
+                    }
+                } else if (q.type === "likertTrait") {
+                    const score = Number(answer)
+                    if (score >= 1 && score <= 2) {
+                        traits.push(q.labels.left)
+                    } else if (score >= 6 && score <= 7) {
+                        traits.push(q.labels.right)
+                    }
 
-            }
+                }
             }
 
-            
-            
+
+
         })
         return Array.from(new Set(traits))
 
@@ -89,42 +135,139 @@ export default function SurveyPage() {
             setAnswers({ ...answers, [currentQuestion.id]: value })
         }
 
-        
+
 
 
 
     }
 
     const handleNext = () => {
-        let nextIndex = currentIndex + 1;
-        
 
-        if (currentQuestion.jump && currentAnswer && currentQuestion.jump[currentAnswer]){
+        const currentQ = questions[currentIndex]
+        if (currentQ.id === "Review") {
+
+            return;
+        }
+
+
+        let nextIndex = currentIndex + 1;
+
+
+        if (currentQuestion.jump && currentAnswer && currentQuestion.jump[currentAnswer]) {
             const target = currentQuestion.jump[currentAnswer]
             const foundIndex = questions.findIndex(q => q.id === target)
-            if (foundIndex != -1){
+            if (foundIndex != -1) {
                 nextIndex = foundIndex
             }
         }
 
-        const nextQuestion = questions[nextIndex];
-        if (nextQuestion?.type === "choose") {
-            const availableTraits = getSectionTraits(nextQuestion.section)
-            if (availableTraits.length <= 1) {
-                if (availableTraits.length === 1) {
-                    setAnswers(prev => ({ ...prev, [nextQuestion.id]: availableTraits[0] }))
-                }
-                setCurrentIndex(nextIndex + 1);
-                console.log(answers)
-                return;
+        while (nextIndex < questions.length) {
+            const nextQuestion = questions[nextIndex];
+
+            if (!shouldShowQuestion(nextQuestion)) {
+                nextIndex++
+                // console.log('here3:', nextQuestion.id)
+                continue;
             }
+
+            if (nextQuestion.id === "AQ1") {
+                setIsReportMode(true)
+                return
+            }
+
+            if (nextQuestion?.type === "choose") {
+                const availableTraits = getSectionTraits(nextQuestion.section)
+                if (availableTraits.length <= 1) {
+                    if (availableTraits.length === 1) {
+                        setAnswers(prev => ({ ...prev, [nextQuestion.id]: availableTraits[0] }))
+                    }
+                    setCurrentIndex(nextIndex + 1);
+                    console.log(answers)
+                    return;
+                }
+            }
+
+            break;
+
+
         }
-        setCurrentIndex(nextIndex)
-        console.log(answers)
+
+        if (nextIndex >= questions.length) {
+            setIsReportMode(true)
+        } else {
+            setCurrentIndex(nextIndex)
+        }
+
+
+
+
+
 
     }
 
+
+    const getReport = async (answers: any) => {
+        const localPath = 'http://localhost:8000/analyze'
+        const globalPath = 'http://54.187.141.137:8000/analyze'
+        try {
+            const response = await fetch(localPath, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(answers),
+            });
+
+            if (!response.ok) throw new Error('Analysis failed');
+
+            const analysisData = await response.json();
+
+            return { success: true, data: analysisData }
+        }
+        catch (error) {
+            console.error('Error in generating report:', error);
+            return { success: false, error: 'Failed to generate report' };
+
+        }
+    }
+
+    const handleFinalSubmission = async (finalOrder: string[]) => {
+        setIsLoading(true);
+        setFinalRankedIdentity(finalOrder)
+        const finalAnswers = { ...answers, finalRankedChoices: finalOrder };
+        sessionStorage.setItem("user_answers", JSON.stringify(finalAnswers))
+        // const response = await fetch('http://localhost:8000/analyze', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify(answers),
+        // });
+
+
+
+
+        // const result = await saveToGoogleSheets(finalAnswers);
+
+        const result = await getReport(finalAnswers)
+
+        if (result.success) {
+            setAnalysisResult(result.data);
+            setIsReportMode(true);
+        } else {
+            alert("Something went wrong calculating your report.");
+        }
+        setIsLoading(false);
+
+
+
+    };
+
+
+
     const isAnswered = () => {
+        if (currentQuestion.id === "T5") {
+            return (currentAnswer || []).length === 5
+        }
+        if (currentQuestion.type === "text") {
+            return (currentAnswer || "").trim().length > 0;
+        }
         if (!currentAnswer) {
             return false
         }
@@ -135,12 +278,43 @@ export default function SurveyPage() {
 
         return true
     }
+
+    // if (isReportMode) {
+    //     return (
+    //         <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center p-6">
+    //             <div className="bg-white p-12 rounded-3xl shadow-xl max-w-2xl w-full text-center">
+    //                 <h1 className="text-4xl font-black mb-4">Your Identity Report</h1>
+    //                 <p className="text-gray-500 mb-8">Based on your survey, here are your top priorities:</p>
+    //                 <div className="space-y-2 mb-10">
+    //                     {finalRankedIdentity.map((trait, i) => (
+    //                         <div key={trait} className="p-3 bg-slate-100 rounded-lg font-bold">
+    //                             {i + 1}. {trait}
+    //                         </div>
+    //                     ))}
+    //                 </div>
+    //                 <button onClick={() => window.location.reload()} className="text-blue-600 font-bold underline">
+    //                     Restart Survey
+    //                 </button>
+    //             </div>
+    //         </div>
+    //     );
+    // }
+
+    if (isReportMode && analysisResult) {
+        return <IdentityReport
+            top_identity_table={analysisResult.top_identity_table}
+            expected_vs_actual_rank_table={analysisResult.expected_vs_actual_rank_table}
+            expected_vs_actual_rank_well_being={analysisResult.expected_vs_actual_rank_well_being}
+            optimized_result={analysisResult.optimized_result} />
+    }
+
+
     return (
         <div className="min-h-screen bg-white flex flex-col">
             <Header />
             <main className="min-h-screen bg-white text-black">
                 <section className="flex-1 flex items-center justify-center p-4">
-                    <div className="w-full max-w-3xl border border-gray-200 rounded-2xl p-10 shadow-sm bg-white">
+                    <div className="w-full max-w-4xl border border-gray-200 rounded-2xl p-10 shadow-sm bg-white">
 
                         {/* Progress Bar */}
                         <div className="w-full h-1 bg-gray-100 rounded-full mb-10 overflow-hidden">
@@ -149,6 +323,30 @@ export default function SurveyPage() {
                         </div>
 
                         {/* Orchestrator */}
+
+                        {currentQuestion.id === "T5" && (
+                            <TopFiveQuestion question={currentQuestion.question}
+                                options={currentQuestion.options}
+                                selectedValues={currentAnswer || []}
+                                onToggle={(val: string) => {
+                                    const prev = currentAnswer || [];
+                                    const updated = prev.includes(val)
+                                        ? prev.filter((x: any) => x != val)
+                                        : [...prev, val]
+                                    if (updated.length <= 5) {
+                                        setAnswers({ ...answers, [currentQuestion.id]: updated })
+                                    }
+                                }
+                                }
+                            />
+                        )}
+
+                        {currentQuestion.id === "Review" && (
+                            <ReviewRanking choices={answers['T5'] || []}
+                                onComplete={async (finalOrder) => handleFinalSubmission(finalOrder)}
+
+                            />
+                        )}
                         {currentQuestion.type === "radio" && (
                             <RadioQuestion question={currentQuestion.question}
                                 options={currentQuestion.options || []}
@@ -177,18 +375,39 @@ export default function SurveyPage() {
                                 onSelect={handleSelect} />
                         )}
 
-                        {/* Next Button */}
-                        <div className="flex justify-center py-8">
-                            <button
-                                disabled={!currentAnswer}
-                                onClick={handleNext}
-                                className={`px-12 py-4 rounded-full font-bold text-lg transition-all ${currentAnswer ? "bg-(--brand-dark) text-white hover:bg-slate-800 shadow-xl" : "bg-gray-100 text-gray-400 cursor-not-allowed"}`}
-                            >
-                                {currentIndex === questions.length - 1 ? "Finish" : "Next"}
-                            </button>
-                        </div>
+                        {currentQuestion.type === "dropdown" && (
+                            <DropdownQuestion question={currentQuestion.question}
+                                options={currentQuestion.options}
+                                selectedValue={currentAnswer}
+                                onSelect={handleSelect} />
+                        )}
 
-                        
+                        {currentQuestion.type === "text" && (
+                            <TextInputQuestion question={currentQuestion.question}
+                                value={currentAnswer || ""}
+                                onChange={handleSelect}
+                                placeholder={currentQuestion.placeholder} />
+                        )}
+
+
+
+
+
+
+                        {/* Next Button */}
+                        {currentQuestion.id != "Review" &&
+                            <div className="flex justify-center py-8">
+                                <button
+                                    disabled={!currentAnswer}
+                                    onClick={handleNext}
+                                    className={`px-12 py-4 rounded-full font-bold text-lg transition-all ${currentAnswer ? "bg-(--brand-dark) text-white hover:bg-slate-800 shadow-xl" : "bg-gray-100 text-gray-400 cursor-not-allowed"}`}
+                                >
+                                    {currentIndex === questions.length - 1 ? "Finish" : "Next"}
+                                </button>
+                            </div>}
+
+
+
 
 
 
