@@ -18,7 +18,7 @@ const Content = function () {
                     We have prepared a test to help you uncover the real nature of your personal self-identity.   Learn what aspects of your personal identity are most important to who you are, and what this means for your happiness and well-being.             </p>
             </div>
 
-            <button onClick={() => router.push("/survey")} className="mt-10 bg-yellow-500 text-(--brand-dark) text-m font-bold px-10 py-4 rounded tracking-widest transition-all hover:bg-yellow-400 hover:scale-105 shadow-md">
+            <button onClick={() => router.push("/survey/select")} className="mt-10 bg-yellow-500 text-(--brand-dark) text-m font-bold px-10 py-4 rounded tracking-widest transition-all hover:bg-yellow-400 hover:scale-105 shadow-md">
                 DISCOVER WHO YOU ARE
             </button>
         </section>

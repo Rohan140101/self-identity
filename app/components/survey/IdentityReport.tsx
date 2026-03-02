@@ -77,9 +77,34 @@ export default function IdentityReport(
         
     };
 
-    const handleEmailSubmit = (e: React.FormEvent) => {
+    const handleEmailSubmit = async (e: React.FormEvent) => {
+        console.log("Inside handleEmailSubmit")
         e.preventDefault();
         handleFinalSave(email);
+        const reportData = {
+            email: email,
+            top_identity_table,
+            expected_vs_actual_rank_table,
+            expected_vs_actual_rank_well_being,
+            optimized_result
+        }
+
+        const localUrl = 'http://localhost:8000/api/send-report'
+
+        try{
+            const response = await fetch(localUrl, {
+                "method": 'POST',
+                "headers": {"Content-Type": "application/json"},
+                "body": JSON.stringify(reportData)
+            });
+
+            if (response.ok) {
+                // alert("Report will be mailed to you in a few minutes!");
+                setIsModalOpen(false);
+            }
+        } catch(error){
+            console.error("Error triggering report:", error);
+        }
     };
 
     const handleSkip = () => {

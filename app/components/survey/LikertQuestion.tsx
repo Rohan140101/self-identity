@@ -15,28 +15,41 @@ export default function LikertQuestion({ question, selectedValue, onSelect, labe
             </h2>
 
 
-            <div className="flex flex-col items-center">
-                <div className="flex justify-between items-center w-full max-w-2xl gap-2 mb-4">
-                    <span className="text-sm font-medium text-(--brand-dark) uppercase tracking-wider w-40 text-right overflow-hidden">
+            <div className="flex flex-col items-center w-full px-2">
+                <div className="flex flex-col md:flex-row justify-center items-center w-full max-w-2xl gap-2 mb-4">
+                    <span className="hidden md:block text-sm font-medium text-(--brand-dark) uppercase tracking-wider w-40 text-right overflow-hidden">
                         {labels?.left || "Disagree"}
                     </span>
 
-                    {[1, 2, 3, 4, 5, 6, 7].map((num) => (
-                        <button key={num}
-                            onClick={() => onSelect(num)}
-                            className={`w-12 h-12 rounded-full border-2 transition-all flex items-center justify-center font-bold text-lg 
+                    <div className="flex flex-row justify-between w-full md:w-auto gap-1 sm:gap-2">
+                        {[1, 2, 3, 4, 5, 6, 7].map((num) => (
+                            <button key={num}
+                                onClick={() => onSelect(num)}
+                                className={`flex-1 md:flex-none w-10 h-10 sm:w-12 sm:h-12 rounded-full border-2 transition-all flex items-center justify-center font-bold text-base sm:text-lg 
                 ${selectedValue === num ? "bg-(--brand-dark) border-slate-900 text-white scale-110 shadow-lg"
-                                    : "border-gray-100 text-gray-400 hover:border-slate-300 hover:text-slate-900"}`}>
+                                        : "border-gray-100 text-gray-400 hover:border-slate-300 hover:text-slate-900"}`}>
 
-                            {num}
-                        </button>
-                    )
+                                {num}
+                            </button>
+                        )
 
-                    )}
+                        )}
+                    </div>
 
-                    <span className="text-sm font-medium text-(--brand-dark) uppercase tracking-wider w-40 text-left overflow-hidden">
+
+                    <span className="hidden md:block text-sm font-medium text-(--brand-dark) uppercase tracking-wider w-40 text-left overflow-hidden">
                         {labels?.right || "Agree"}
                     </span>
+
+                    <div className="flex md:hidden justify-between w-full px-1 mt-2">
+                        <span className="text-[10px] font-bold text-(--brand-dark) uppercase tracking-light w-1/2 text-left">
+                            {labels?.left || "Disagree"}
+                        </span>
+                        <span className="text-[10px] font-bold text-(--brand-dark) uppercase tracking-light w-1/2 text-right">
+                            {labels?.right || "Agree"}
+                        </span>
+
+                    </div>
 
                 </div>
 

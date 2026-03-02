@@ -2,8 +2,10 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from data_processor import IdentityAnalyzer
 from fastapi.middleware.cors import CORSMiddleware
-
-
+import os
+from pdf_generator import generate_full_identity_report
+from report_mailer import send_email_with_report
+from datetime import datetime
 app = FastAPI()
 
 app.add_middleware(
@@ -31,6 +33,12 @@ async def analyze_survey(data: dict):
     expected_vs_actual_rank_table = analyzer.get_expected_vs_actual_rank(data)
     expected_vs_actual_rank_well_being = analyzer.get_expected_vs_actual_well_being(data, expected_vs_actual_rank_table)
     optimized_result = analyzer.get_highest_happiness_permutations(data, expected_vs_actual_rank_table)
+    print({
+        "top_identity_table": top_id_table,
+        "expected_vs_actual_rank_table": expected_vs_actual_rank_table,
+        "expected_vs_actual_rank_well_being": expected_vs_actual_rank_well_being,
+        "optimized_result": optimized_result
+    })
     return {
         "top_identity_table": top_id_table,
         "expected_vs_actual_rank_table": expected_vs_actual_rank_table,
@@ -39,6 +47,20 @@ async def analyze_survey(data: dict):
     }
 
 
+@app.post("/api/send-report")
+async def handle_report_request(data: dict):
+    user_email = data.get("email")
+    if not os.path.exists("generated_reports"):
+        os.makedirs("generated_reports")
+
+    x = datetime.now()
+    date_format_string = x.strftime("%Y_%m_%d_%H%M%S")
+
+
+    filename = f"generated_reports/report_{user_email.split('@')[0]}_{date_format_string}.pdf"
+    generate_full_identity_report(data, user_email, filename)
+    send_email_with_report(user_email, filename)
+    return {"status": "success", "message": f"Report Generated and Sent"}
 
 # @app.route('/api/append-to-sheets', methods=['POST'])
 # def append_to_sheets(data: dict):

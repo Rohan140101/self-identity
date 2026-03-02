@@ -2,26 +2,6 @@
     "Personal Info": [
         {
             "qtype": "radio",
-            "qid": "QID74",
-            "did": "Age",
-            "qtext": "What range does your age fall into?",
-            "qoptions": [
-                "0 - 10",
-                "11 - 20",
-                "21 - 30",
-                "31 - 40",
-                "41 - 50",
-                "51 - 60",
-                "61 - 70",
-                "71 - 80",
-                "81 - 90",
-                "91 - 100",
-                "101+"
-            ],
-            "matches": []
-        },
-        {
-            "qtype": "radio",
             "qid": "QID75",
             "did": "Gender",
             "qtext": "What is your gender?",
@@ -29,23 +9,6 @@
                 "Male",
                 "Female",
                 "Other"
-            ],
-            "matches": []
-        },
-        {
-            "qtype": "radio",
-            "qid": "QID76",
-            "did": "Nationality",
-            "qtext": "What region best represents your nationality?",
-            "qoptions": [
-                "North America",
-                "South America",
-                "Europe",
-                "Africa",
-                "Middle East",
-                "South Asia",
-                "East Asia",
-                "Oceania"
             ],
             "matches": []
         }
@@ -64,14 +27,6 @@
                 "Other",
                 "Prefer not to answer"
             ],
-            "matches": []
-        },
-        {
-            "qid": "QID226",
-            "qtype": "choose",
-            "did": "ETHCHOOSE",
-            "qtext": "Which of these choices about ethnicity is the one that best describes you?",
-            "qoptions": [],
             "matches": []
         },
         {
@@ -96,27 +51,6 @@
     ],
     "Sexual Orientation": [
         {
-            "qtype": "radio",
-            "qid": "QID24",
-            "did": "SOR2",
-            "qtext": "Would you describe yourself as:",
-            "qoptions": [
-                "Heterosexual",
-                "LGBTQI+",
-                "Other",
-                "Prefer not to answer"
-            ],
-            "matches": []
-        },
-        {
-            "qid": "QID227",
-            "qtype": "choose",
-            "did": "SORCHOOSE",
-            "qtext": "Which of these choices about sexual orientation is the one that best describes you?",
-            "qoptions": [],
-            "matches": []
-        },
-        {
             "qtype": "likert",
             "qid": "QID112",
             "did": "sorMainChoice",
@@ -137,29 +71,6 @@
         }
     ],
     "Family Relations": [
-        {
-            "qtype": "checkbox",
-            "qid": "QID2",
-            "did": "FAM2",
-            "qtext": "Which of these relationship roles are big parts of who you are (i.e. your self identity):(You can select one or more than one option)",
-            "qoptions": [
-                "Son/Daughter",
-                "Brother/Sister",
-                "Mother/Father",
-                "Husband/Wife/Partner",
-                "Grandfather/Grandmother",
-                "Friend"
-            ],
-            "matches": []
-        },
-        {
-            "qid": "QID225",
-            "qtype": "choose",
-            "did": "FAMCHOOSE",
-            "qtext": "Which of these choices about family relationships is the one that best describes you?",
-            "qoptions": [],
-            "matches": []
-        },
         {
             "qtype": "likert",
             "qid": "QID1",
@@ -182,56 +93,6 @@
     ],
     "Occupation": [
         {
-            "qtype": "radio",
-            "qid": "QID15",
-            "did": "OCC2",
-            "qtext": "What type of professional occupation best describes what you do?",
-            "qoptions": [
-                "Student",
-                "Professional",
-                "Worker/Laborer",
-                "Service",
-                "Business",
-                "Caregiver",
-                "Retired",
-                "Other"
-            ],
-            "jump": {
-                "Student": "occMainChoice",
-                "Caregiver": "occMainChoice"
-            },
-            "matches": []
-        },
-        {
-            "qid": "QID16",
-            "did": "OCC3",
-            "qtext": "What is your most recent job title?",
-            "qtype": "text",
-            "qoptions": [],
-            "matches": []
-        },
-        {
-            "qtype": "radio",
-            "qid": "QID48",
-            "did": "OCC4",
-            "qtext": "What level would you say you work at?",
-            "qoptions": [
-                "Junior level",
-                "Mid-level manager",
-                "Executive level",
-                "None applicable"
-            ],
-            "matches": []
-        },
-        {
-            "qid": "QID228",
-            "qtype": "choose",
-            "did": "OCCCHOOSE",
-            "qtext": "Which of these choices about occupation is the one that best describes you?",
-            "qoptions": [],
-            "matches": []
-        },
-        {
             "qtype": "likert",
             "qid": "QID14",
             "did": "occMainChoice",
@@ -252,49 +113,6 @@
         }
     ],
     "Service": [
-        {
-            "qtype": "radio",
-            "qid": "QID127",
-            "did": "SER1",
-            "qtext": "Which of these forms of service are a big part of who you are (i.e your self identity)?",
-            "qoptions": [
-                "Community Service",
-                "Military Service",
-                "Public Service",
-                "Caregiving",
-                "Volunteering",
-                "Other",
-                "None"
-            ],
-            "matches": []
-        },
-        {
-            "qtype": "radio",
-            "qid": "QID109",
-            "did": "SER2",
-            "showOnly": {
-                "SER1": "Military Service"
-            },
-            "qtext": "Which branch of the military did you serve in?",
-            "qoptions": [
-                "Army",
-                "Air Force",
-                "Navy",
-                "Marine Corps",
-                "Coast Guard",
-                "Other",
-                "None"
-            ],
-            "matches": []
-        },
-        {
-            "qid": "QID230",
-            "qtype": "choose",
-            "did": "SERCHOOSE",
-            "qtext": "Which of these choices about service is the one that best describes you?",
-            "qoptions": [],
-            "matches": []
-        },
         {
             "qtype": "likert",
             "qid": "QID129",
@@ -317,42 +135,6 @@
     ],
     "Education": [
         {
-            "qtype": "radio",
-            "qid": "QID34",
-            "did": "ED2",
-            "qtext": "Which of the following best describes your education level?",
-            "qoptions": [
-                "High school",
-                "College/University",
-                "Graduate/Professional school",
-                "None"
-            ],
-            "matches": []
-        },
-        {
-            "qtype": "radio",
-            "qid": "QID35",
-            "did": "ED3",
-            "qtext": "Which of the following subjects best describes the focus of your education?",
-            "qoptions": [
-                "Arts",
-                "Science & Technology",
-                "Humanities",
-                "Business",
-                "Social Sciences",
-                "None applicable"
-            ],
-            "matches": []
-        },
-        {
-            "qid": "QID231",
-            "qtype": "choose",
-            "did": "EDUCHOOSE",
-            "qtext": "Which of these choices about education is the one that best describes you?",
-            "qoptions": [],
-            "matches": []
-        },
-        {
             "qtype": "likert",
             "qid": "QID33",
             "did": "eduMainChoice",
@@ -373,18 +155,6 @@
         }
     ],
     "Economic Role and Status": [
-        {
-            "qtype": "radio",
-            "qid": "QID26",
-            "did": "ERS1",
-            "qtext": "Would you describe yourself as:",
-            "qoptions": [
-                "Rich",
-                "Middle-class",
-                "Poor"
-            ],
-            "matches": []
-        },
         {
             "qtype": "likertTrait",
             "qid": "QID126",
@@ -443,14 +213,6 @@
             ]
         },
         {
-            "qid": "QID253",
-            "qtype": "choose",
-            "did": "ERSCHOOSE",
-            "qtext": "Which of these choices about economic role and status is the one that best describes you?",
-            "qoptions": [],
-            "matches": []
-        },
-        {
             "qtype": "likert",
             "qid": "QID241",
             "did": "ersMainChoice",
@@ -501,14 +263,6 @@
                 "Ugly",
                 "Good Looking"
             ]
-        },
-        {
-            "qid": "QID254",
-            "qtype": "choose",
-            "did": "AACHOOSE",
-            "qtext": "Which of these choices about appearance and age is the one that best describes you?",
-            "qoptions": [],
-            "matches": []
         },
         {
             "qtype": "likert",
@@ -627,14 +381,6 @@
             ]
         },
         {
-            "qid": "QID255",
-            "qtype": "choose",
-            "did": "PERCHOOSE",
-            "qtext": "Which of these choices about personality traits is the one that best describes you?",
-            "qoptions": [],
-            "matches": []
-        },
-        {
             "qtype": "likert",
             "qid": "QID248",
             "did": "perMainChoice",
@@ -713,27 +459,6 @@
             ]
         },
         {
-            "qtype": "radio",
-            "qid": "QID25",
-            "did": "LIF4",
-            "qtext": "Would you describe yourself as a:",
-            "qoptions": [
-                "Dog person",
-                "Cat person",
-                "Other pet person",
-                "Not an animal person"
-            ],
-            "matches": []
-        },
-        {
-            "qid": "QID256",
-            "qtype": "choose",
-            "did": "LIFCHOOSE",
-            "qtext": "Which of these choices about lifestyle is the one that best describes you?",
-            "qoptions": [],
-            "matches": []
-        },
-        {
             "qtype": "likert",
             "qid": "QID250",
             "did": "lifMainChoice",
@@ -793,14 +518,6 @@
             ]
         },
         {
-            "qid": "QID257",
-            "qtype": "choose",
-            "did": "SEPCHOOSE",
-            "qtext": "Which of these choices about Self Perception is the one that best describes you?",
-            "qoptions": [],
-            "matches": []
-        },
-        {
             "qtype": "likert",
             "qid": "QID243",
             "did": "sepMainChoice",
@@ -822,69 +539,6 @@
     ],
     "Health": [
         {
-            "qtype": "radio",
-            "qid": "QID36",
-            "did": "HEL1",
-            "qtext": "Which of the following best describes how you see yourself?",
-            "qoptions": [
-                "Healthy",
-                "Sick",
-                "Survivor",
-                "None applicable"
-            ],
-            "matches": []
-        },
-        {
-            "qtype": "radio",
-            "qid": "QID37",
-            "did": "HEL2",
-            "qtext": "Which of the following best describes how you see yourself?",
-            "qoptions": [
-                "Neurotypical",
-                "Neurodivergent",
-                "Neither"
-            ],
-            "matches": []
-        },
-        {
-            "qtype": "radio",
-            "qid": "QID38",
-            "did": "HEL3",
-            "qtext": "Which of the following best describes how you see yourself?",
-            "qoptions": [
-                "Able Bodied",
-                "Disabled",
-                "Neither"
-            ],
-            "matches": []
-        },
-        {
-            "qtype": "checkbox",
-            "qid": "QID40",
-            "did": "HEL4",
-            "qtext": "Which of the following medical/health conditions is a big part of who you are?(You can select one or more than one option)",
-            "qoptions": [
-                "Anxiety",
-                "Depression",
-                "Chronic Pain",
-                "Cancer",
-                "Heart Disease",
-                "Diabetes",
-                "Addiction",
-                "Other",
-                "None"
-            ],
-            "matches": []
-        },
-        {
-            "qid": "QID232",
-            "qtype": "choose",
-            "did": "HELCHOOSE",
-            "qtext": "Which of these choices about health is the one that best describes you?",
-            "qoptions": [],
-            "matches": []
-        },
-        {
             "qtype": "likert",
             "qid": "QID69",
             "did": "helMainChoice",
@@ -905,155 +559,6 @@
         }
     ],
     "Location": [
-        {
-            "qtype": "radio",
-            "qid": "QID41",
-            "did": "LOC1",
-            "qtext": "Is your self-identity most linked to your:",
-            "qoptions": [
-                "Country",
-                "State",
-                "City",
-                "Region",
-                "None applicable"
-            ],
-            "matches": []
-        },
-        {
-            "qtype": "radio",
-            "qid": "QID113",
-            "did": "LOC6",
-            "showOnly": {
-                "LOC1": "Country"
-            },
-            "qtext": "Please select your country",
-            "qoptions": [
-                "United States of America",
-                "Other"
-            ],
-            "matches": []
-        },
-        {
-            "qtype": "dropdown",
-            "qid": "QID120",
-            "did": "LOC12",
-            "showOnly": {
-                "LOC6": "Other"
-            },
-            "qtext": "Please select your country from this dropdown",
-            "qoptions": [],
-            "lookupKey": "countries",
-            "matches": []
-        },
-        {
-            "qtype": "dropdown",
-            "qid": "QID114",
-            "did": "LOC7",
-            "showOnly": {
-                "LOC1": "State"
-            },
-            "qtext": "Please select your state from this dropdown",
-            "qoptions": [],
-            "lookupKey": "states",
-            "matches": []
-        },
-        {
-            "qtype": "radio",
-            "qid": "QID115",
-            "did": "LOC8",
-            "qtext": "Please select your city",
-            "showOnly": {
-                "LOC1": "City"
-            },
-            "qoptions": [
-                "Boston",
-                "Chicago",
-                "Los Angeles",
-                "New York",
-                "Washington",
-                "Other"
-            ],
-            "matches": []
-        },
-        {
-            "qtype": "text",
-            "qid": "QID121",
-            "did": "LOC13",
-            "showOnly": {
-                "LOC8": "Other"
-            },
-            "qtext": "Please enter your city",
-            "qoptions": [],
-            "matches": []
-        },
-        {
-            "qtype": "radio",
-            "qid": "QID122",
-            "did": "LOC14",
-            "showOnly": {
-                "LOC1": "Region"
-            },
-            "qtext": "Please select your regional identity",
-            "qoptions": [
-                "Westerner",
-                "Southwesterner",
-                "Midwesterner",
-                "Northeasterner",
-                "Southerner",
-                "None applicable",
-                "New Englander"
-            ],
-            "matches": []
-        },
-        {
-            "qtype": "radio",
-            "qid": "QID42",
-            "did": "LOC2",
-            "qtext": "Is your self-identity most linked to:",
-            "qoptions": [
-                "Where your ancestors came from",
-                "Where you were born",
-                "Where you are now",
-                "None applicable"
-            ],
-            "matches": []
-        },
-        {
-            "qtype": "dropdown",
-            "qid": "QID116",
-            "did": "LOC9",
-            "qtext": "Where did your ancestors come from?",
-            "showOnly": {
-                "LOC2": "Where your ancestors came from"
-            },
-            "qoptions": [],
-            "lookupKey": "countries",
-            "matches": []
-        },
-        {
-            "qtype": "dropdown",
-            "qid": "QID117",
-            "did": "LOC10",
-            "qtext": "Where were you born?",
-            "showOnly": {
-                "LOC2": "Where you were born"
-            },
-            "qoptions": [],
-            "lookupKey": "countries",
-            "matches": []
-        },
-        {
-            "qtype": "dropdown",
-            "qid": "QID118",
-            "did": "LOC11",
-            "qtext": "Where are you currently located?",
-            "showOnly": {
-                "LOC2": "Where you are now"
-            },
-            "qoptions": [],
-            "lookupKey": "countries",
-            "matches": []
-        },
         {
             "qtype": "likertTrait",
             "qid": "QID93",
@@ -1110,14 +615,6 @@
                 "Homebody",
                 "Wanderer"
             ]
-        },
-        {
-            "qid": "QID233",
-            "qtype": "choose",
-            "did": "LOCCHOOSE",
-            "qtext": "Which of these choices about location is the one that best describes you?",
-            "qoptions": [],
-            "matches": []
         },
         {
             "qtype": "likert",
@@ -1179,70 +676,6 @@
             ]
         },
         {
-            "qtype": "radio",
-            "qid": "QID51",
-            "did": "SPO4",
-            "qtext": "Which sport is most important to you as an athlete/participant?",
-            "showOnly": {
-                "SPO2": "Serious Athlete"
-            },
-            "qoptions": [
-                "Baseball",
-                "Basketball",
-                "Hockey",
-                "Football",
-                "Golf",
-                "Gymnastics",
-                "Rugby",
-                "Swimming",
-                "Soccer",
-                "Tennis",
-                "Other",
-                "None applicable"
-            ],
-            "matches": []
-        },
-        {
-            "qtype": "radio",
-            "qid": "QID52",
-            "did": "SPO5",
-            "qtext": "Which sport is most important to you as a fan/spectator?",
-            "showOnly": {
-                "SPO3": "Sports Fan"
-            },
-            "qoptions": [
-                "Baseball",
-                "Basketball",
-                "Hockey",
-                "Football",
-                "Golf",
-                "Gymnastics",
-                "Rugby",
-                "Swimming",
-                "Tennis",
-                "Soccer",
-                "Other",
-                "None applicable"
-            ],
-            "matches": []
-        },
-        {
-            "qid": "QID53",
-            "did": "SPO6",
-            "qtype": "text",
-            "qtext": "What is your favorite sports team?",
-            "qoptions": [],
-            "matches": []
-        },
-        {
-            "qid": "QID234",
-            "qtype": "choose",
-            "did": "SPOCHOOSE",
-            "qtext": "Which of these choices about sports is the one that best describes you?",
-            "qoptions": [],
-            "matches": []
-        },
-        {
             "qtype": "likert",
             "qid": "QID49",
             "did": "spoMainChoice",
@@ -1264,32 +697,6 @@
     ],
     "Religion": [
         {
-            "qtype": "radio",
-            "qid": "QID55",
-            "did": "REL2",
-            "qtext": "Which religion do you follow?",
-            "qoptions": [
-                "Buddhism",
-                "Catholic",
-                "Hinduism",
-                "Islam",
-                "Judaism",
-                "Protestantism",
-                "Atheist",
-                "Other",
-                "None applicable"
-            ],
-            "matches": []
-        },
-        {
-            "qid": "QID235",
-            "qtype": "choose",
-            "did": "RELCHOOSE",
-            "qtext": "Which of these choices about religion is the one that best describes you?",
-            "qoptions": [],
-            "matches": []
-        },
-        {
             "qtype": "likert",
             "qid": "QID54",
             "did": "relMainChoice",
@@ -1310,40 +717,6 @@
         }
     ],
     "Politics": [
-        {
-            "qtype": "radio",
-            "qid": "QID57",
-            "did": "POL2",
-            "qtext": "Which political party would you say you most associate with?",
-            "qoptions": [
-                "Democratic",
-                "Republican",
-                "Independent",
-                "None applicable"
-            ],
-            "matches": []
-        },
-        {
-            "qtype": "radio",
-            "qid": "QID58",
-            "did": "POL3",
-            "qtext": "Which of the following categories/labels best describes your political beliefs?",
-            "qoptions": [
-                "Liberal",
-                "Conservative",
-                "Centrist",
-                "None applicable"
-            ],
-            "matches": []
-        },
-        {
-            "qid": "QID236",
-            "qtype": "choose",
-            "did": "POLCHOOSE",
-            "qtext": "Which of these choices about politics is the one that best describes you?",
-            "qoptions": [],
-            "matches": []
-        },
         {
             "qtype": "likert",
             "qid": "QID56",
@@ -1461,14 +834,6 @@
             ]
         },
         {
-            "qid": "QID237",
-            "qtype": "choose",
-            "did": "HOBCHOOSE",
-            "qtext": "Which of these choices about hobbies is the one that best describes you?",
-            "qoptions": [],
-            "matches": []
-        },
-        {
             "qtype": "likert",
             "qid": "QID71",
             "did": "hobMainChoice",
@@ -1489,30 +854,6 @@
         }
     ],
     "Generation": [
-        {
-            "qtype": "radio",
-            "qid": "QID63",
-            "did": "GEN1",
-            "qtext": "Which generation do you feel you belong to?",
-            "qoptions": [
-                "Young/MidGeneration Alpha",
-                "Generation Z (Gen Z)",
-                "Millennials (Generation Y)",
-                "Generation X",
-                "Baby Boomers",
-                "Silent Generation",
-                "None applicable"
-            ],
-            "matches": []
-        },
-        {
-            "qid": "QID238",
-            "qtype": "choose",
-            "did": "GENCHOOSE",
-            "qtext": "Which of these choices about generation is the one that best describes you?",
-            "qoptions": [],
-            "matches": []
-        },
         {
             "qtype": "likert",
             "qid": "QID72",
@@ -1535,130 +876,6 @@
     ],
     "Entertainment": [
         {
-            "qtype": "checkbox",
-            "qid": "QID64",
-            "did": "ENT1",
-            "qtext": "Which of the following entertainment media are important to you?(You can select one or more than one option)",
-            "qoptions": [
-                "Books",
-                "Movies and TV Shows",
-                "Music",
-                "Podcasts",
-                "Video Games",
-                "Other",
-                "None"
-            ],
-            "matches": []
-        },
-        {
-            "qtype": "radio",
-            "qid": "QID104",
-            "did": "ENT2",
-            "showOnly": {
-                "ENT1": "Books"
-            },
-            "qtext": "Which is your favorite genre of books?",
-            "qoptions": [
-                "Fiction",
-                "Horror",
-                "Mystery",
-                "Romance",
-                "Science Fiction",
-                "Non Fiction",
-                "Other",
-                "None"
-            ],
-            "matches": []
-        },
-        {
-            "qtype": "radio",
-            "qid": "QID105",
-            "did": "ENT3",
-            "qtext": "Which is your favorite genre of movies and TV shows?",
-            "showOnly": {
-                "ENT1": "Movies and TV Shows"
-            },
-            "qoptions": [
-                "Action",
-                "Animation",
-                "Comedy",
-                "Horror",
-                "Historical",
-                "Romance",
-                "Science Fiction",
-                "Other",
-                "None"
-            ],
-            "matches": []
-        },
-        {
-            "qtype": "radio",
-            "qid": "QID106",
-            "did": "ENT4",
-            "qtext": "What is your favorite type of music?",
-            "showOnly": {
-                "ENT1": "Music"
-            },
-            "qoptions": [
-                "Classical",
-                "Dance",
-                "Hip-Hop",
-                "Rock",
-                "Pop",
-                "Other",
-                "None"
-            ],
-            "matches": []
-        },
-        {
-            "qtype": "radio",
-            "qid": "QID107",
-            "did": "ENT5",
-            "qtext": "Which is your favorite podcast genre?",
-            "showOnly": {
-                "ENT1": "Podcasts"
-            },
-            "qoptions": [
-                "Arts",
-                "Comedy",
-                "Education",
-                "Heatlh and Fitness",
-                "Politics",
-                "Religion and Spirituality",
-                "Other",
-                "None"
-            ],
-            "matches": []
-        },
-        {
-            "qtype": "radio",
-            "qid": "QID108",
-            "did": "ENT6",
-            "qtext": "Which is your favorite video game category?",
-            "showOnly": {
-                "ENT1": "Video Games"
-            },
-            "qoptions": [
-                "Action",
-                "Adventure",
-                "Puzzle",
-                "Racing",
-                "Horror",
-                "Sports",
-                "Other",
-                "None"
-            ],
-            "matches": []
-        },
-        {
-            "qid": "QID239",
-            "qtype": "choose",
-            "did": "ENTCHOOSE",
-            "qtext": "Which of these choices about entertainment is the one that best describes you?",
-            "qoptions": [],
-            "matches": []
-        },
-        {
             "qtype": "likert",
             "qid": "QID123",
             "did": "entMainChoice",
@@ -1679,27 +896,6 @@
         }
     ],
     "Social Media": [
-        {
-            "qtype": "radio",
-            "qid": "QID66",
-            "did": "SM2",
-            "qtext": "With respect to social media, would you best describe yourself as a:",
-            "qoptions": [
-                "Creator",
-                "Influencer",
-                "Follower",
-                "None applicable"
-            ],
-            "matches": []
-        },
-        {
-            "qid": "QID240",
-            "qtype": "choose",
-            "did": "SMCHOOSE",
-            "qtext": "Which of these choices about social media is the one that best describes you?",
-            "qoptions": [],
-            "matches": []
-        },
         {
             "qtype": "likert",
             "qid": "QID65",

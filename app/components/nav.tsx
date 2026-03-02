@@ -40,7 +40,7 @@ const NavLinks = ({isMobile= false} : {isMobile ?: boolean}) => {
                     
     return (
         <div className={containerStyle}>
-            <Link href="/survey" className={linkStyle}>Survey</Link>
+            <Link href="/survey/select" className={linkStyle}>Survey</Link>
             
             <Link href="/blog" className={linkStyle}>Blog</Link>
             <Link href="/data" className={linkStyle}>Data</Link>

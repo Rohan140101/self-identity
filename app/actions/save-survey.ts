@@ -116,7 +116,8 @@ export async function saveToGoogleSheets(answersStr: any, user_email: any) {
         'socMainChoice',
         'T5',
         'finalRankedChoices',
-        'Email']
+        'Email',
+    'surveyType']
 
 
     const row: any[] = []

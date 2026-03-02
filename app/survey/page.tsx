@@ -1,12 +1,14 @@
 "use client";
 import { useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation"
 import RadioQuestion from "../components/survey/RadioQuestion";
 import LikertQuestion from "../components/survey/LikertQuestion";
 import CheckBoxQuestion from "../components/survey/CheckBoxQuestion";
 import Header from "../components/header";
 import Footer from "../components/footer";
 import { transformSurveyData } from "@/utils/surveyUtils";
-import rawSurveyData from "@/data/survey.json"
+import longSurveyData from "@/data/survey.json"
+import shortSurveyData from "@/data/short_survey.json"
 import DropdownQuestion from "../components/survey/DropdownQuestion";
 import TextInputQuestion from "../components/survey/TextInputQuestion";
 import TopFiveQuestion from "../components/survey/TopFiveQuestion";
@@ -41,9 +43,18 @@ const isValidIdentityTrait = (val: string) => {
 }
 
 export default function SurveyPage() {
-    const questions = useMemo(() => transformSurveyData(rawSurveyData), [])
+
+    const searchParams = useSearchParams()
+    const surveyType = searchParams.get("type") || "long";
+    console.log("Survey Type: ", surveyType)
+
+    const data = surveyType ? shortSurveyData : longSurveyData
+
+    const questions = useMemo(() => transformSurveyData(data), [])
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [answers, setAnswers] = useState<Record<string, any>>({});
+    const [answers, setAnswers] = useState<Record<string, any>>({
+        surveyType: surveyType
+    });
     const [isReportMode, setIsReportMode] = useState(false);
     const [finalRankedIdentity, setFinalRankedIdentity] = useState<string[]>([])
     const [analysisResult, setAnalysisResult] = useState<any>(null);
