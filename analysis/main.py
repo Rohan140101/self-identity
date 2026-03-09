@@ -33,12 +33,6 @@ async def analyze_survey(data: dict):
     expected_vs_actual_rank_table = analyzer.get_expected_vs_actual_rank(data)
     expected_vs_actual_rank_well_being = analyzer.get_expected_vs_actual_well_being(data, expected_vs_actual_rank_table)
     optimized_result = analyzer.get_highest_happiness_permutations(data, expected_vs_actual_rank_table)
-    print({
-        "top_identity_table": top_id_table,
-        "expected_vs_actual_rank_table": expected_vs_actual_rank_table,
-        "expected_vs_actual_rank_well_being": expected_vs_actual_rank_well_being,
-        "optimized_result": optimized_result
-    })
     return {
         "top_identity_table": top_id_table,
         "expected_vs_actual_rank_table": expected_vs_actual_rank_table,

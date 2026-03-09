@@ -83,7 +83,6 @@ class IdentityAnalyzer:
 
         feature_set_keys = ['Age', 'Gender', 'ETH1'] + list(self.main_questions.keys()) + list(self.other_likerts.keys())
         self.feature_set = self.df.loc[:, feature_set_keys]
-        # print('Here1: ', feature_set_keys)
 
         
         
@@ -110,7 +109,6 @@ class IdentityAnalyzer:
 
         self.monte_carlo_samples_df, self.monte_carlo_samples_metrics = self.monte_carlo_simulation_samples(10000)
         self.model, self.id_to_name, self.feature_cols = self._train_ranker()
-#         print(self.monte_carlo_samples_df.shape)
 
         
     def normalize_likerts(self):
@@ -126,7 +124,6 @@ class IdentityAnalyzer:
 
         self.df[mainChoicesNorm.columns] = self.df[mainChoicesNorm.columns].astype(float)
         self.df[mainChoicesNorm.columns] = mainChoicesNorm
-        # print(self.df[mainChoicesNorm.columns].mean(axis=1))
 
     def _get_positional_counts(self):
         counts = defaultdict(lambda: defaultdict(int))
@@ -197,11 +194,8 @@ class IdentityAnalyzer:
         cat_cols_train = df_train.select_dtypes(include=['object', 'category']).columns.tolist()
         df_train = pd.get_dummies(df_train, columns=cat_cols_train)
 
-        # print('df_train:', df_train.columns.tolist())
         X = df_train.drop(columns=['importance'])
-        # print('X:', X.columns[20:])
         y = df_train['importance'].astype(int)
-        # print(df_train)
         model = LGBMRanker(objective="lambdarank", metric="ndcg")
         groups = [len(all_options)] * len(feature_set)
         model.fit(X, y, group=groups)
@@ -210,7 +204,6 @@ class IdentityAnalyzer:
         return model, id_to_name, X.columns.tolist()
 
     def normalize_user_answer_likerts(self, user_answers_dict: dict):
-        # print('Here1: ', user_answers_dict)
         all_likerts = list(self.main_questions.keys()) + list(self.other_likerts.keys())
         sumOfLikerts = 0
         for likert in all_likerts:
@@ -221,7 +214,6 @@ class IdentityAnalyzer:
             new_likert_val = cur_likert_val*len(all_likerts)*4/sumOfLikerts
             user_answers_dict[likert] = new_likert_val
 
-        # print('Here3:', user_answers_dict)
 
         return user_answers_dict
 
@@ -238,10 +230,7 @@ class IdentityAnalyzer:
 
         user_features = pd.DataFrame([clean_input])
         
-#         print('Here2: ', self.feature_cols)
         user_features = user_features.reindex(columns=self.feature_cols[:20], fill_value=0)
-#         for col in user_features.columns:
-#             print(col)
 
         
         all_options_ids = list(self.id_to_name.keys())
@@ -251,16 +240,9 @@ class IdentityAnalyzer:
         # predict_block = pd.get_dummies(predict_block, columns=['option_id'])
         predict_block = pd.get_dummies(predict_block, columns=['option'])
 
-        # print(predict_block.columns)
-#         cl_Count =defaultdict(int)
-#         for col in predict_block.columns:
-#             cl_Count[col] += 1
-#             if cl_Count[col] >= 2:
-#                 print(col, cl_Count[col])
 
             
         predict_block = predict_block.reindex(columns=self.feature_cols, fill_value=0)
-        # print('predict_block: ', predict_block.columns.tolist())
         scores = self.model.predict(predict_block[self.feature_cols])
         
         results = pd.DataFrame({
@@ -335,13 +317,11 @@ class IdentityAnalyzer:
             samples[len(samples)] = cur_sample
             
         samples_df = pd.DataFrame(samples).T
-        # print(samples_df)
         metrics = defaultdict(lambda: defaultdict(float))
 
         for wb in self.well_being_variables:
             metrics[wb]["mu"] = samples_df[wb].mean()
             metrics[wb]["std"] = samples_df[wb].std()
-#             print(wb, metrics[wb]["mu"], metrics[wb]["std"])
 
         return samples_df, metrics
     
@@ -352,7 +332,6 @@ class IdentityAnalyzer:
         well_being_vars_top5 = defaultdict(lambda: defaultdict(float))
         for category in self.all_categories:
             for wb in self.well_being_variables:
-                # print(self.df.loc[:, wb].iloc[1], self.df.loc[:, wb].iloc[20])
                 mu = self.df.loc[:, wb].mean()
                 std = self.df.loc[:, wb].std()
                 sample_df = self.df[self.df.loc[:, 'finalRankedChoices'].str.contains(category)]
@@ -369,13 +348,11 @@ class IdentityAnalyzer:
             sumOfScores = 0
             for i in range(len(rankedChoices)):
                 weight = 5 - i
-#                 print(wb, self.well_being_vars_top5[rankedChoices[i]][wb])
                 sumOfScores += weight * self.well_being_vars_top5[rankedChoices[i]][wb]
             user_wb_raw[wb] = sumOfScores / 15
             sample_mean = user_wb_raw[wb]
             mu = self.monte_carlo_samples_metrics[wb]["mu"]
             std = self.monte_carlo_samples_metrics[wb]["std"]
-#             print('Sample Mean: ', sample_mean, 'Mu: ', mu, 'Std: ', std)
             user_wb_percentile[wb] = self._get_pct(sample_mean, mu, std)
             
         return user_wb_percentile
@@ -394,9 +371,6 @@ class IdentityAnalyzer:
         final_report_df = final_report_df.sort_values(by='predicted_rank', ascending=True)
         predictedRanked = final_report_df[final_report_df['predicted_rank'] <= 5]
         predictedRankedCategories = predictedRanked['component'].tolist()
-        # print('finalRankedChoices: ', finalRankedChoices)
-        # print()
-        # print('predictedRankedCategories: ', predictedRankedCategories)
         finalRankedChoicesPercentiles = self.get_monte_carlo_percentile(finalRankedChoices)
         predictedRankedChoicesPercentiles = self.get_monte_carlo_percentile(predictedRankedCategories)
 
@@ -416,10 +390,11 @@ class IdentityAnalyzer:
     def _kendall_tau_distance(self, list1, list2):
         distance = 0
         for i, j in itertools.combinations(range(len(list1)), 2):
-            if (list1[i] in list2 and list1[j] in list2):
-                a = list1.index(list1[i]) < list1.index(list1[j])
-                b = list2.index(list1[i]) < list2.index(list1[j])
-                if a != b:
+            elem_i = list1[i]
+            elem_j = list1[j]
+            if elem_i in list2 and elem_j in list2:
+                b = list2.index(elem_i) < list2.index(elem_j)
+                if not b: 
                     distance += 1
         return distance
     
@@ -429,7 +404,7 @@ class IdentityAnalyzer:
         wb = 'SEP1Choice'
         for i in range(len(finalRankedChoices)):
             category = finalRankedChoices[i]
-            weight = 5-i
+            weight = max(5-i, 0)
             cat_percentile = self.well_being_vars_top5_df.loc[category, wb]
             sumOfScores += weight*cat_percentile
         raw_score = sumOfScores / 15
@@ -483,38 +458,58 @@ class IdentityAnalyzer:
                 highest_happiness_cat = cat
                 
                 
-        best_perm = list(finalRankedChoices)
-        best_happiness = self.get_user_happy_score(finalRankedChoices)
+#         best_perm = list(finalRankedChoices)
+#         best_happiness = self.get_user_happy_score(finalRankedChoices)
     
-#         print('Hee:', highest_happiness_cat)
-        candidate_sets = [finalRankedChoices]
-        for i in range(len(finalRankedChoices)):
-            new_set = list(finalRankedChoices)
-            new_set[i] = highest_happiness_cat 
-            candidate_sets.append(new_set)
+# #         print('Hee:', highest_happiness_cat)
+#         candidate_sets = [finalRankedChoices]
+#         for i in range(len(finalRankedChoices)):
+#             new_set = list(finalRankedChoices)
+#             new_set[i] = highest_happiness_cat 
+#             candidate_sets.append(new_set)
             
-#         print(candidate_sets)
-        for c_set in candidate_sets:
-#             print(c_set)
-            for perm in itertools.permutations(c_set):
-                dist = self._kendall_tau_distance(finalRankedChoices, list(perm))
-#                 print(perm, dist)
-                if dist <= max_iterations:
-                    current_h = self.get_user_happy_score(perm)
+# #         print(candidate_sets)
+#         for c_set in candidate_sets:
+# #             print(c_set)
+#             for perm in itertools.permutations(c_set):
+#                 dist = self._kendall_tau_distance(finalRankedChoices, list(perm))
+# #                 print(perm, dist)
+#                 if dist <= max_iterations:
+#                     current_h = self.get_user_happy_score(perm)
+# #                     print(c_set, current_h)
+#                     if current_h > best_happiness:
+#                         best_happiness = current_h
+#                         best_perm = list(perm)
+
+
+
+        # Modified Ranking Calculation
+        original_perm = list(finalRankedChoices) + [highest_happiness_cat]
+        best_perm = original_perm.copy()
+        best_happiness = self.get_user_happy_score(best_perm)
+        for perm in itertools.permutations(original_perm):
+            dist = self._kendall_tau_distance(original_perm, list(perm))
+            
+            if dist <= max_iterations:
+                # print(perm, dist)
+                current_h = self.get_user_happy_score(perm)
 #                     print(c_set, current_h)
-                    if current_h > best_happiness:
-                        best_happiness = current_h
-                        best_perm = list(perm)
+                if current_h > best_happiness:
+                    best_happiness = current_h
+                    best_perm = list(perm)
+
+
+
+
 
         optimized_result = {}
-        optimized_result['optimized_top5'] = best_perm
+        optimized_result['optimized_top5'] = best_perm[:5]
         optimized_result['actual_top5'] = finalRankedChoices
         actual_pct = self.get_monte_carlo_percentile(finalRankedChoices)['SEP1Choice']
         optimized_pct = self.get_monte_carlo_percentile(optimized_result['optimized_top5'])['SEP1Choice']
 
 
         final_report_df = pd.DataFrame(final_report)
-#         print(final_report_df.columns)
         final_report_df = final_report_df.sort_values(by='predicted_rank', ascending=True)
         predictedRanked = final_report_df[final_report_df['predicted_rank'] <= 5]
         predictedRankedCategories = predictedRanked['component'].tolist()

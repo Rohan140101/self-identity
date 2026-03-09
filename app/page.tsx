@@ -7,12 +7,12 @@ export default function Page() {
         <div className="min-h-screen bg-white flex flex-col">
             <Header />
             <main className="min-h-screen bg-white text-black">
-            
-            <Hero />
-            <Content />
-        </main>
-        <Footer />
+
+                <Hero />
+                <Content />
+            </main>
+            <Footer />
         </div>
-        
+
     )
 }
