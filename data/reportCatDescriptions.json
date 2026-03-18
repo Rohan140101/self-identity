@@ -1,0 +1,22 @@
+{
+    "Happy": {
+        "category": "Happiness",
+        "definition": "refers to your overall sense of life satisfaction, emotional well-being, and perceived fulfillment in personal and social life."
+    },
+    "Good Person": {
+        "category": "Goodness",
+        "definition": "refers to your perception of your own moral character, including kindness, honesty, empathy, and ethical behavior toward others."
+    },
+    "Successful": {
+        "category": "Success",
+        "definition": "refers to your perceived achievements, accomplishments, and progress toward personal, professional, or societal goals."
+    },
+    "Resilient": {
+        "category": "Resilience",
+        "definition": "refers to your perceived ability to cope with adversity, recover from setbacks, and adapt positively to challenging situations."
+    },
+    "Extrovert": {
+        "category": "Extrovertedness",
+        "definition": "refers to your tendency toward sociability, outward expression, and preference for engaging with others in social environments."
+    }
+}

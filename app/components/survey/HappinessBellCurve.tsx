@@ -1,177 +1,224 @@
 import React from 'react';
-import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, ReferenceLine } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer, ReferenceLine, Customized  } from 'recharts';
 
 interface BellCurveProps {
   actual?: number;
-  predicted?: number;
   optimized?: number;
 }
 
-interface DotLabelProps {
-  viewBox?: {
-    x: number;
-    y: number;
-    height: number;
-  };
-  yValue: number;
-  color: string;
-  yDomain: [number, number];
-}
+const mean = 50;
+const stdDev = 14;
 
-interface LegendItem {
-  label: string;
-  color: string;
-}
+const getY = (x: number): number => {
+  const exponent = -Math.pow(x - mean, 2) / (2 * Math.pow(stdDev, 2));
+  return (1 / (stdDev * Math.sqrt(2 * Math.PI))) * Math.exp(exponent);
+};
 
-const HappinessBellCurve = ({ actual = 28, predicted = 45, optimized = 62 }: BellCurveProps) => {
-  const mean = 50;
-  const stdDev = 18;
+const GrowthArrow = ({ xAxisMap, actual, optimized }: any) => {
+  if (!xAxisMap) return null;
 
-  const getY = (x: number): number => {
-    const exponent = -Math.pow(x - mean, 2) / (2 * Math.pow(stdDev, 2));
-    return (1 / (stdDev * Math.sqrt(2 * Math.PI))) * Math.exp(exponent);
-  };
+  const xAxis = xAxisMap[Object.keys(xAxisMap)[0]];
+  const scale = xAxis?.scale;
+  if (!scale) return null;
 
-  // Use 0.1 steps so ReferenceLine x values with decimals find a close match
-  const data: { x: number; y: number }[] = Array.from({ length: 1001 }, (_, i) => {
-    const x = parseFloat((i * 0.1).toFixed(1));
-    return { x, y: getY(x) };
-  });
+  const x1 = scale(actual);
+  const x2 = scale(optimized);
+  const arrowY = 180; // adjust to sit mid-chart vertically
 
-  const maxY = getY(mean);
-  const yMax = maxY * 1.1;
-  const yDomain: [number, number] = [0, yMax];
-
-  const DotLabel = ({ viewBox, yValue, color, yDomain }: DotLabelProps) => {
-    if (!viewBox) return null;
-    const { x, y, height } = viewBox;
-    const [yMin, yMax] = yDomain;
-    const fraction = 1 - (yValue - yMin) / (yMax - yMin);
-    const cy = y + fraction * height;
-    return <circle cx={x} cy={cy} r={6} fill={color} stroke="white" strokeWidth={2} />;
-  };
-
-  const legendItems: LegendItem[] = [
-    { label: 'Actual', color: '#64748b' },
-    { label: 'Predicted', color: '#8b5cf6' },
-    { label: 'Optimized', color: '#22c55e' },
-  ];
+  const midX = (x1 + x2) / 2;
+  const growth = Math.round(optimized - actual);
 
   return (
-    <div style={{ width: '100%', padding: '20px 0' }}>
-      {/* Legend */}
-      <div style={{ display: 'flex', gap: '20px', marginBottom: '12px', paddingLeft: '10px' }}>
-        {legendItems.map(({ label, color }) => (
-          <div
-            key={label}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              fontSize: '13px',
-              color: '#555',
-            }}
-          >
-            <div
-              style={{
-                width: 10,
-                height: 10,
-                borderRadius: '50%',
-                background: color,
-              }}
-            />
-            {label}
-          </div>
-        ))}
-      </div>
-
-      <ResponsiveContainer width="100%" height={300}>
-        <AreaChart data={data} margin={{ top: 20, right: 30, left: 10, bottom: 0 }}>
-          <defs>
-            <linearGradient id="bellGradient" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#818cf8" stopOpacity={0.3} />
-              <stop offset="95%" stopColor="#818cf8" stopOpacity={0.05} />
-            </linearGradient>
-          </defs>
-
-          <XAxis dataKey="x" hide />
-          <YAxis domain={yDomain} hide />
-
-          <Area
-            type="monotone"
-            dataKey="y"
-            stroke="#6366f1"
-            strokeWidth={2}
-            fill="url(#bellGradient)"
-            dot={false}
-            isAnimationActive={false}
+    <g>
+      <defs>
+        <marker
+          id="growthArrow"
+          viewBox="0 0 10 10"
+          refX="8" refY="5"
+          markerWidth="6" markerHeight="6"
+          orient="auto"
+        >
+          <path
+            d="M2 1L8 5L2 9"
+            fill="none"
+            stroke="#f59e0b"
+            strokeWidth="1.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
           />
+        </marker>
+      </defs>
 
-          {/* Actual - Slate */}
-          <ReferenceLine
-            x={Math.round(actual * 10) / 10}
-            stroke="#64748b"
-            strokeWidth={2}
-            strokeDasharray="4 3"
-            label={(props) => (
-              <DotLabel
-                {...props}
-                yValue={getY(actual)}
-                color="#64748b"
-                yDomain={yDomain}
-              />
-            )}
-          />
+      {/* Arrow line */}
+      <line
+        x1={x1 + 4}
+        y1={arrowY}
+        x2={x2 - 4}
+        y2={arrowY}
+        stroke="#f59e0b"
+        strokeWidth={2}
+        markerEnd="url(#growthArrow)"
+      />
 
-          {/* Predicted - Purple */}
-          <ReferenceLine
-            x={Math.round(predicted * 10) / 10}
-            stroke="#8b5cf6"
-            strokeWidth={2}
-            strokeDasharray="4 3"
-            label={(props) => (
-              <DotLabel
-                {...props}
-                yValue={getY(predicted)}
-                color="#8b5cf6"
-                yDomain={yDomain}
-              />
-            )}
-          />
-
-          {/* Optimized - Green */}
-          <ReferenceLine
-            x={Math.round(optimized * 10) / 10}
-            stroke="#22c55e"
-            strokeWidth={2}
-            strokeDasharray="4 3"
-            label={(props) => (
-              <DotLabel
-                {...props}
-                yValue={getY(optimized)}
-                color="#22c55e"
-                yDomain={yDomain}
-              />
-            )}
-          />
-        </AreaChart>
-      </ResponsiveContainer>
-
-      {/* X-axis labels */}
-      <div
+      {/* Label pill */}
+      <rect
+        x={midX - 22}
+        y={arrowY - 20}
+        width={44}
+        height={16}
+        rx={8}
+        fill="white"
+        style={{ filter: 'drop-shadow(0px 1px 2px rgba(0,0,0,0.08))' }}
+      />
+      <text
+        x={midX}
+        y={arrowY - 8}
+        textAnchor="middle"
+        fill="#d97706"
         style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          paddingTop: '8px',
-          color: '#9ca3af',
-          fontSize: '11px',
-          letterSpacing: '0.05em',
-          textTransform: 'uppercase',
+          fontFamily: 'Inter, system-ui, sans-serif',
+          fontSize: 11,
+          fontWeight: 700,
         }}
       >
-        <span>Lower Happiness</span>
-        <span>Population Average</span>
-        <span>Higher Happiness</span>
+        +{growth}%
+      </text>
+    </g>
+  );
+};
+
+
+const HappinessBellCurve = ({ actual = 28, optimized = 62 }: BellCurveProps) => {
+  const data = Array.from({ length: 101 }, (_, i) => ({ x: i, y: getY(i) }));
+  const maxY = getY(mean);
+  const yDomain: [number, number] = [0, maxY * 1.25];
+
+  const CustomLabel = ({ viewBox, color, value }: any) => {
+    if (!viewBox) return null;
+    const { x, y } = viewBox;
+
+    return (
+      <g>
+        {/* FIX: filter used instead of shadow prop for TS compliance */}
+        <rect
+          x={x - 22}
+          y={y - 35}
+          width={44}
+          height={24}
+          rx={12}
+          fill="white"
+          style={{ filter: 'drop-shadow(0px 2px 2px rgba(0,0,0,0.1))' }}
+        />
+        <text
+          x={x}
+          y={y - 18}
+          textAnchor="middle"
+          fill={color}
+          className="text-[12px] font-bold tracking-tight"
+          style={{ fontFamily: 'Inter, system-ui, sans-serif' }}
+        >
+          {Math.round(value)}%
+        </text>
+      </g>
+    );
+  };
+
+  return (
+    /* FIX: Ensure parent has a explicit height and min-width to solve console error */
+    <div className="w-full min-h-125 max-w-4xl mx-auto p-8 bg-white rounded-4xl border border-slate-100 shadow-xl flex flex-col">
+
+      {/* Legend & Growth Badge */}
+      <div className="flex flex-wrap items-center justify-between mb-8 px-2">
+        <div className="flex gap-6">
+          {[
+            { label: 'Population Avg', color: '#94a3b8', type: 'dashed' },
+            { label: 'Current Actual', color: '#2791F5', type: 'solid' },
+            { label: 'Optimized State', color: '#10b981', type: 'solid' },
+          ].map(({ label, color, type }) => (
+            <div key={label} className="flex items-center gap-2">
+              <div
+                className={`h-1 w-5 rounded-full ${type === 'dashed' ? 'border-t-2 border-dashed' : ''}`}
+                style={{
+                  backgroundColor: type === 'solid' ? color : 'transparent',
+                  borderColor: type === 'dashed' ? color : 'transparent'
+                }}
+              />
+              <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{label}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="bg-emerald-50 px-4 py-1.5 rounded-full border border-emerald-100">
+          <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Growth: </span>
+          <span className="text-sm font-black text-emerald-700">+{Math.round(optimized - actual)}%</span>
+        </div>
+      </div>
+
+      {/* FIX: Use a div with explicit height for ResponsiveContainer */}
+      <div className="grow h-87.5 w-full min-w-0">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={data} margin={{ top: 40, right: 30, left: 30, bottom: 0 }}>
+            <defs>
+              <linearGradient id="bellGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#6366f1" stopOpacity={0.15} />
+                <stop offset="100%" stopColor="#6366f1" stopOpacity={0.01} />
+              </linearGradient>
+            </defs>
+
+            {/* FIX: Ensure XAxis is present with a type 'number' for ReferenceLines to anchor properly */}
+            <XAxis dataKey="x" type="number" domain={[0, 100]} hide />
+            <YAxis domain={yDomain} hide />
+
+            <Area
+              type="monotone"
+              dataKey="y"
+              stroke="#6366f1"
+              strokeWidth={2.5}
+              fill="url(#bellGradient)"
+              isAnimationActive={false}
+            />
+
+            {/* Vertical Lines - always rendered on top */}
+            <ReferenceLine
+              x={mean}
+              stroke="#94a3b8"
+              strokeWidth={2}
+              strokeDasharray="6 6"
+              label={(props) => <CustomLabel {...props} color="#64748b" value={mean} />}
+            />
+
+            <ReferenceLine
+              x={actual}
+              stroke="#2791F5"
+              strokeWidth={3}
+              label={(props) => <CustomLabel {...props} color="#2791F5" value={actual} />}
+            />
+
+            <ReferenceLine
+              x={optimized}
+              stroke="#10b981"
+              strokeWidth={3}
+              label={(props) => <CustomLabel {...props} color="#059669" value={optimized} />}
+            />
+
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+
+      {/* Axis Labels */}
+      <div className="flex justify-between px-8 mt-6 border-t border-slate-50 pt-6">
+        <div className="text-center">
+          <p className="text-[9px] font-black text-slate-300 uppercase tracking-widest">Lower Range</p>
+          <p className="text-xs font-bold text-slate-400">0%</p>
+        </div>
+        <div className="text-center">
+          <p className="text-[9px] font-black text-slate-300 uppercase tracking-widest">Population Median</p>
+          <p className="text-xs font-bold text-slate-400">50th Percentile</p>
+        </div>
+        <div className="text-center">
+          <p className="text-[9px] font-black text-slate-300 uppercase tracking-widest">Peak Range</p>
+          <p className="text-xs font-bold text-slate-400">100%</p>
+        </div>
       </div>
     </div>
   );

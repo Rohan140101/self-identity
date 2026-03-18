@@ -1,160 +1,390 @@
-from turtle import color
+import string
 
-from matplotlib.lines import lineStyles
-import matplotlib.pyplot as plt
+import asyncio
+from playwright.sync_api import sync_playwright  
+import plotly.graph_objects as go
 import numpy as np
-from xhtml2pdf import pisa
+from scipy.stats import norm
 import base64
 from io import BytesIO
 
-def generate_full_identity_report(data, user_email, filename):
-    plt.figure(figsize=(7, 3))
+reportCatDescriptions = {
+    "Happy": {
+        "category": "Happiness",
+        "definition": "refers to your overall sense of life satisfaction, emotional well-being, and perceived fulfillment in personal and social life."
+    },
+    "Good Person": {
+        "category": "Goodness",
+        "definition": "refers to your perception of your own moral character, including kindness, honesty, empathy, and ethical behavior toward others."
+    },
+    "Successful": {
+        "category": "Success",
+        "definition": "refers to your perceived achievements, accomplishments, and progress toward personal, professional, or societal goals."
+    },
+    "Resilient": {
+        "category": "Resilience",
+        "definition": "refers to your perceived ability to cope with adversity, recover from setbacks, and adapt positively to challenging situations."
+    },
+    "Extrovert": {
+        "category": "Extrovertedness",
+        "definition": "refers to your tendency toward sociability, outward expression, and preference for engaging with others in social environments."
+    }
+}
+
+
+
+
+def get_plot_base64(fig):
+    buf = BytesIO()
+    fig.write_image(buf, format="png", scale=3)
+    buf.seek(0)
+    base64_string = base64.b64encode(buf.read()).decode('utf-8')
+    return f"data:image/png;base64,{base64_string}"
+
+def get_bell_curve(actual: float, optimized: float, wb_cat_name: string):
+    mu, sigma = 50, 14
     x = np.linspace(0, 100, 1000)
-    y = np.exp(-0.5 * ((x-50)/15)**2)
-    plt.plot(x, y, color="#cbd5e1", lw=2)
+    y = norm.pdf(x, mu, sigma)
+    y_max = max(y)
 
-    pcts = data['optimized_result']['percentiles']
-    colors = {'actual_pct': '#3b82f6', 'predicted_pct': '#a855f7', 'optimized_pct': '#22c55e'}
+    fig = go.Figure()
 
-    for key, val in pcts.items():
-        plt.axvline(x=val, color=colors[key], label=key.replace("_pct", ""))
-        plt.text(val, 1.1, f"{val:.1f}", color=colors[key], fontweight="bold", ha="center")
-
-    plt.axis("off")
-    plt.legend()
-
-    img_buffer = BytesIO()
-    plt.savefig(img_buffer, format='png', bbox_inches='tight', transparent=True)
-    img_base64 = base64.b64encode(img_buffer.getvalue()).decode('utf-8')
-    plt.close()
+    fig.add_trace(go.Scatter(
+        x=x, y=y, mode='lines', fill='tozeroy',
+        fillcolor='rgba(99, 102, 241, 0.05)',
+        line=dict(color='#6366f1', width=2.5),
+        showlegend=False,
+        hoverinfo='skip'
+    ))
 
 
-    html_content = f"""
-    <html>
-    <head>
-        <style>
-            body {{ font-family: Helvetica, sans-serif; padding: 20px; color: #1e293b; }}
-            h1 {{ font-size: 24px; color: #0f172a; margin-bottom: 5px; }}
-            h2 {{ font-size: 16px; color: #1e293b; margin-top: 30px; border-left: 4px solid #3b82f6; padding-left: 10px; }}
-            table {{ width: 100%; border-collapse: collapse; margin-top: 10px; border-radius: 8px; overflow: hidden; table-layout: fixed;}}
-            th {{ background-color: #0f172a; color: white; padding: 10px; font-size: 12px; text-align: left; }}
-            td {{ padding: 10px; border-bottom: 1px solid #f1f5f9; font-size: 12px; }}
-            .text-center {{ text-align: center; }}
-            .highlight-box {{ background-color: #f8fafc; padding: 15px; border-radius: 10px; border-left: 4px solid #3b82f6; margin-top: 15px; }}
-            .new-badge {{ background-color: #dcfce7; color: #15803d; font-size: 8px; padding: 2px 5px; border-radius: 10px; font-weight: bold; }}
-        </style>
-    </head>
-    <body>
-        <header>
-            <h1>Your Identity Report</h1>
-            <p style="color: #64748b;">Generated for: {user_email}</p>
-        </header>
+    fig.add_trace(go.Scatter(x=[None], y=[None], mode='lines', 
+                            line=dict(color='#94a3b8', width=3, dash='dash'), name='Population Avg'))
+    fig.add_trace(go.Scatter(x=[None], y=[None], mode='lines', 
+                            line=dict(color='#2791F5', width=5), name=f'Current {wb_cat_name}'))
+    fig.add_trace(go.Scatter(x=[None], y=[None], mode='lines', 
+                            line=dict(color='#10b981', width=5), name=f'Optimized {wb_cat_name}'))
 
-        <h2>Top Identity Components</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Identity Component</th>
-                    <th class="text-center">Agreement %</th>
-                    <th class="text-center">Top 5 %</th>
-                    <th class="text-center">Happiness Pct</th>
-                </tr>
-            </thead>
-            <tbody>
-                {"".join([f"<tr><td><i>{row['component']}</i></td><td class='text-center'>{row['agree_pct']:.1f}%</td><td class='text-center'>{row['top5_pct']:.1f}%</td><td class='text-center'>{row['happiness_pct']:.1f}</td></tr>" for row in data['top_identity_table']])}
-            </tbody>
-        </table>
-        <div style="page-break-before: always;"></div>"""
+    fig.add_vline(x=mu, line_width=2, line_dash="dash", line_color="#94a3b8")
+    fig.add_vline(x=actual, line_width=4, line_color="#2791F5")
+    fig.add_vline(x=optimized, line_width=4, line_color="#10b981")
+
+    fig.add_annotation(
+        x=optimized,      
+        y=y_max * 0.2,   
+        ax=actual,        
+        ay=y_max * 0.2, 
+        xref="x", yref="y",
+        axref="x", ayref="y",
+        text="",         
+        showarrow=True,
+        arrowhead=2,
+        arrowsize=1.2,
+        arrowwidth=2,
+        arrowcolor="#10b981"
+    )
+
+    fig.add_annotation(
+        x=(actual + optimized) / 2, \
+        y=y_max * 0.20,
+        xref="x", yref="y",
+        text="GROWTH",
+        showarrow=False,
+        font=dict(size=13, color="#10b981", family="Arial Black"),
+        yshift=15 
+    )
+
+
+    def add_bubble(val, color):
+        fig.add_annotation(
+            x=val, y=norm.pdf(val, mu, sigma) + 0.003,
+            text=f"<b>{int(val)}%</b>",
+            showarrow=False,
+            font=dict(size=15, color=color, family="Arial"),
+            bgcolor="white", bordercolor=color, borderwidth=2, borderpad=5
+        )
+
+    add_bubble(actual, "#2791F5")
+    add_bubble(optimized, "#059669")
+
+
+    fig.update_layout(
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        margin=dict(t=130, b=60, l=50, r=50), 
+        height=600,
+        width=1000,
+        showlegend=True,
+        legend=dict(
+            orientation="h",
+            yanchor="bottom",
+            y=1.05,
+            xanchor="center",
+            x=0.2,
+            font=dict(size=16, color="#334155"),
+            itemsizing="constant",               
+            itemwidth=60
+        ),
+        xaxis=dict(
+            range=[0, 100],
+            showgrid=False,
+            zeroline=False,
+            tickvals=[0, 50, 100],
+            ticktext=[f'<b>LOW {wb_cat_name.upper()}</b>', '<b>POPULATION AVERAGE</b>', f'<b>HIGH {wb_cat_name.upper()}</b>'],
+            tickfont=dict(size=11, color='#94a3b8')
+        ),
+        yaxis=dict(
+            visible=False,
+            range=[0, y_max * 1.4]
+        )
+    )
+
+    # fig.write_image("bell_curve_professional.png", scale=3)
+    # fig.show()
+    return fig
+
+
+
+
+def get_message(optimization_message, wb_cat_name):
+    styles = {
+        "variable": "text-purple-600 font-bold",
+        "category": "text-blue-600 font-bold",
+        "number": "text-black font-bold",
+    }
+
+    actual_pct = optimization_message["actual_pct"]
+    opt_pct = optimization_message["opt_pct"]
+    msgCase = optimization_message["case"]
     
-    html_content += f"""
-    <h2>2. Expected vs. Actual Identity</h2>
-    <table>
-        <thead>
-            <tr style="background-color: #0f172a; color: white;">
-                <th style="width: 50%; padding: 12px; text-align: left;">Identity Component</th>
-                <th style="width: 25%; padding: 12px; text-align: center;">Predicted Rank</th>
-                <th style="width: 25%; padding: 12px; text-align: center;">Actual Rank</th>
-            </tr>
-        </thead>
-        <tbody>
+
+    actual = f"<span class={styles["number"]}>{actual_pct:.1f}th</span>"
+    opt = f"<span class={styles["number"]}>{opt_pct:.1f}th</span>"
+    variable = f"<span class={styles["variable"]}>{wb_cat_name}</span>"
+
+    message = optimization_message["message"]
+    if msgCase == 1:
+        message = f"Your current identity ranking is already optimized for {variable}! You are in the {actual} percentile."
+    elif msgCase == 2:
+        message = f"By simply reprioritizing your current identities, you could move from the {actual} to the {opt} percentile of {variable}."
+    elif msgCase == 3:
+        added_component = optimization_message["added_component"]
+        message = f"By incorporating <span class={styles["category"]}>{added_component}</span> into your top priorities, you could significantly boost your {variable} percentile from {actual} to {opt}."
+    
+
+    boxColor = "bg-blue-50 border-blue-500" if msgCase == 1 else "bg-green-50 border-green-500"
+    return f"""
+    <div class="p-6 rounded-xl border-l-4 mb-8 shadow-sm transition-all {boxColor}">
+            <p class="text-lg font-medium text-slate-800 leading-relaxed">
+                {message}
+            </p>
+        </div>
     """
 
-    for row in data['expected_vs_actual_rank_table']:
-        is_matched = bool(row.get('actual_rank'))
+
+def generate_full_identity_report_sync(data, user_email, filename):
+    generated_figs = []
+    html_content = f"""
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {{
+                theme: {{
+                    extend: {{
+                        colors: {{
+                            slate: {{ 900: '#0f172a', 800: '#1e293b', 700: '#334155', 100: '#f1f5f9' }},
+                        }}
+                    }}
+                }}
+            }}
+        </script>"""
+
+    html_content += """
+    </head>
+    <body class="bg-white p-10">
+        <header class="mb-10 border-b border-slate-100 pb-6">
+            <h1 class="text-4xl font-extrabold text-slate-900 tracking-tight">
+                Your Identity Report
+            </h1>
+        </header>
+    """
+
+
+
+    # Identity Optimization Analysis
+    html_content += """
+    <section class='mt-16'>
+                <h2 class="text-lg font-bold mb-5 text-slate-800 flex items-center gap-2">
+                    <span class="w-1.5 h-6 bg-purple-600 rounded-full"></span>
+                    Identity Optimization Analysis
+                </h2>
+
+                <p class="text-slate-700 mt-2 pb-10">
+                    Now that we know the aspects of your personal identity that you feel are most important, we can make inferences about several aspects of your personality and well-being.   For each of these attributes (happiness, goodness, success, resilience, extrovertedness) we show where you sit relative to the U.S. population, and where you could be with minor changes in which identity components you prioritize.
+                </p> """
+
+    i = 1
+    for key, optimized_result_data in data['optimized_result'].items():
+        catDescData = reportCatDescriptions[key]
+        actual_top5 = optimized_result_data["actual_top5"]
+        optimized_top5 = optimized_result_data["optimized_top5"]
+        fig = get_bell_curve(actual=optimized_result_data['percentiles']['actual_pct'],
+                            optimized=optimized_result_data['percentiles']['optimized_pct'],
+                            wb_cat_name=catDescData['category'])
         
-        # Matching the styling from your images (image_19b4d2.png)
-        bg_style = "background-color: #f0fdf4;" if is_matched else ""
-        text_color = "#15803d" if is_matched else "#1e293b"
-        
+        fig_data = get_plot_base64(fig)
+        generated_figs.append(fig)
         html_content += f"""
-            <tr style="{bg_style}">
-                <td style="padding: 10px; border-bottom: 1px solid #f1f5f9; color: {text_color};">
-                    {row['component']}{' ★' if is_matched else ''}
-                </td>
-                <td style="padding: 10px; border-bottom: 1px solid #f1f5f9; text-align: center; color: #64748b;">
-                    #{row['predicted_rank']}
-                </td>
-                <td style="padding: 10px; border-bottom: 1px solid #f1f5f9; text-align: center; font-weight: bold;">
-                    {'#' + str(row['actual_rank']) if is_matched else ''}
-                </td>
-            </tr>
+            <div class="mt-8 break-after-page mb-10">
+            <h2 class="text-lg font-bold flex gap-2 mb-5">{i}. {key} </h2>
+            <div class="p-6 rounded-xl border-l-4 mb-8 shadow-sm bg-yellow-50 border-yellow-500">
+                <span class='text-lg font-bold text-purple-600 leading-relaxed'>
+                    {catDescData['category'] + " "}
+                </span>
+                <span class='text-lg font-medium text-slate-800 leading-relaxed'>
+                    {catDescData['definition']}
+                </span>
+
+            </div>
+
+            <div class="bg-slate-50 rounded-xl p-4 border border-slate-100 mb-8">
+                <img src="{fig_data}" class="w-full rounded-3xl shadow-lg">
+            </div>
+
+            {get_message(optimized_result_data['optimization_message'], wb_cat_name=catDescData['category'])}
+
         """
 
-    html_content += "</tbody></table>"
 
-    html_content +=  f"""
-        <h2>Expected vs. Actual Well Being</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Well Being Category</th>
-                    <th class="text-center">Percentile as per Actual Answers</th>
-                    <th class="text-center">Percentile as per Predicted Answers</th>
+        html_content += """
+        <div class='overflow-hidden rounded-xl border border-slate-200 shadow-sm bg-white'>
+            <table class='w-full text-left border-collapse'>
+                <thead>
+                    <tr class='bg-slate-900'>
+                        <th class='p-4 text-sm font-semibold text-white'>Rank</th>
+                        <th class='p-4 text-sm font-semibold text-white'>Your Current Identity</th>
+                        <th class='p-4 text-sm font-semibold text-green-300'>Better Identity for You</th>
+                    </tr>
+                </thead>
+                <tbody class='divide-y divide-slate-100'>
+        """
+
+        for j in range(5):
+            cur_index_actual = actual_top5[j]
+            cur_index_opt = optimized_top5[j]
+            newCatBool = True if not cur_index_opt in actual_top5 else False
+            catColor = "text-green-600" if newCatBool else "text-slate-900"
+            html_content += f"""
+                <tr key={j} class='hover:bg-slate-50 transition-colors'>
+                    <td class='p-4 font-mono text-slate-400'>#{j + 1}</td>
+                    <td class='p-4 text-slate-700 font-medium'>{cur_index_actual}</td>
+                    <td class='p-4 text-slate-700 font-medium'>
+                        <span class="font-bold {catColor}">
+                            {cur_index_opt}
+                        </span>
+                            {'<span class="ml-2 text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full font-bold">NEW</span>' if newCatBool else ""}
+                    </td>
+
                 </tr>
-            </thead>
-            <tbody>
-                {"".join([f"<tr><td>{row['wellBeingChoice']}</td><td class='text-center'>{row['actualPct']:.1f}</td><td class='text-center'>{row['predictedPct']:.1f}</td></tr>" for row in data['expected_vs_actual_rank_well_being']])}
-            </tbody>
+            """
+
+
+
+
+
+
+        html_content += """
+        </tbody>
         </table>
-
-        <h2>Happiness Optimization</h2>
-        <div style="text-align: center; background: #f8fafc; padding: 10px; border-radius: 10px;">
-            <img src="data:image/png;base64,{img_base64}" width="450">
         </div>
-
-        <div class="highlight-box">
-            <p>{data['optimized_result']['optimization_message']['message']}</p>
         </div>
+    """
+        i += 1
 
-        <table>
-            <thead>
-                <tr>
-                    <th>Rank</th>
-                    <th>Current Ranking</th>
-                    <th style="color: #d8b4fe;">Predicted Ranking</th>
-                    <th style="color: #86efac;">Optimized Ranking</th>
-                </tr>
-            </thead>
-            <tbody>
-                {"".join([f"<tr><td>#{i+1}</td><td>{data['optimized_result']['actual_top5'][i]}</td><td>{data['optimized_result']['predicted_top5'][i]}</td><td>{data['optimized_result']['optimized_top5'][i]}</td></tr>" for i in range(5)])}
-            </tbody>
-        </table>
 
+    html_content += """
+    </section>
+    """
+
+    html_content += """
+    <section class="mt-16">
+            <h2 class="text-xl font-bold mb-5 text-slate-800 flex items-center gap-3">
+                <span class="w-1.5 h-6 bg-emerald-500 rounded-full"></span>
+                Expected vs. Actual Identity
+            </h2>
+            <p class="text-slate-600 mt-2 pb-10 leading-relaxed">
+                We formed an idea about how strongly you would value different facets of your identity based on our understanding of you. 
+                This did not completely predict the five identity components that you selected. 
+                Compare our model's sense of you with your self-declared identity.
+            </p>
+
+            <div class="overflow-hidden rounded-2xl border border-slate-200 shadow-sm bg-white">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-900 text-white">
+                            <th class="p-5 font-bold text-sm uppercase tracking-wider">Identity Component</th>
+                            <th class="p-5 font-bold text-sm uppercase tracking-wider text-center">Predicted Rank</th>
+                            <th class="p-5 font-bold text-sm uppercase tracking-wider text-center">Actual Rank</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-slate-700">"""
+
+
+    for row in data['expected_vs_actual_rank_table']:
+        isMatched = row['actual_rank'] != ''
+        rowStyle = "bg-green-50/30" if isMatched else ""
+        colorStyleTrow1 = "text-green-700" if isMatched else "text-slate-900"
+        actualRankStyle = "font-bold text-slate-900" if isMatched else ""
+        row3Code = f"<span class='font-bold text-slate-900'>#{row['actual_rank']}</span>" if isMatched else "<span class='text-slate-300'>-</span>"
+
+        html_content += f"""
+        <tr class='{rowStyle}'>
+        <td class='p-4 font-medium {colorStyleTrow1}'>{row['component']} {"★" if isMatched else ""}</td>
+        <td class='p-4 text-center font-mono'>#{row['predicted_rank']}</td>
+        <td class="p-4 text-center">{row3Code}</td>
+
+
+        </tr>
+    """
+                        
+
+
+
+    html_content += """
+    </div>
+    </section>
     </body>
     </html>
     """
 
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        page = browser.new_page()
 
-    # with open(f"report_{user_email.split('@')[0]}.pdf", "wb") as f:
-    #     pisa.CreatePDF(html_content, dest=f)
-    with open(filename, "wb") as f:
-        pisa.CreatePDF(html_content, f)
-    return "PDF Generated"
+        page.set_content(html_content, wait_until="load")
+        
+        page.wait_for_timeout(1000) 
+
+        page.pdf(
+            path=filename,
+            format="A4",
+            margin={
+                "top": "20mm",
+                "bottom": "20mm",
+                "left": "15mm",
+                "right": "15mm"
+            },
+            print_background=True  
+        )
+
+        browser.close()
+        # print("PDF Generated Successfully: report.pdf")
+    return generated_figs
 
 
 
-
-
-# sample_data = {'top_identity_table': [{'component': 'Generation', 'agree_pct': 0.75, 'top5_pct': 12.375, 'happiness_pct': np.float64(52.704718588250444)}, {'component': 'Sexual Orientation', 'agree_pct': 3.875, 'top5_pct': 20.625, 'happiness_pct': np.float64(45.142437606129796)}, {'component': 'Occupation', 'agree_pct': 4.75, 'top5_pct': 20.625, 'happiness_pct': np.float64(50.59731927600028)}, {'component': 'Location', 'agree_pct': 3.75, 'top5_pct': 13.375, 'happiness_pct': np.float64(49.36153971653438)}, {'component': 'Education', 'agree_pct': 5.0, 'top5_pct': 26.375, 'happiness_pct': np.float64(51.01694693324084)}], 'expected_vs_actual_rank_table': [{'component': 'Sports', 'predicted_rank': 1, 'actual_rank': ''}, {'component': 'Family Relations', 'predicted_rank': 2, 'actual_rank': ''}, {'component': 'Personality Traits', 'predicted_rank': 3, 'actual_rank': ''}, {'component': 'Generation', 'predicted_rank': 4, 'actual_rank': 1}, {'component': 'Entertainment', 'predicted_rank': 5, 'actual_rank': ''}, {'component': 'Ethnicity', 'predicted_rank': 6, 'actual_rank': ''}, {'component': 'Self Perception', 'predicted_rank': 7, 'actual_rank': ''}, {'component': 'Lifestyle', 'predicted_rank': 8, 'actual_rank': ''}, {'component': 'Service', 'predicted_rank': 9, 'actual_rank': ''}, {'component': 'Politics', 'predicted_rank': 10, 'actual_rank': ''}, {'component': 'Appearance and Age', 'predicted_rank': 11, 'actual_rank': ''}, {'component': 'Occupation', 'predicted_rank': 12, 'actual_rank': 3}, {'component': 'Education', 'predicted_rank': 13, 'actual_rank': 5}, {'component': 'Economic Role and Status', 'predicted_rank': 14, 'actual_rank': ''}, {'component': 'Social Media', 'predicted_rank': 15, 'actual_rank': ''}, {'component': 'Hobbies', 'predicted_rank': 16, 'actual_rank': ''}, {'component': 'Health', 'predicted_rank': 17, 'actual_rank': ''}, {'component': 'Religion', 'predicted_rank': 18, 'actual_rank': ''}, {'component': 'Location', 'predicted_rank': 19, 'actual_rank': 4}, {'component': 'Sexual Orientation', 'predicted_rank': 20, 'actual_rank': 2}], 'expected_vs_actual_rank_well_being': [{'wellBeingChoice': 'Happy', 'actualPct': np.float64(37.266983633920034), 'predictedPct': np.float64(49.38978360848639)}, {'wellBeingChoice': 'Good Person', 'actualPct': np.float64(46.40979387003225), 'predictedPct': np.float64(36.477045489831895)}, {'wellBeingChoice': 'Successful', 'actualPct': np.float64(65.82444033992074), 'predictedPct': np.float64(25.812351004299817)}, {'wellBeingChoice': 'Resilient', 'actualPct': np.float64(48.32733795534717), 'predictedPct': np.float64(72.31360163195191)}, {'wellBeingChoice': 'Extrovert', 'actualPct': np.float64(48.95016702471609), 'predictedPct': np.float64(76.24818426326956)}], 'optimized_result': {'optimized_top5': ['Family Relations', 'Generation', 'Education', 'Occupation', 'Location'], 'actual_top5': ['Generation', 'Sexual Orientation', 'Occupation', 'Location', 'Education'], 'predicted_top5': ['Sports', 'Family Relations', 'Personality Traits', 'Generation', 'Entertainment'], 'percentiles': {'actual_pct': np.float64(37.266983633920034), 'predicted_pct': np.float64(49.38978360848639), 'optimized_pct': np.float64(96.11410462395139)}, 'optimization_message': {'case': 3, 'message': "By incorporating 'Family Relations' into your top priorities, you could significantly boost your happiness percentile from 37.3th to 96.1th.", 'actual_pct': np.float64(37.266983633920034), 'opt_pct': np.float64(96.11410462395139), 'added_component': 'Family Relations'}}}
-
-# generate_full_identity_report(sample_data, "user@example.com")
+async def generate_full_identity_report(data, user_email, filename):
+    return await asyncio.to_thread(generate_full_identity_report_sync, data, user_email, filename)

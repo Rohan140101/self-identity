@@ -2,7 +2,7 @@
 
 import { google } from 'googleapis'
 
-export async function saveToGoogleSheets(answersStr: any, user_email: any) {
+export async function saveToGoogleSheets(answersStr: any, user_email: any, user_name: any, research_consent: any) {
     const answers = JSON.parse(answersStr);
     const headers = ['Timestamp',
         'Age',
@@ -117,7 +117,9 @@ export async function saveToGoogleSheets(answersStr: any, user_email: any) {
         'T5',
         'finalRankedChoices',
         'Email',
-    'surveyType']
+    'surveyType',
+        'UserName',
+        'ResearchConsent']
 
 
     const row: any[] = []
@@ -131,6 +133,18 @@ export async function saveToGoogleSheets(answersStr: any, user_email: any) {
             }
         } else if (h === 'Timestamp') {
             row.push(new Date().toLocaleString())
+        } else if (h === 'UserName') {
+            if (user_name) {
+                row.push(user_name)
+            } else {
+                row.push("")
+            }
+        } else if (h === "ResearchConsent") {
+            if (research_consent) {
+                row.push(research_consent)
+            } else {
+                row.push("")
+            }
         } else {
             let value = answers[h];
             if (Array.isArray(value)) {

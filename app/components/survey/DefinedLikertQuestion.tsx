@@ -1,19 +1,33 @@
 "use client";
 
 interface LikertQuestionProps {
-    question: string;
+    category: string;
+    definition: string,
     selectedValue: number | null;
     onSelect: (value: number) => void;
     labels?: { left: string, right: string }
 }
 
-export default function LikertQuestion({ question, selectedValue, onSelect, labels }: LikertQuestionProps) {
-    // console.log("Here6: ", question)
+export default function DefinedLikertQuestion({ category, definition, selectedValue, onSelect, labels }: LikertQuestionProps) {
+    console.log(category)
     return (
         <div className="w-full text-center">
-            <h2 className="text-3xl font-bold text-slate-900 mb-8 leading-tight">
-                {question}
-            </h2>
+            <div className="mb-6">
+
+                <span className="text-3xl font-black uppercase text-blue-600">
+                    {category + " "}
+                </span>
+
+                <span className="text-3xl font-black text-slate-900 tracking-tight">
+
+                    {definition}
+
+                </span>
+
+            </div>
+
+            <p className="text-gray-500 text-2xl mb-8">How important is it to your personal identity?</p>
+
 
 
             <div className="flex flex-col items-center w-full px-2">

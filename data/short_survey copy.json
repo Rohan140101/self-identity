@@ -42,11 +42,10 @@
             "matches": []
         },
         {
-            "qtype": "dlikert",
+            "qtype": "likert",
             "qid": "QID133",
             "did": "ethMainChoice",
-            "category": "Ethnic identity", 
-            "definition": "is your identification with your national, racial, and ethnic heritage.",
+            "qtext": "Ethnic identity is your identification with your national, racial, and ethnic heritage. How important is it to your personal identity?",
             "qoptions": [
                 1,
                 2,
@@ -64,11 +63,10 @@
     ],
     "Sexual Orientation": [
         {
-            "qtype": "dlikert",
+            "qtype": "likert",
             "qid": "QID112",
             "did": "sorMainChoice",
-            "category": "Sexual identity",
-            "definition": "is your identification with your gender role and sexual orientation.",
+            "qtext": "Sexual identity is your identification with your gender role and sexual orientation. How important is it to your personal identity?",
             "qoptions": [
                 1,
                 2,
@@ -86,11 +84,10 @@
     ],
     "Family Relations": [
         {
-            "qtype": "dlikert",
+            "qtype": "likert",
             "qid": "QID1",
             "did": "famMainChoice",
-            "category": "Family identity",
-            "definition": "is your identification with your familial roles including parent, partner, and child.",
+            "qtext": "Family identity is your identification with your familial roles including parent, partner, and child. How important is it to your personal identity?",
             "qoptions": [
                 1,
                 2,
@@ -108,11 +105,10 @@
     ],
     "Occupation": [
         {
-            "qtype": "dlikert",
+            "qtype": "likert",
             "qid": "QID14",
             "did": "occMainChoice",
-            "category": "Occupational identity",
-            "definition": "is your identification with your work and career achievements, such as job, employer, and professional standing.",
+            "qtext": "Occupational Identity is your identification with your work and career achievements, such as job, employer, and professional standing. How important is it to your personal identity?",
             "qoptions": [
                 1,
                 2,
@@ -130,11 +126,10 @@
     ],
     "Service": [
         {
-            "qtype": "dlikert",
+            "qtype": "likert",
             "qid": "QID129",
             "did": "serMainChoice",
-            "category": "Service Identity",
-            "definition": " is your identification with your altruistic or civic activities, from military service to community volunteering.",
+            "qtext": "Service Identity is your identification with your altruistic or civic activities, from military service to community volunteering. How important is it to your personal identity?",
             "qoptions": [
                 1,
                 2,
@@ -152,11 +147,10 @@
     ],
     "Education": [
         {
-            "qtype": "dlikert",
+            "qtype": "likert",
             "qid": "QID33",
             "did": "eduMainChoice",
-            "category": "Educational identity",
-            "definition": "is your identification with your academic attainment, school, and primary field of study.",
+            "qtext": "Educational identity is your identification with your academic attainment, school, and primary field of study. How important is it to your personal identity?",
             "qoptions": [
                 1,
                 2,
@@ -174,11 +168,10 @@
     ],
     "Economic Role and Status": [
         {
-            "qtype": "dlikert",
+            "qtype": "likert",
             "qid": "QID241",
             "did": "ersMainChoice",
-            "category": "Economic identity",
-            "definition": "is your identification with your socioeconomic standing and perceived role as a financial provider or caregiver.",
+            "qtext": "Economic identity is your identification with your socioeconomic standing and perceived role as a financial provider or caregiver. How important is it to your personal identity?",
             "qoptions": [
                 1,
                 2,
@@ -197,11 +190,10 @@
     "Appearance and Age": [
 
         {
-            "qtype": "dlikert",
+            "qtype": "likert",
             "qid": "QID246",
             "did": "aaMainChoice",
-            "category": "Appearance and Age",
-            "definition": "refers to your identification with your self-perceived life-stage, age group, and physical attractiveness.",
+            "qtext": "Appearance and Age refers to your identification with your self-perceived life-stage, age group, and physical attractiveness. How important is it to your personal identity?",
             "qoptions": [
                 1,
                 2,
@@ -219,11 +211,10 @@
     ],
     "Personality Traits": [
         {
-            "qtype": "dlikert",
+            "qtype": "likert",
             "qid": "QID248",
             "did": "perMainChoice",
-            "category": "Personality Traits",
-            "definition": "refers to your identification with your self-perceived temperament and traits such as introversion, resilience, and intellect.",
+            "qtext": "Personality Traits refers to your identification with your self-perceived temperament and traits such as introversion, resilience, and intellect. How important is it to your personal identity?",
             "qoptions": [
                 1,
                 2,
@@ -241,11 +232,10 @@
     ],
     "Lifestyle": [
         {
-            "qtype": "dlikert",
+            "qtype": "likert",
             "qid": "QID250",
             "did": "lifMainChoice",
-            "category": "Lifestyle identity",
-            "definition": "is your identification with your behavioral and lifestyle choices including habits, activity levels, and personal preferences.",
+            "qtext": "Lifestyle identity is your identification with your behavioral and lifestyle choices including habits, activity levels, and personal preferences. How important is it to your personal identity?",
             "qoptions": [
                 1,
                 2,
@@ -263,11 +253,10 @@
     ],
     "Self Perception": [
         {
-            "qtype": "dlikert",
+            "qtype": "likert",
             "qid": "QID243",
             "did": "sepMainChoice",
-            "category": "Self-Perception",
-            "definition": "refers to your identification with your internal evaluative state, regarding general happiness, values and perceived moral character.",
+            "qtext": "Self-Perception refers to your identification with your internal evaluative state, regarding general happiness, values and perceived moral character. How important is it to your personal identity?",
             "qoptions": [
                 1,
                 2,
@@ -285,11 +274,10 @@
     ],
     "Health": [
         {
-            "qtype": "dlikert",
+            "qtype": "likert",
             "qid": "QID69",
             "did": "helMainChoice",
-            "category": "Health Identity",
-            "definition": "is your identification with your mental/physical health status, medical conditions, and physical ability.",
+            "qtext": "Health identity is your identification with your mental/physical health status, medical conditions, and physical ability. How important is it to your personal identity?",
             "qoptions": [
                 1,
                 2,
@@ -307,11 +295,10 @@
     ],
     "Location": [
         {
-            "qtype": "dlikert",
+            "qtype": "likert",
             "qid": "QID70",
             "did": "locMainChoice",
-            "category": "Location identity",
-            "definition": "is your identification with your geographical and cultural sense of place, ranging from ancestral origins to current residency.",
+            "qtext": "Location identity is your identification with your geographical and cultural sense of place, ranging from ancestral origins to current residency. How important is it to your personal identity?",
             "qoptions": [
                 1,
                 2,
@@ -329,11 +316,10 @@
     ],
     "Sports": [
         {
-            "qtype": "dlikert",
+            "qtype": "likert",
             "qid": "QID49",
             "did": "spoMainChoice",
-            "category": "Sports identity",
-            "definition": "is your identification with your level of athletic engagement and spectator interest in specific sports and team.",
+            "qtext": "Sports identity is your identification with your level of athletic engagement and spectator interest in specific sports and team. How important is it to your personal identity?",
             "qoptions": [
                 1,
                 2,
@@ -351,11 +337,10 @@
     ],
     "Religion": [
         {
-            "qtype": "dlikert",
+            "qtype": "likert",
             "qid": "QID54",
             "did": "relMainChoice",
-            "category": "Religious identity",
-            "definition": "is your identification with your theological or spiritual convictions,  beliefs and affiliations.",
+            "qtext": "Religious identity is your identification with your theological or spiritual convictions,  beliefs and affiliations. How important is it to your personal identity?",
             "qoptions": [
                 1,
                 2,
@@ -373,11 +358,10 @@
     ],
     "Politics": [
         {
-            "qtype": "dlikert",
+            "qtype": "likert",
             "qid": "QID56",
             "did": "polMainChoice",
-            "category": "Political identity",
-            "definition": "is your identification with your ideological positioning, political convictions, and party affiliation.",
+            "qtext": "Political identity is your identification with your ideological positioning, political convictions, and party affiliation. How important is it to your personal identity?",
             "qoptions": [
                 1,
                 2,
@@ -395,11 +379,10 @@
     ],
     "Hobbies": [
         {
-            "qtype": "dlikert",
+            "qtype": "likert",
             "qid": "QID71",
             "did": "hobMainChoice",
-            "category": "Hobbies",
-            "definition": "refers to your identification with your leisure activities and personal interests, including recreational and creative pursuits.",
+            "qtext": "Hobbies refers to your identification with your leisure activities and personal interests, including recreational and creative pursuits. How important is it to your personal identity?",
             "qoptions": [
                 1,
                 2,
@@ -417,11 +400,10 @@
     ],
     "Generation": [
         {
-            "qtype": "dlikert",
+            "qtype": "likert",
             "qid": "QID72",
             "did": "genMainChoice",
-            "category": "Generational identity",
-            "definition": "is your identification with your specific generational cohort, such as Baby Boomer or Generation Z.",
+            "qtext": "Generational identity is your identification with your specific generational cohort, such as Baby Boomer or Generation Z. How important is it to your personal identity?",
             "qoptions": [
                 1,
                 2,
@@ -439,11 +421,10 @@
     ],
     "Entertainment": [
         {
-            "qtype": "dlikert",
+            "qtype": "likert",
             "qid": "QID123",
             "did": "entMainChoice",
-            "category": "Entertainment",
-            "definition": "refers to your identification with your preferred arts and media, including literature, film, music, and digital gaming.",
+            "qtext": "Entertainment refers to your identification with your preferred arts and media, including literature, film, music, and digital gaming. How important is it to your personal identity?",
             "qoptions": [
                 1,
                 2,
@@ -461,11 +442,10 @@
     ],
     "Social Media": [
         {
-            "qtype": "dlikert",
+            "qtype": "likert",
             "qid": "QID65",
             "did": "socMainChoice",
-            "category": "Social Media identity",
-            "definition": "is your identification with your preferred arts and media, including literature, film, music, and digital gaming.",
+            "qtext": "Social Media identity is your identification with your preferred arts and media, including literature, film, music, and digital gaming. How important is it to your personal identity?",
             "qoptions": [
                 1,
                 2,

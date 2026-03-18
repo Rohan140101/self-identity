@@ -8,19 +8,21 @@ export const transformSurveyData = (data: any) => {
                     id: q.did,
                     type: q.qtype,
                     section: section,
-                    question: q.qtext,
+                    question: q.qtext || null,
                     jump: q.jump || null,
                     showOnly: q.showOnly || null,
+                    category: q.category || null,
+                    definition: q.definition || null,
                 }
 
                 if (q.qtype === "radio" || q.qtype === "checkbox" || q.qtype === "T5"){
                     transformed.options = q.qoptions
                 }
 
-                if (q.qtype === "likert" || q.qtype === "likertTrait"){
+                if (q.qtype === "likert" || q.qtype === "likertTrait" || q.qtype === "dlikert"){
                     transformed.labels = {
                         left: q.matches[0] || "1",
-                        right: q.matches[1] || "2"
+                        right: q.matches[1] || "7"
                     };
                 }
 

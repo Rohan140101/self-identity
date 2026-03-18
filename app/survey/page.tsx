@@ -1,8 +1,9 @@
 "use client";
-import { useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation"
+import { useMemo, useState, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import RadioQuestion from "../components/survey/RadioQuestion";
 import LikertQuestion from "../components/survey/LikertQuestion";
+import DefinedLikertQuestion from "../components/survey/DefinedLikertQuestion"
 import CheckBoxQuestion from "../components/survey/CheckBoxQuestion";
 import Header from "../components/header";
 import Footer from "../components/footer";
@@ -42,13 +43,13 @@ const isValidIdentityTrait = (val: string) => {
     return val && !junk.includes(val.toLowerCase())
 }
 
-export default function SurveyPage() {
+function SurveyManager() {
 
     const searchParams = useSearchParams()
     const surveyType = searchParams.get("type") || "long";
     console.log("Survey Type: ", surveyType)
 
-    const data = surveyType ? shortSurveyData : longSurveyData
+    const data = surveyType == "long" ? longSurveyData : shortSurveyData
 
     const questions = useMemo(() => transformSurveyData(data), [])
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -218,8 +219,9 @@ export default function SurveyPage() {
 
 
     const getReport = async (answers: any) => {
-        const localPath = 'http://localhost:8000/analyze'
-        const globalPath = 'http://54.187.141.137:8000/analyze'
+        const localPath = process.env.NEXT_PUBLIC_LOCAL_API_PATH + "/analyze"
+        const globalPath = process.env.NEXT_PUBLIC_GLOBAL_API_PATH + "/analyze"
+        console.log(localPath, globalPath, process.env)
         try {
             const response = await fetch(localPath, {
                 method: 'POST',
@@ -353,9 +355,11 @@ export default function SurveyPage() {
                         )}
 
                         {currentQuestion.id === "Review" && (
-                            <ReviewRanking choices={answers['T5'] || []}
+                            <ReviewRanking
+                                choices={answers['T5'] || []}
+                                surveyType={surveyType}
+                                allAnswers={answers}
                                 onComplete={async (finalOrder) => handleFinalSubmission(finalOrder)}
-
                             />
                         )}
                         {currentQuestion.type === "radio" && (
@@ -372,11 +376,28 @@ export default function SurveyPage() {
                                 onToggle={handleSelect} />
                         )}
 
+
+                        {(currentQuestion.type === "dlikert") && (
+
+                            <DefinedLikertQuestion
+                                category={currentQuestion.category}
+                                definition={currentQuestion.definition}
+                                selectedValue={currentAnswer}
+                                onSelect={handleSelect}
+                                labels={currentQuestion.labels}
+
+                            />
+                        )}
+
                         {(currentQuestion.type === "likert" || currentQuestion.type === "likertTrait") && (
+
                             <LikertQuestion question={currentQuestion.question}
                                 selectedValue={currentAnswer}
                                 onSelect={handleSelect}
                                 labels={currentQuestion.labels} />
+
+
+
                         )}
 
                         {currentQuestion.type === "choose" && (
@@ -431,5 +452,17 @@ export default function SurveyPage() {
             </main><Footer />
         </div>
 
+
     )
+}
+
+
+
+
+export default function SurveyPage() {
+    return (
+        <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading Survey...</div>}>
+            <SurveyManager />
+        </Suspense>
+    );
 }

@@ -1,5 +1,7 @@
 from os import replace
 from pydoc import doc
+import string
+from tkinter import W
 
 import pandas as pd
 import json
@@ -10,6 +12,7 @@ from lightgbm import LGBMRanker, train
 import re
 import numpy as np
 import itertools
+
 
 class IdentityAnalyzer:
     def __init__(self, prolific_path, survey_path, did_option_dict_path):
@@ -81,7 +84,9 @@ class IdentityAnalyzer:
         self.df.replace(float('nan'), '', inplace=True)
         self.normalize_likerts()
 
-        feature_set_keys = ['Age', 'Gender', 'ETH1'] + list(self.main_questions.keys()) + list(self.other_likerts.keys())
+        # feature_set_keys = ['Age', 'Gender', 'ETH1'] + list(self.main_questions.keys()) + list(self.other_likerts.keys())
+        feature_set_keys = ['Age', 'Gender', 'ETH1'] + list(self.main_questions.keys())
+
         self.feature_set = self.df.loc[:, feature_set_keys]
 
         
@@ -92,6 +97,7 @@ class IdentityAnalyzer:
         
         self.pos_counts = self._get_positional_counts()
         self.cat_stats = self._get_category_stats()
+        
 
         self.did_dict = json.load(open(did_option_dict_path, 'r'))
         self.well_being_variables  = ['SEP1Choice', 'SEP2Choice', 'ERS4Choice', 'PER4Choice', 'PER1Choice']
@@ -101,6 +107,13 @@ class IdentityAnalyzer:
             'ERS4Choice': 'Successful',
             'PER4Choice': 'Resilient',
             'PER1Choice': 'Extrovert'
+        }
+        self.well_being_vars_encoded_verb = {
+            'SEP1Choice': 'happiness',
+            'SEP2Choice': 'goodness',
+            'ERS4Choice': 'success',
+            'PER4Choice': 'resilience',
+            'PER1Choice': 'extrovertedness'
         }
         self.well_being_vars_top5 = self._get_well_being_vars_top5()
 
@@ -124,6 +137,7 @@ class IdentityAnalyzer:
 
         self.df[mainChoicesNorm.columns] = self.df[mainChoicesNorm.columns].astype(float)
         self.df[mainChoicesNorm.columns] = mainChoicesNorm
+
 
     def _get_positional_counts(self):
         counts = defaultdict(lambda: defaultdict(int))
@@ -200,11 +214,10 @@ class IdentityAnalyzer:
         groups = [len(all_options)] * len(feature_set)
         model.fit(X, y, group=groups)
     
-        
         return model, id_to_name, X.columns.tolist()
 
     def normalize_user_answer_likerts(self, user_answers_dict: dict):
-        all_likerts = list(self.main_questions.keys()) + list(self.other_likerts.keys())
+        all_likerts = list(self.main_questions.keys())
         sumOfLikerts = 0
         for likert in all_likerts:
             sumOfLikerts += user_answers_dict[likert]
@@ -218,7 +231,47 @@ class IdentityAnalyzer:
         return user_answers_dict
 
         
+    def shorten_expected_vs_actual_rank(self, final_report: list):
+        rankedByUser = []
+        notRankedByUser = []
+        for i in range(len(final_report)):
+            if len(rankedByUser) == 5 and len(notRankedByUser) == 5:
+                break
 
+            cur_index = final_report[i]
+            if cur_index["actual_rank"]:
+                rankedByUser.append(cur_index)
+            elif len(notRankedByUser) < 5:
+                notRankedByUser.append(cur_index)
+
+        print('rankedByUser:', rankedByUser)
+        print()
+        print('notRankedByUser:', notRankedByUser)
+        shortened_report = []
+        i = 0
+        j = 0
+        while i<len(rankedByUser) and j < len(notRankedByUser):
+            r = rankedByUser[i]
+            n = notRankedByUser[j]
+            if r["predicted_rank"] < n["predicted_rank"]:
+                shortened_report.append(r)
+                i += 1
+            else:
+                shortened_report.append(n)
+                j += 1
+
+        while i < len(rankedByUser):
+            shortened_report.append(rankedByUser[i])
+            i += 1
+
+        while j < len(notRankedByUser):
+            shortened_report.append(notRankedByUser[j])
+            j += 1
+
+
+
+        return shortened_report
+            
     def get_expected_vs_actual_rank(self, user_answers_dict: dict):
         clean_input = {}
         all_options = list(self.all_categories)
@@ -266,8 +319,8 @@ class IdentityAnalyzer:
                 "predicted_rank": int(row['predicted_rank']),
                 "actual_rank": actual_rank
             })
-            
-        return final_report
+        shortened_report = self.shorten_expected_vs_actual_rank(final_report)
+        return final_report, shortened_report
         # ret
 
     def get_user_wb_percentile_scores(self, finalRankedChoices):
@@ -414,16 +467,16 @@ class IdentityAnalyzer:
 #         raw_score  = self.get_user_happy_score(finalRankedChoices)
 #         mu = 
         
-    def generate_optimization_message(self, actual_choices, optimized_result):
-        actual_pct = self.get_monte_carlo_percentile(actual_choices)['SEP1Choice']
-        opt_pct = self.get_monte_carlo_percentile(optimized_result['optimized_top5'])['SEP1Choice']
+    def generate_optimization_message(self, actual_choices, optimized_result, wb_cat):
+        actual_pct = self.get_monte_carlo_percentile(actual_choices)[wb_cat]
+        opt_pct = self.get_monte_carlo_percentile(optimized_result[wb_cat]['optimized_top5'])[wb_cat]
 
-        swapped_in = [cat for cat in optimized_result['optimized_top5'] if cat not in actual_choices]
+        swapped_in = [cat for cat in optimized_result[wb_cat]['optimized_top5'] if cat not in actual_choices]
 
-        if actual_choices == optimized_result['optimized_top5']:
+        if actual_choices == optimized_result[wb_cat]['optimized_top5']:
             return {
                 "case": 1,
-                "message": f"Your current identity ranking is already optimized for happiness! You are in the {actual_pct:.1f}th percentile.",
+                "message": f"Your current identity ranking is already optimized for {self.well_being_vars_encoded_verb[wb_cat]}! You are in the {actual_pct:.1f}th percentile.",
                 "actual_pct": actual_pct,
                 "opt_pct": opt_pct
             }
@@ -431,7 +484,7 @@ class IdentityAnalyzer:
         if not swapped_in:
             return {
                 "case": 2,
-                "message": f"By simply reprioritizing your current identities, you could move from the {actual_pct:.1f}th to the {opt_pct:.1f}th percentile of happiness.",
+                "message": f"By simply reprioritizing your current identities, you could move from the {actual_pct:.1f}th to the {opt_pct:.1f}th percentile of {self.well_being_vars_encoded_verb[wb_cat]}.",
                 "actual_pct": actual_pct,
                 "opt_pct": opt_pct
             }
@@ -440,7 +493,7 @@ class IdentityAnalyzer:
             new_cat = swapped_in[0]
             return {
                 "case": 3,
-                "message": f"By incorporating '{new_cat}' into your top priorities, you could significantly boost your happiness percentile from {actual_pct:.1f}th to {opt_pct:.1f}th.",
+                "message": f"By incorporating {new_cat} into your top priorities, you could significantly boost your {self.well_being_vars_encoded_verb[wb_cat]} percentile from {actual_pct:.1f}th to {opt_pct:.1f}th.",
                 "actual_pct": actual_pct,
                 "opt_pct": opt_pct,
                 "added_component": new_cat
@@ -524,6 +577,87 @@ class IdentityAnalyzer:
         optimization_message = self.generate_optimization_message(finalRankedChoices, optimized_result)
         optimized_result['optimization_message'] = optimization_message
         return optimized_result
+
+
+
+    def get_user_cat_score(self, finalRankedChoices, wb_cat):
+        sumOfScores = 0
+        for i in range(len(finalRankedChoices)):
+            category = finalRankedChoices[i]
+            weight = max(5-i, 0)
+            cat_percentile = self.well_being_vars_top5_df.loc[category, wb_cat]
+            sumOfScores += weight*cat_percentile
+        raw_score = sumOfScores / 15
+        return raw_score
+    
+
+    def get_highest_permutation(self, user_answers_dict: dict, final_report: list, max_iterations=3):
+        finalRankedChoices = user_answers_dict['finalRankedChoices']
+        final_report_df = pd.DataFrame(final_report)
+        final_report_df = final_report_df.sort_values(by='predicted_rank', ascending=True)
+        predictedRanked = final_report_df[final_report_df['predicted_rank'] <= 5]
+        predictedRankedCategories = predictedRanked['component'].tolist()
+        optimized_result = defaultdict(lambda: defaultdict(float))
+        for wb_cat in self.well_being_vars_encoded.keys():
+            highest_cat = None
+            highest_cat_score = -1
+            not_in_user_cats = {k:v for k,v in self.well_being_vars_top5.items() if k not in finalRankedChoices}
+            for cat, wb_dict in not_in_user_cats.items():
+                if wb_dict[wb_cat] > highest_cat_score:
+                    highest_cat_score = wb_dict[wb_cat]
+                    highest_cat = cat
+
+            original_perm = list(finalRankedChoices) + [highest_cat]
+            best_perm = original_perm.copy()
+            highest_cat_score = self.get_user_cat_score(best_perm, wb_cat)
+            for perm in itertools.permutations(original_perm):
+                dist = self._kendall_tau_distance(original_perm, list(perm))
+                
+                if dist <= max_iterations:
+                    # print(perm, dist)
+                    current_score = self.get_user_cat_score(perm, wb_cat)
+    #                     print(c_set, current_h)
+                    if current_score > highest_cat_score:
+                        highest_cat_score = current_score
+                        best_perm = list(perm)
+
+            optimized_result[wb_cat]['optimized_top5'] = best_perm[:5]
+            optimized_result[wb_cat]['actual_top5'] = finalRankedChoices
+            actual_pct = self.get_monte_carlo_percentile(finalRankedChoices)[wb_cat]
+            optimized_pct = self.get_monte_carlo_percentile(optimized_result[wb_cat]['optimized_top5'])[wb_cat]
+
+            predicted_pct = self.get_monte_carlo_percentile(predictedRankedCategories)[wb_cat]
+            optimized_result[wb_cat]['predicted_top5'] = predictedRankedCategories
+            optimized_result[wb_cat]['percentiles'] = {
+                'actual_pct': actual_pct,
+                'predicted_pct' : predicted_pct,
+                'optimized_pct': optimized_pct
+            }
+            optimization_message = self.generate_optimization_message(finalRankedChoices, optimized_result, wb_cat)
+            optimized_result[wb_cat]['optimization_message'] = optimization_message
+        optimized_result = {self.well_being_vars_encoded[k]: v for (k, v) in optimized_result.items()}
+
+        return optimized_result
+
+
+    def get_user_order(self, user_answers_dict):
+        t5 = user_answers_dict['T5']
+        main_likert_mapping = {v:k for (k,v) in self.main_questions.items()}
+        likert_vals_top5 = {}
+        for cat in t5:
+            likert_vals_top5[cat] = (user_answers_dict[main_likert_mapping[cat]], self.cat_stats[cat]["pct_in_top5"])
+        
+        sorted_data = sorted(likert_vals_top5.items(), key=lambda x: (x[1][0], x[1][1]), reverse=True)
+        
+        return sorted_data
+            
+
+
+
+
+        
+        
+
 
         
 

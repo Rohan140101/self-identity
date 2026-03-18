@@ -1,0 +1,25 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: analysis/Dockerfile
+    ports:
+      - "8000:8000"
+    restart: always
+    shm_size: '2gb'
+
+  frontend:
+    build:
+      context: .
+      dockerfile: app/Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/build/data 
+      - ./public:/build/public 
+      - ./utils:/build/utils    
+      - ./images:/build/images  
+    environment:
+      - NEXT_PUBLIC_API_URL=https://13.220.25.137:8000
+      - NEXT_PUBLIC_GLOBAL_API_PATH=/api/
+    restart: always
