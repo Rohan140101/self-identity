@@ -8,7 +8,6 @@ from scipy.stats import norm
 import base64
 from io import BytesIO
 
-user_email = "rkuckian@cs.stonybrook.edu"
 data = {'email': 'rkuckian@cs.stonybrook.edu', 
         'top_identity_table': [
             {'component': 'Ethnicity', 'agree_pct': 1.875, 'top5_pct': 21.25, 'happiness_pct': 46.13593691045414}, 

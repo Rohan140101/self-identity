@@ -273,6 +273,74 @@ export default function IdentityReport(
             <Header />
             <main className="min-h-screen bg-white text-black">
                 <main className="grow w-full max-w-5xl mx-auto py-12 px-6">
+                    <section className='mt-16'>
+                        {/* <div className="mt-16 mb-20 px-6 bg-slate-50 border border-slate-200 rounded-3xl text-center shadow-sm relative overflow-hidden">
+                            <div className='relative z-10 space-y-6'>
+                                <div className='space-y-2'>
+                                    <h3 className="text-2xl font-bold text-slate-900 tracking-tight">Get a copy of this analysis?</h3>
+                                </div>
+                            </div>
+
+
+                            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                                <button
+                                    onClick={() => setIsModalOpen(true)}
+                                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white px-10 py-4 rounded-xl font-bold hover:bg-blue-700 transition-all hover:-translate-y-0.5 shadow-lg shadow-blue-200 active:scale-95"
+                                >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                                    </svg>
+                                    Get PDF Report
+                                </button>
+                                <button
+                                    onClick={handleSkip}
+                                    className="w-full sm:w-auto text-slate-400 font-medium hover:text-slate-600 px-6 py-4 transition-colors rounded-xl hover:bg-slate-100"
+                                >
+                                    Skip
+                                </button>
+                            </div>
+                        </div>
+                         */}
+
+                        <div className="mb-10 px-6">
+                            <div className="max-w-2xl mx-auto bg-slate-50 border border-slate-200 rounded-3xl p-10 text-center shadow-sm relative overflow-hidden">
+
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-100/50 rounded-full blur-3xl -mr-16 -mt-16"></div>
+
+                                <div className="relative z-10 space-y-6">
+                                    <div className="space-y-2">
+                                        <h3 className="text-2xl font-black text-slate-900 tracking-tight">
+                                            Get your Identity Report
+                                        </h3>
+                                        <p className="text-slate-500 text-sm max-w-sm mx-auto">
+                                            Get a comprehensive PDF copy of your analysis delivered to your email id.
+                                        </p>
+                                    </div>
+
+                                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                                        <button
+                                            onClick={() => setIsModalOpen(true)}
+                                            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white px-10 py-4 rounded-xl font-bold hover:bg-blue-700 transition-all hover:-translate-y-0.5 shadow-lg shadow-blue-200 active:scale-95"
+                                        >
+                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                                            </svg>
+                                            Get Full PDF Report
+                                        </button>
+
+                                        <button
+                                            onClick={handleSkip}
+                                            className="w-full sm:w-auto text-slate-400 font-semibold hover:text-slate-600 px-6 py-4 rounded-xl hover:bg-slate-100 transition-colors"
+                                        >
+                                            Skip
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </section>
                     <header className="mb-10 border-b border-slate-100 pb-6">
                         <h1 className="text-3xl font-extrabold text-slate-900 tracking-tight">
                             Your Identity Report
@@ -407,124 +475,73 @@ export default function IdentityReport(
                     </section>
 
 
-                    {/* <section className='mt-16'>
-                        <h2 className="text-lg font-bold mb-5 text-slate-800 flex items-center gap-2">
-                            <span className="w-1.5 h-6 bg-purple-600 rounded-full"></span>
-                            Happiness Optimization
-                        </h2>
-
-
-
-                        <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 mb-8">
-                            <HappinessBellCurve
-                                actual={optimized_result.percentiles.actual_pct}
-                                predicted={optimized_result.percentiles.predicted_pct}
-                                optimized={optimized_result.percentiles.optimized_pct}
-                            />
-                        </div>
-
-                        <div className={`p-6 rounded-xl border-l-4 mb-8 
-                        ${msg.case === 1 ? "bg-blue-50 border-blue-500" : "bg-green-50 border-green-50"}`}>
-                            <p className='text-lg font-medium text-slate-800 leading-relaxed'>
-                                {msg.message}
-                            </p>
-                        </div>
-
-
-                        <div className='grid grid-cols-1 md:grid-cols-3 gap-6 mb-8'>
-                            <div className='p-4 rounded-xl border border-slate-200 bg-white shadow-sm'>
-                                <p className='text-xs font-bold text-slate-400'>
-                                    Current Happiness
-                                </p>
-                                <p className='text-3xl font-black text-slate-900'>
-                                    {msg.actual_pct.toFixed(1)}
-                                </p>
-
-                            </div>
-
-                            <div className='p-4 rounded-xl border border-slate-200 bg-white shadow-sm'>
-                                <p className='text-xs font-bold text-slate-400'>
-                                    Predicted Happiness
-                                </p>
-                                <p className='text-3xl font-black text-slate-900'>
-                                    {optimized_result.percentiles.predicted_pct.toFixed(1)}
-                                </p>
-
-                            </div>
-
-                            <div className='p-4 rounded-xl border border-slate-200 bg-white shadow-sm'>
-                                <p className='text-xs font-bold text-slate-400'>
-                                    Optimized Happiness
-                                </p>
-                                <p className='text-3xl font-black text-slate-900'>
-                                    {optimized_result.percentiles.optimized_pct.toFixed(1)}
-                                </p>
-
-                            </div>
-
-                        </div>
-
-
-
-                        <div className='overflow-hidden rounded-xl border borders-slate-200 shadow-sm bg-white'>
-                            <table className='w-full text-left border-collapse'>
-                                <thead>
-                                    <tr className='bg-slate-900 text=white'>
-                                        <th className='p-4 text-sm font-semibold text-white'>Rank</th>
-                                        <th className='p-4 text-sm font-semibold text-white'>Current Ranking</th>
-                                        <th className='p-4 text-sm font-semibold text-purple-300'>Predicted Ranking</th>
-                                        <th className='p-4 text-sm font-semibold text-green-300'>Optimized Ranking</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody className='divide-y divide-slate-100'>
-                                    {[0, 1, 2, 3, 4].map((i) => (
-                                        <tr key={i} className='hover:bg-slate-50 transition-colors'>
-                                            <td className='p-4 text-mono text-slate-400'>#{i + 1}</td>
-                                            <td className='p-4 text-slate-700 font-medium'>{optimized_result.actual_top5[i]}</td>
-                                            <td className='p-4 text-slate-700 font-medium'>{optimized_result.predicted_top5[i]}</td>
-                                            <td className='p-4 text-slate-700 font-medium'>
-                                                <span className={`font-bold ${!optimized_result.actual_top5.includes(optimized_result.optimized_top5[i]) ?
-                                                    "text-green-600" : "text-slate-900"
-                                                    }`}>
-
-                                                </span>
-                                                {optimized_result.optimized_top5[i]}
-                                                {!optimized_result.actual_top5.includes(optimized_result.optimized_top5[i]) && (
-                                                    <span className="ml-2 text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full">NEW</span>
-                                                )}
-                                            </td>
-                                        </tr>
-                                    ))}
-
-                                </tbody>
-
-                            </table>
-
-                        </div>
-
-
-                    </section> */}
 
 
 
 
                     <section className='mt-16'>
-                        <div className="mt-16 border-t border-slate-100 pt-10 flex flex-col items-center gap-4 pb-20">
-                            <h3 className="text-xl font-bold text-slate-900">Want a copy of this analysis?</h3>
-                            <div className="flex gap-4">
+                        {/* <div className="mt-16 mb-20 px-6 bg-slate-50 border border-slate-200 rounded-3xl text-center shadow-sm relative overflow-hidden">
+                            <div className='relative z-10 space-y-6'>
+                                <div className='space-y-2'>
+                                    <h3 className="text-2xl font-bold text-slate-900 tracking-tight">Get a copy of this analysis?</h3>
+                                </div>
+                            </div>
+
+
+                            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                                 <button
                                     onClick={() => setIsModalOpen(true)}
-                                    className="bg-blue-600 text-white px-8 py-3 rounded-lg font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200"
+                                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white px-10 py-4 rounded-xl font-bold hover:bg-blue-700 transition-all hover:-translate-y-0.5 shadow-lg shadow-blue-200 active:scale-95"
                                 >
+                                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                                    </svg>
                                     Get PDF Report
                                 </button>
                                 <button
                                     onClick={handleSkip}
-                                    className="text-slate-400 font-medium hover:text-slate-600 px-8 py-3 transition"
+                                    className="w-full sm:w-auto text-slate-400 font-medium hover:text-slate-600 px-6 py-4 transition-colors rounded-xl hover:bg-slate-100"
                                 >
                                     Skip
                                 </button>
+                            </div>
+                        </div>
+                         */}
+
+                        <div className="mt-20 mb-20 px-6">
+                            <div className="max-w-2xl mx-auto bg-slate-50 border border-slate-200 rounded-3xl p-10 text-center shadow-sm relative overflow-hidden">
+
+                                <div className="absolute top-0 right-0 w-32 h-32 bg-blue-100/50 rounded-full blur-3xl -mr-16 -mt-16"></div>
+
+                                <div className="relative z-10 space-y-6">
+                                    <div className="space-y-2">
+                                        <h3 className="text-2xl font-black text-slate-900 tracking-tight">
+                                            Get your Identity Report
+                                        </h3>
+                                        <p className="text-slate-500 text-sm max-w-sm mx-auto">
+                                            Get a comprehensive PDF copy of your analysis delivered to your email id.
+                                        </p>
+                                    </div>
+
+                                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                                        <button
+                                            onClick={() => setIsModalOpen(true)}
+                                            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white px-10 py-4 rounded-xl font-bold hover:bg-blue-700 transition-all hover:-translate-y-0.5 shadow-lg shadow-blue-200 active:scale-95"
+                                        >
+                                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                                            </svg>
+                                            Get Full PDF Report
+                                        </button>
+
+                                        <button
+                                            onClick={handleSkip}
+                                            className="w-full sm:w-auto text-slate-400 font-semibold hover:text-slate-600 px-6 py-4 rounded-xl hover:bg-slate-100 transition-colors"
+                                        >
+                                            Skip
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
 

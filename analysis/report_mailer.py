@@ -95,7 +95,8 @@ def send_email_with_report(data, user_name, user_email, report_path, generated_i
     app_password = os.getenv("GMAIL_APP_PASSWORD")
 
     message = MIMEMultipart("related")
-    message["From"] = os.getenv("REPORT_SENDER_NAME")
+    message["From"] =f"{os.getenv("REPORT_SENDER_NAME")} <{sender_email}>"
+
     message["To"] = user_email
     message["Subject"] = "Your Personal Self-Identity Analysis"
 

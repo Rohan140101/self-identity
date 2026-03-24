@@ -341,6 +341,7 @@ function SurveyManager() {
                             <TopFiveQuestion question={currentQuestion.question}
                                 options={currentQuestion.options}
                                 selectedValues={currentAnswer || []}
+                                answers={answers}
                                 onToggle={(val: string) => {
                                     const prev = currentAnswer || [];
                                     const updated = prev.includes(val)

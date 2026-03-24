@@ -68,33 +68,3 @@ async def handle_report_request(data: dict):
     send_email_with_report(data, user_name, user_email, filename, generated_images)
     return {"status": "success", "message": f"Report Generated and Sent"}
 
-# @app.route('/api/append-to-sheets', methods=['POST'])
-# def append_to_sheets(data: dict):
-#     email = data['email']
-#     answers = data['answers']
-    
-#     headers = [
-#         "timestamp", "survey_id", "email", "age", "gender", 
-#         "choice_1", "choice_2", "choice_3", "choice_4", "choice_5", 
-#         "optimized_pct"
-#     ]
-    
-#     choices = data.get('finalRankedChoices', [])
-    
-#     # 3. Build the row list based on your headers
-#     row = [
-#         data.get("timestamp"),
-#         data.get("survey_id"),
-#         data.get("email"),
-#         data.get("age"),
-#         data.get("gender"),
-#         choices[0] if len(choices) > 0 else "",
-#         choices[1] if len(choices) > 1 else "",
-#         choices[2] if len(choices) > 2 else "",
-#         choices[3] if len(choices) > 3 else "",
-#         choices[4] if len(choices) > 4 else "",
-#         data.get("optimized_pct")
-#     ]
-    
-#     sheet.append_row(row)
-#     return {"status": "success"}, 200

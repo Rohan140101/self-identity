@@ -1,56 +1,99 @@
+"use client";
 import Header from "../components/header"
 import Footer from "../components/footer"
 import { platform } from "os"
 import { url } from "inspector"
+import { CircleUser, Twitter, Mail } from 'lucide-react';
+import { useRouter } from "next/navigation";
+
 export default function ContactPage() {
+    const name = "Steven Skiena"
+    const department = "Dept. of Computer Science"
+    const university = "Stony Brook University"
+    const pincode = "NY, 11794-2424"
+    const router = useRouter()
+
+    const links = [
+        { "name": "Twitter", "icon": Twitter, url: "https://twitter.com/StevenSkiena" },
+        { "name": "Email", "icon": Mail, url: "mailto:skiena@cs.stonybrook.edu" }
+    ]
     return (
-        <div className="min-h-screen bg-white flex flex-col">
+
+        <div className="min-h-screen bg-white flex flex-col font-sans">
             <Header />
-            <main className="min-h-screen bg-white text-black">
-                <div className="max-w-5xl mx-auto py-20 px-6">
-                    <h1 className="text-5xl text-center font-bold mb-12 pb-4 text-(--brand-dark) ">
-                        Contact
-                    </h1>
+            <main className="grow flex items-center justify-center bg-slate-50/50 py-10 px-6">
+                <div className="max-w-xl w-full">
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
+                    <div className="text-center mb-8">
+                        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
+                            Contact Us
+                        </h1>
+                        {/* <div className="w-20 h-1.5 bg-blue-600 mx-auto rounded-full"></div> */}
+                    </div>
+                    <div className="bg-white border border-slate-200 rounded-[2.5rem] p-7 md:p-10 shadow-xl shadow-slate-200/50 text-center relative overflow-hidden">
 
-                        <div className="space-y-6">
-                            <div>
+                        {/* <div className="absolute top-0 left-0 w-full h-2 bg-linear-to-r from-blue-500 via-indigo-600 to-purple-500"></div> */}
 
-                                <p className="text-2xl font-semibold text-(--brand-dark)">Steven Skiena</p>
-                            </div>
+                        <div className="space-y-4">
+                            <h1 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">
+                                {name}
+                            </h1>
 
-                            <div>
-
-                                <p className="text-lg text-slate-600">
-                                    Department of Computer Science<br />
-                                    Stony Brook University<br />
-                                    Stony Brook, NY 11794
+                            <div className="space-y-1">
+                                <p className="text-slate-500 text-base leading-relaxed max-w-sm mx-auto ">
+                                    {department}
+                                </p>
+                                <p className="text-slate-500 text-base leading-relaxed max-w-sm mx-auto">
+                                    {university}
+                                </p>
+                                <p className="text-slate-500 text-base leading-relaxed max-w-sm mx-auto">
+                                    {pincode}
                                 </p>
                             </div>
-                        </div>
 
-                        <div className="space-y-6">
+                            <div className="w-12 h-1 bg-slate-200 mx-auto my-6 rounded-full"></div>
 
-                            <ul className="space-y-1">
-                                <li>
-                                    <a href="https://www.cs.stonybrook.edu/~skiena" className="text-lg text-(--brand-dark) hover:text-blue-600 flex items-center gap-2 transition-colors">
-                                        www.cs.stonybrook.edu/~skiena
+                            <a href="https://www.cs.stonybrook.edu/~skiena" target="_blank" className="font-medium text-slate-900 underline hover:text-blue-600 transition-all">Personal Website</a>
+
+
+                            <div className="flex flex-wrap justify-center gap-4 pt-4">
+                                {links.map((linkData) => (
+                                    <a
+                                        href={linkData.url}
+                                        key={linkData.name}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="flex items-center gap-2 px-6 py-3 bg-slate-900 text-white rounded-xl font-bold text-sm hover:bg-blue-600 hover:-translate-y-1 transition-all duration-300 shadow-md active:scale-95"
+                                    >
+                                        <linkData.icon size={20} />
                                     </a>
-                                </li>
-                                <li>
-                                    <a href="https://twitter.com/StevenSkiena" target="_blank" rel="noreferrer" className="text-lg text-(--brand-dark) hover:text-blue-600 flex items-center gap-2 transition-colors">
-                                        https://twitter.com/StevenSkiena
-                                    </a>
-                                </li>
-                                <li>
-                                    <p className="text-lg text-(--brand-dark)">Email: skiena@cs.stonybrook.edu</p>
-                                    
-                                </li>
-                            </ul>
+                                ))}
+                            </div>
                         </div>
+                        <div className="w-12 h-1 bg-slate-200 mx-auto my-6 rounded-full"></div>
+                        <div className="space-y-3">
+                            <div className="space-y-1">
+                                <h3 className="text-sm font-bold text-slate-900 uppercase tracking-widest">
+                                    Stay Updated
+                                </h3>
+                                <p className="text-slate-500 text-sm leading-relaxed max-w-xs mx-auto">
+                                    Subscribe to receive updates on research, publications, and news.
+                                </p>
+                            </div>
 
+
+                            <a href="/subscribe"
+                                rel="noreferrer"
+                                className="inline-flex items-center gap-2 px-8 py-3 bg-slate-900 text-white rounded-xl font-bold text-sm hover:bg-blue-600 hover:-translate-y-1 transition-all duration-300 shadow-md shadow-blue-200 active:scale-95"
+                            >
+                                <Mail size={16} />
+                                Subscribe to Mailing List
+                            </a>
+                        </div>
                     </div>
+
+
+
                 </div>
             </main>
             <Footer />

@@ -4,14 +4,59 @@ import { useState, useMemo } from "react";
 interface TopFiveQuestionProps {
     question: string;
     options: string[];
+    answers: Record<string, any>;
     selectedValues: string[];
     onToggle: (value: string) => void;
+};
+
+const main_questions = {
+    'ethMainChoice': 'Ethnicity',
+    'sorMainChoice': 'Sexual Orientation',
+    'famMainChoice': 'Family Relations',
+    'occMainChoice': 'Occupation',
+    'serMainChoice': 'Service',
+    'eduMainChoice': 'Education',
+    'helMainChoice': 'Health',
+    'locMainChoice': 'Location',
+    'spoMainChoice': 'Sports',
+    'relMainChoice': 'Religion',
+    'polMainChoice': 'Politics',
+    'hobMainChoice': 'Hobbies',
+    'genMainChoice': 'Generation',
+    'entMainChoice': 'Entertainment',
+    'socMainChoice': 'Social Media',
+    'ersMainChoice': 'Economic Role and Status',
+    'aaMainChoice': 'Appearance and Age',
+    'perMainChoice': 'Personality Traits',
+    'lifMainChoice': 'Lifestyle',
+    'sepMainChoice': 'Self Perception'
 }
 
-export default function TopFiveQuestion({ question, options, selectedValues, onToggle }: TopFiveQuestionProps) {
+const likertStyles: Record<number, string> = {
+    1: "bg-violet-800 text-white",
+    2: "bg-indigo-800 text-white",
+    3: "bg-blue-800 text-white",
+    4: "bg-green-800 text-white",
+    5: "bg-yellow-800 text-white",
+    6: "bg-orange-800 text-white",
+    7: "bg-red-800 text-white",
+}
+
+export default function TopFiveQuestion({ question, options, answers, selectedValues, onToggle }: TopFiveQuestionProps) {
 
     const shuffledOptions = useMemo(() => [...options].sort(() => Math.random() - 0.5), [options]);
     const canSelectMore = selectedValues.length < 5;
+    console.log(answers)
+    let categoryStyles: Record<string, string> = {}
+    let categoryLikertVal: Record<string, number> = {}
+    Object.entries(main_questions).forEach((values: any) => {
+        let categoryQuestion = values[0]
+        let category = values[1]
+        let catLikertVal = answers[categoryQuestion]
+        categoryStyles[category] = likertStyles[catLikertVal]
+        categoryLikertVal[category] = catLikertVal
+    })
+
 
     return (
         <div className="w-full">
@@ -29,16 +74,20 @@ export default function TopFiveQuestion({ question, options, selectedValues, onT
 
                     return (
                         <button
-                        key={option}
-                        disabled={disabled}
-                        onClick={() => onToggle(option)}
-                        className={`p-4 text-center border-2 rounded-xl transition-all h-24 flex items-center justify-center text-sm font-bold
-                        ${isSelected ? "border-slate-900 bg-slate-900 text-white shadow-md scale-[1.05]" : 
-                            disabled ? "border-gray-50 bg-gray-50 text-gray-300 cursor-not-allowed" :
-                            "border-gray-100 bg-white text-gray-700 hover:border-slate-300"
-                            }`}>
-                                {option}
+                            key={option}
+                            disabled={disabled}
+                            onClick={() => onToggle(option)}
+                            className={`p-4 text-center border-2 rounded-xl transition-all h-32 flex flex-col items-center justify-center text-sm font-bold gap-2
+    ${isSelected ? "border-slate-900 bg-slate-900 text-white shadow-md scale-[1.05]" :
+                                    disabled ? "border-gray-50 bg-gray-50 text-gray-300 cursor-not-allowed" :
+                                        `border-gray-100 ${categoryStyles[option]} opacity-75 hover:border-slate-300`
+                                }`}
+                        >
+                            <p className={`w-8 h-8 flex items-center justify-center rounded-full border-2 border-white text-xs mb-1`}>
+                                {categoryLikertVal[option]}
+                            </p>
 
+                            <span>{option}</span>
                         </button>
                     )
                 })}

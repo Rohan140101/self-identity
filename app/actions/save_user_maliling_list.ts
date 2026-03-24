@@ -1,0 +1,57 @@
+'use server'
+
+import { google } from 'googleapis'
+
+export async function saveToMailingList(user_name: any, user_email: any) {
+    
+
+
+    const row: any[] = [new Date().toLocaleString(), user_name, user_email]
+
+    
+
+    try {
+        const auth = new google.auth.JWT(
+            {
+                email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+                key: process.env.GOOGLE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+                scopes: ['https://www.googleapis.com/auth/spreadsheets'],
+            }
+        );
+
+        const sheets = google.sheets({ version: 'v4', auth })
+        // const row = [
+        //     new Date().toISOString(),
+        //     JSON.stringify(answers),
+        // ]
+
+        await sheets.spreadsheets.values.append({
+            spreadsheetId: process.env.GOOGLE_SHEET_MAILING_LIST,
+            range: "Sheet1!A1",
+            valueInputOption: "USER_ENTERED",
+            requestBody: {
+                values: [row]
+            }
+
+        });
+
+
+        // const response = await fetch('http://localhost:8000/analyze', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify(answers),
+        // });
+
+        // if (!response.ok) throw new Error('Analysis failed');
+
+        // const analysisData = await response.json();
+
+        // return { success: true, data: analysisData }
+
+
+    } catch (error) {
+        console.error('Google Sheets Error:', error);
+        return { success: false, error: 'Failed to save data' };
+
+    }
+}
