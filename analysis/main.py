@@ -6,9 +6,10 @@ import os
 from pdf_generator import generate_full_identity_report
 from report_mailer import send_email_with_report
 from datetime import datetime
-
-
-
+from sm_image_generator import S3_Instance
+from message_generator import twitter_message_generator
+from tst_email_mailer import send_tst_confirmation_email
+from grsm_email_mailer import send_bio_grading_email
 app = FastAPI()
 
 app.add_middleware(
@@ -21,6 +22,7 @@ app.add_middleware(
 
 
 analyzer = IdentityAnalyzer('data/prolific_data.csv', 'data/survey_data.csv', 'data/did_option_dict.json')
+s3_instance = S3_Instance()
 
 class SurveyInput(BaseModel):
     finalRankedChoices: list
@@ -68,3 +70,51 @@ async def handle_report_request(data: dict):
     send_email_with_report(data, user_name, user_email, filename, generated_images)
     return {"status": "success", "message": f"Report Generated and Sent"}
 
+
+@app.post("/share_social_media")
+async def handle_share_social_media(data:dict):
+    now = datetime.now()
+    timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
+    user_email = data.get("email")
+    image_urls = s3_instance.get_sm_image_paths(data=data, timestamp=timestamp, user_email=user_email)
+    twitter_msg = twitter_message_generator(data)
+    
+    return {
+        "image_urls": image_urls,
+        "twitter_msg": twitter_msg
+    }
+
+@app.post("/mail_tst_results")
+async def mail_tst_results(data: dict):
+    # print(data)
+    user_email = data.get("user_email")
+    user_name = data.get("user_name")
+    statements = data.get("statements")
+    send_tst_confirmation_email(user_name, user_email, statements)
+    
+    return {
+        "status": "success", "message": f"TST Email Generated and Sent"
+    }
+
+
+@app.post("/mail_grade_social_media_results")
+async def mail_grade_social_media_results(data: dict):
+    user_email = data.get("user_email")
+    user_name = data.get("user_name")
+    instagramId = data.get("instagramId")
+    twitterId = data.get("twitterId")
+    facebookId = data.get("facebookId")
+    bio = data.get("bio")
+    send_bio_grading_email(user_email, user_name, instagramId, facebookId, twitterId, bio)
+    
+    return {
+        "status": "success", "message": f"Grade Social Media Bio Email Generated and Sent"
+    }
+
+
+# @app.post("/get_twitter_message")
+# async def get_twitter_message(data: dict):
+#     msg = twitter_message_generator(data)
+#     return {
+        
+#     }

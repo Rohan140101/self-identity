@@ -45,11 +45,10 @@ export default function ReviewRanking({ choices, onComplete, surveyType, allAnsw
     }, [choices])
 
     const fetchRankedOrder = async () => {
-        const localPath = process.env.NEXT_PUBLIC_LOCAL_API_PATH + '/getRankedOrder'
-        const globalPath = process.env.NEXT_PUBLIC_GLOBAL_API_PATH + '/getRankedOrder'
 
+        const path = process.env.NEXT_PUBLIC_API_PATH + '/getRankedOrder'
         try {
-            const response = await fetch(localPath, {
+            const response = await fetch(path, {
                 "method": 'POST',
                 "headers": { "Content-Type": "application/json" },
                 "body": JSON.stringify(allAnswers)

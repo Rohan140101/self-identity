@@ -14,7 +14,6 @@ import DropdownQuestion from "../components/survey/DropdownQuestion";
 import TextInputQuestion from "../components/survey/TextInputQuestion";
 import TopFiveQuestion from "../components/survey/TopFiveQuestion";
 import ReviewRanking from "../components/survey/ReviewRanking";
-import { saveToGoogleSheets } from "../actions/save-survey";
 import IdentityReport from "../components/survey/IdentityReport";
 
 // const mockQuestions = [
@@ -219,11 +218,11 @@ function SurveyManager() {
 
 
     const getReport = async (answers: any) => {
-        const localPath = process.env.NEXT_PUBLIC_LOCAL_API_PATH + "/analyze"
-        const globalPath = process.env.NEXT_PUBLIC_GLOBAL_API_PATH + "/analyze"
-        console.log(localPath, globalPath, process.env)
+        // const localPath = process.env.NEXT_PUBLIC_LOCAL_API_PATH + "/analyze"
+        // const globalPath = process.env.NEXT_PUBLIC_GLOBAL_API_PATH + "/analyze"
+        const path = process.env.NEXT_PUBLIC_API_PATH + '/analyze'
         try {
-            const response = await fetch(localPath, {
+            const response = await fetch(path, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(answers),
@@ -327,7 +326,7 @@ function SurveyManager() {
             <Header />
             <main className="min-h-screen bg-white text-black">
                 <section className="flex-1 flex items-center justify-center p-4">
-                    <div className="w-full max-w-4xl border border-gray-200 rounded-2xl p-10 shadow-sm bg-white">
+                    <div className="w-full max-w-4xl border border-gray-200 rounded-2xl p-5 sm:p-10 shadow-sm bg-white">
 
                         {/* Progress Bar */}
                         <div className="w-full h-1 bg-gray-100 rounded-full mb-10 overflow-hidden">
@@ -431,9 +430,9 @@ function SurveyManager() {
                         {currentQuestion.id != "Review" &&
                             <div className="flex justify-center py-8">
                                 <button
-                                    disabled={!currentAnswer}
+                                    disabled={!isAnswered()}
                                     onClick={handleNext}
-                                    className={`px-12 py-4 rounded-full font-bold text-lg transition-all ${currentAnswer ? "bg-(--brand-dark) text-white hover:bg-slate-800 shadow-xl" : "bg-gray-100 text-gray-400 cursor-not-allowed"}`}
+                                    className={`px-12 py-4 rounded-full font-bold text-lg transition-all ${isAnswered() ? "bg-(--brand-dark) text-white hover:bg-slate-800 shadow-xl" : "bg-gray-100 text-gray-400 cursor-not-allowed"}`}
                                 >
                                     {currentIndex === questions.length - 1 ? "Finish" : "Next"}
                                 </button>

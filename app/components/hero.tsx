@@ -19,7 +19,7 @@ const Hero = function () {
 
         // </section>
 
-        <section className="min-h-[40vh] max-h-[60vh] w-full bg-black flex items-center justify-center px-[5vw] py-12">
+        <section className="max-h-[90vh] sm:min-h-[40vh] sm:max-h-[90vh] w-full bg-black flex items-center justify-center px-[5vw] py-12">
             <div className="flex flex-col md:flex-row items-center justify-between w-full max-w-400 gap-8">
                 <div className="hidden md:block w-[30vw] max-w-120 transition-transform duration-500 hover:scale-105">
                     <img src={woman.src} alt="Woman" className="w-full h-auto drop-shadow-[0_0_30px_rgba(59,130,246,0.5)]" />

@@ -6,6 +6,7 @@ import { act, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { saveToGoogleSheets } from '@/app/actions/save-survey';
 import reportCatDescriptions from "@/data/reportCatDescriptions.json"
+import { time } from 'console';
 
 interface IdentityRow {
     component: string;
@@ -67,7 +68,6 @@ const HighlightedMessage = ({ msg, wb_cat_name }: { msg: any, wb_cat_name: strin
     const renderMessage = () => {
         const { case: msgCase, actual_pct, opt_pct, added_component } = msg;
 
-        // Format percentiles to 1 decimal place
         const actual = <span className={styles.number}>{actual_pct.toFixed(1)}th</span>;
         const opt = <span className={styles.number}>{opt_pct.toFixed(1)}th</span>;
         const variable = <span className={styles.variable}>{wb_cat_name}</span>;
@@ -118,8 +118,8 @@ const ComprehensiveOptimization: React.FC<ComprehensiveOptimizationProps> = ({ a
                 Identity Optimization Analysis
             </h2>
 
-            <p className="text-slate-700 mt-2 pb-10">
-                Now that we know the aspects of your personal identity that you feel are most important, we can make inferences about several aspects of your personality and well-being.   For each of these attributes (happiness, goodness, success, resilience, extrovertedness) we show where you sit relative to the U.S. population, and where you could be with minor changes in which identity components you prioritize.
+            <p className="text-slate-800 italic font-bold mt-2 pb-10">
+                Our model uses the answers you gave on our <a target="_blank"   href='https://www.self-identity.me/' className='text-blue-900 hover:text-blue-600 underline font-black'>identity survey</a> to make inferences about several aspects of your personality and well-being. For each of these attributes (happiness, goodness, success, resilience, extrovertedness), we show where you sit relative to the U.S. population, and where you could be with minor changes in the identity components which you prioritize.  Identities that revolve around interactions with other people, including family, religion, and work, generally serve to help increase well-being.
             </p>
 
 
@@ -149,7 +149,7 @@ const ComprehensiveOptimization: React.FC<ComprehensiveOptimizationProps> = ({ a
 
             </div>
 
-            <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 mb-8">
+            <div className="bg-slate-50 rounded-xl p-1 sm:p-4 border border-slate-100 mb-8">
                 <HappinessBellCurve
                     actual={current.percentiles.actual_pct}
                     optimized={current.percentiles.optimized_pct}
@@ -208,10 +208,14 @@ export default function IdentityReport(
         }) {
 
     // const msg = optimized_result.optimization_message;
-    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEmailModalOpen, setIsEmailModalOpen] = useState(false);
+    const [isSMShareModalOpen, setIsSMShareModalOpen] = useState(false)
+    const [isLoading, setIsLoading] = useState(false);
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
-    const [consent, setConsent] = useState("");
+    const [consent, setConsent] = useState("yes");
+    const [shareStatus, setShareStatus] = useState<'idle' | 'loading' | 'success'>('idle')
+    const [finalTwitterUrl, setFinalTwitterUrl] = useState("");
     const router = useRouter();
 
 
@@ -223,11 +227,9 @@ export default function IdentityReport(
         //     email: userEmail || "",
         //     answers: JSON.parse(storedAnswers),
         // };
-
         const result = await saveToGoogleSheets(storedAnswers, userEmail, userName, researchConsent)
 
         sessionStorage.removeItem('user_answers');
-        router.push('/survey/success');
 
 
     };
@@ -235,7 +237,32 @@ export default function IdentityReport(
     const handleEmailSubmit = async (e: React.FormEvent) => {
         console.log("Inside handleEmailSubmit")
         e.preventDefault();
-        handleFinalSave(email, name, consent);
+        setIsLoading(true);
+        try {
+            await handleFinalSave(email, name, consent);
+            setIsEmailModalOpen(false);
+            setIsSMShareModalOpen(true);
+            setIsLoading(false);
+            const reportData = {
+                username: name,
+                email,
+                top_identity_table,
+                expected_vs_actual_rank_table,
+                expected_vs_actual_rank_well_being,
+                optimized_result
+            };
+            const path = process.env.NEXT_PUBLIC_API_PATH + '/send-report';
+            fetch(path, {
+                method: 'POST',
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(reportData)
+            }).catch(err => console.error("Background email failed:", err));
+        } catch (error) {
+            console.error("Critical Save Error:", error);
+            setIsLoading(false);
+        }
+
+        setIsLoading(true)
         const reportData = {
             username: name,
             email: email,
@@ -245,34 +272,68 @@ export default function IdentityReport(
             optimized_result
         }
 
-        const localPath = process.env.NEXT_PUBLIC_LOCAL_API_PATH + '/send-report'
-        const globalPath = process.env.NEXT_PUBLIC_GLOBAL_API_PATH + '/send-report'
-
-        try {
-            const response = await fetch(localPath, {
-                "method": 'POST',
-                "headers": { "Content-Type": "application/json" },
-                "body": JSON.stringify(reportData)
-            });
-
-            if (response.ok) {
-                setIsModalOpen(false);
-            }
-        } catch (error) {
-            console.error("Error triggering report:", error);
-        }
     };
 
     const handleSkip = () => {
         handleFinalSave(null, null, null);
+        setIsEmailModalOpen(false);
+        setIsSMShareModalOpen(true);
     };
+
+
+    const handleSMShareSubmit = async (platform: string) => {
+        const domain = "https://self-identity.me";
+        setShareStatus("loading")
+        setIsLoading(true);
+        const data = {
+            email: email,
+            optimized_result
+        }
+        const path = process.env.NEXT_PUBLIC_API_PATH + '/share_social_media'
+        try {
+            const response = await fetch(path, {
+                "method": 'POST',
+                "headers": { "Content-Type": "application/json" },
+                "body": JSON.stringify(data)
+            });
+
+            if (response.ok) {
+                // Reredictectinng to SM
+                const result = await response.json();
+                const firstImageUrl = Object.values(result.image_urls)[0] as string;
+                const fileName = firstImageUrl.split('/').pop()
+                const hash = fileName?.split('_')[0];
+                if (platform === "twitter") {
+                    const msg = result.twitter_msg
+                    const sharePageUrl = `https://self-identity.me/share/${hash}`;
+                    const tweetText = encodeURIComponent(
+                        `I just analyzed my Self-Identity Profile!\n\n${msg}\n\nAnalyze yourself today at ${domain}\n\n`
+                    );
+                    // optimized_result['Happy']
+                    const twitterUrl = `https://twitter.com/intent/tweet?text=${tweetText}&url=${encodeURIComponent(sharePageUrl)}`;
+                    // window.location.href = twitterUrl
+                    // window.open(twitterUrl, '_blank', 'noopener,noreferrer');
+                    setFinalTwitterUrl(twitterUrl)
+                    setShareStatus("success")
+
+                }
+
+            }
+        } catch (error) {
+            console.error("Error triggering report:", error);
+
+            setShareStatus("idle")
+        } finally {
+            setIsLoading(false);
+        }
+    }
 
 
     return (
         <div className="min-h-screen bg-white flex flex-col">
             <Header />
-            <main className="min-h-screen bg-white text-black">
-                <main className="grow w-full max-w-5xl mx-auto py-12 px-6">
+            <main className="grow flex flex-col items-center bg-slate-50/50 px-4 sm:px-6 max-w-full overflow-x-hidden">
+                <div className='w-full max-w-4xl mx-auto'>
                     <section className='mt-16'>
                         {/* <div className="mt-16 mb-20 px-6 bg-slate-50 border border-slate-200 rounded-3xl text-center shadow-sm relative overflow-hidden">
                             <div className='relative z-10 space-y-6'>
@@ -302,8 +363,8 @@ export default function IdentityReport(
                         </div>
                          */}
 
-                        <div className="mb-10 px-6">
-                            <div className="max-w-2xl mx-auto bg-slate-50 border border-slate-200 rounded-3xl p-10 text-center shadow-sm relative overflow-hidden">
+                        <div className="mb-10 px-3 sm:px-6">
+                            <div className="max-w-2xl mx-auto bg-slate-50 border border-slate-200 rounded-3xl p-5 sm:p-10 text-center shadow-sm relative overflow-hidden">
 
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-blue-100/50 rounded-full blur-3xl -mr-16 -mt-16"></div>
 
@@ -319,7 +380,7 @@ export default function IdentityReport(
 
                                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                                         <button
-                                            onClick={() => setIsModalOpen(true)}
+                                            onClick={() => setIsEmailModalOpen(true)}
                                             className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white px-10 py-4 rounded-xl font-bold hover:bg-blue-700 transition-all hover:-translate-y-0.5 shadow-lg shadow-blue-200 active:scale-95"
                                         >
                                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -349,46 +410,7 @@ export default function IdentityReport(
                     </header>
 
                     <ComprehensiveOptimization allOptimizedData={optimized_result} />
-                    {/* 
-                    <section>
-                        <h2 className="text-lg font-bold mb-5 text-slate-800 flex items-center gap-2">
-                            <span className="w-1.5 h-6 bg-blue-600 rounded-full"></span>
-                            Top Identity Components
-                        </h2>
 
-                        <div className="overflow-hidden rounded-xl border border-slate-200 shadow-sm bg-white">
-                            <table className="w-full text-left border-collapse">
-                                <thead>
-                                    <tr className="bg-slate-900 text-white">
-                                        <th className="p-4 font-semibold text-sm tracking-wider">Identity Component</th>
-                                        <th className="p-4 font-semibold text-sm  tracking-wider text-center">Agreement %</th>
-                                        <th className="p-4 font-semibold text-sm  tracking-wider text-center">Top 5 %</th>
-                                        <th className="p-4 font-semibold text-sm  tracking-wider text-center">Happiness Percentile</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-slate-100 text-slate-700">
-                                    {top_identity_table.map((row, i) => (
-                                        <tr key={i} className="hover:bg-slate-50 transition-colors">
-                                            <td className="p-4 font-medium text-slate-900 italic">
-                                                {row.component}
-                                            </td>
-                                            <td className="p-4 text-center">
-                                                {row.agree_pct.toFixed(1)}%
-                                            </td>
-                                            <td className="p-4 text-center text-slate-500">
-                                                {row.top5_pct.toFixed(1)}%
-                                            </td>
-                                            <td className="p-4 text-center">
-                                                <span className="inline-flex items-center justify-center w-12 h-8 rounded-lg bg-blue-50 text-blue-700 font-bold border border-blue-100">
-                                                    {row.happiness_pct.toFixed(0)}
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
-                    </section> */}
 
 
                     <section className="mt-16">
@@ -396,7 +418,7 @@ export default function IdentityReport(
                             <span className="w-1.5 h-6 bg-green-600 rounded-full"></span>
                             Expected vs. Actual Identity
                         </h2>
-                        <p className="text-slate-700 mt-2 pb-10">
+                        <p className="text-slate-800 italic font-bold mt-2 pb-10">
                             We formed an idea about how strongly you would value different facets of your identity based on our understanding of you. This did not completely predict the five identity components that you selected. Compare our models sense of you with your self-declared identity.
 
                         </p>
@@ -508,8 +530,8 @@ export default function IdentityReport(
                         </div>
                          */}
 
-                        <div className="mt-20 mb-20 px-6">
-                            <div className="max-w-2xl mx-auto bg-slate-50 border border-slate-200 rounded-3xl p-10 text-center shadow-sm relative overflow-hidden">
+                        <div className="mt-20 mb-20 px-3 sm:px-6">
+                            <div className="max-w-2xl mx-auto bg-slate-50 border border-slate-200 rounded-3xl p-5 sm:p-10 text-center shadow-sm relative overflow-hidden">
 
                                 <div className="absolute top-0 right-0 w-32 h-32 bg-blue-100/50 rounded-full blur-3xl -mr-16 -mt-16"></div>
 
@@ -525,7 +547,7 @@ export default function IdentityReport(
 
                                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                                         <button
-                                            onClick={() => setIsModalOpen(true)}
+                                            onClick={() => setIsEmailModalOpen(true)}
                                             className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white px-10 py-4 rounded-xl font-bold hover:bg-blue-700 transition-all hover:-translate-y-0.5 shadow-lg shadow-blue-200 active:scale-95"
                                         >
                                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -545,56 +567,56 @@ export default function IdentityReport(
                             </div>
                         </div>
 
-                        {isModalOpen && (
-                            <div className="fixed inset-0 bg-slate-900/40 backdrop-blur-md flex items-center justify-center z-50 p-4 transition-all">
-                                <div className="bg-white rounded-3xl max-w-md w-full shadow-2xl overflow-hidden border border-slate-100">
-                                    <div className="bg-linear-to-br from-blue-600 to-indigo-700 p-8 text-center">
-                                        <div className="inline-flex items-center justify-center w-12 h-12 bg-white/20 rounded-full mb-4">
-                                            <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        {isEmailModalOpen && (
+                            <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-50 p-4 overflow-y-auto transition-all">
+                                <div className="bg-white rounded-4xl sm:rounded-3xl max-w-md w-full my-auto shadow-2xl overflow-hidden border border-slate-100 relative">
+                                    <div className="bg-linear-to-br from-blue-600 to-indigo-700 p-6 sm:p-8 text-center">
+                                        <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-full mb-3 sm:mb-4">
+                                            <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                                             </svg>
                                         </div>
-                                        <h2 className="text-2xl font-bold text-white mb-2">Ready to see your report?</h2>
-                                        <p className="text-blue-100 text-sm leading-relaxed">
+                                        <h2 className="text-xl sm:text-2xl font-bold text-white mb-1.5 sm:mb-2">Ready to see your report?</h2>
+                                        <p className="text-blue-100 text-xs sm:text-sm leading-relaxed max-w-65 mx-auto">
                                             Enter your details to receive your personalized Identity report PDF.
                                         </p>
                                     </div>
 
-                                    <form onSubmit={handleEmailSubmit} className="p-8">
-                                        <div className="space-y-5">
+                                    <form onSubmit={handleEmailSubmit} className="p-6 sm:p-8">
+                                        <div className="space-y-4 sm:space-y-5">
                                             <div>
-                                                <label className="block mb-1.5 text-sm font-semibold text-slate-700">
-                                                    Full Name <span className="text-slate-400 font-normal">(Optional)</span>
+                                                <label className="block mb-1 text-sm font-semibold text-slate-700">
+                                                    Full Name <span className="text-slate-400 font-normal text-xs">(Optional)</span>
                                                 </label>
                                                 <input
                                                     type="text"
                                                     placeholder="Alex Johnson"
-                                                    className="w-full border border-slate-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-900 transition-all placeholder:text-slate-300"
+                                                    className="w-full border border-slate-200 rounded-xl px-4 py-2.5 sm:py-3 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-base text-slate-900 transition-all placeholder:text-slate-300"
                                                     onChange={(e) => setName(e.target.value)}
                                                 />
                                             </div>
 
                                             <div>
-                                                <label className="block mb-1.5 text-sm font-semibold text-slate-700">
+                                                <label className="block mb-1 text-sm font-semibold text-slate-700">
                                                     Email Address
                                                 </label>
                                                 <input
                                                     type="email"
                                                     required
                                                     placeholder="name@example.com"
-                                                    className="w-full border border-slate-200 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-slate-900 transition-all placeholder:text-slate-300"
+                                                    className="w-full border border-slate-200 rounded-xl px-4 py-2.5 sm:py-3 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none text-base text-slate-900 transition-all placeholder:text-slate-300"
                                                     onChange={(e) => setEmail(e.target.value)}
                                                 />
                                             </div>
 
                                             <div className="bg-slate-50 p-4 rounded-2xl border border-slate-100">
-                                                <label className="block mb-3 text-xs font-bold uppercase tracking-wider text-slate-500">
+                                                <label className="block mb-2 text-[10px] font-bold uppercase tracking-wider text-slate-500">
                                                     Research Contribution
                                                 </label>
-                                                <p className="text-xs text-slate-500 mb-3 leading-tight">
+                                                <p className="text-[11px] text-slate-500 mb-3 leading-snug">
                                                     May we use your anonymized data for scientific research purposes?
                                                 </p>
-                                                <div className="flex gap-4">
+                                                <div className="flex gap-6">
                                                     <label className="flex items-center gap-2 cursor-pointer group">
                                                         <input
                                                             type="radio"
@@ -604,7 +626,7 @@ export default function IdentityReport(
                                                             className="w-4 h-4 text-blue-600 focus:ring-blue-500"
                                                             onChange={(e) => setConsent(e.target.value)}
                                                         />
-                                                        <span className="text-sm font-medium text-slate-700 group-hover:text-blue-600">Yes</span>
+                                                        <span className="text-sm font-medium text-slate-700">Yes</span>
                                                     </label>
                                                     <label className="flex items-center gap-2 cursor-pointer group">
                                                         <input
@@ -614,23 +636,23 @@ export default function IdentityReport(
                                                             className="w-4 h-4 text-blue-600 focus:ring-blue-500"
                                                             onChange={(e) => setConsent(e.target.value)}
                                                         />
-                                                        <span className="text-sm font-medium text-slate-700 group-hover:text-slate-500">No</span>
+                                                        <span className="text-sm font-medium text-slate-700">No</span>
                                                     </label>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="mt-8 flex flex-col gap-3">
+                                        <div className="mt-6 sm:mt-8 flex flex-col gap-2">
                                             <button
                                                 type="submit"
-                                                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-xl font-bold shadow-lg shadow-blue-200 transition-all active:scale-[0.98]"
+                                                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3.5 sm:py-4 rounded-xl font-bold shadow-lg shadow-blue-200 transition-all active:scale-[0.98] text-sm sm:text-base"
                                             >
                                                 Generate & Send My Report
                                             </button>
                                             <button
                                                 type="button"
-                                                onClick={() => setIsModalOpen(false)}
-                                                className="text-slate-400 hover:text-slate-600 text-sm font-medium py-2 transition-colors"
+                                                onClick={() => setIsEmailModalOpen(false)}
+                                                className="text-slate-400 hover:text-slate-600 text-xs sm:text-sm font-medium py-2 transition-colors"
                                             >
                                                 Cancel
                                             </button>
@@ -639,12 +661,96 @@ export default function IdentityReport(
                                 </div>
                             </div>
                         )}
+
+
+
+
+                        {isSMShareModalOpen && (
+                            <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-50 p-4 overflow-y-auto">
+                                <div className="bg-white rounded-3xl max-w-md w-full shadow-2xl overflow-hidden border border-slate-100">
+                                    <div className={`${shareStatus === 'success' ? 'bg-green-600' : 'bg-linear-to-br from-purple-600 to-indigo-700'} p-8 text-center text-white transition-colors duration-500`}>
+                                        <h2 className="text-2xl font-bold mb-2">
+                                            {shareStatus === 'success' ? 'Ready to Post!' : 'Share your Results'}
+                                        </h2>
+                                        <p className="text-white/80 text-sm">
+                                            {shareStatus === 'success' ? 'Check your new browser tab to finish tweeting.' : 'Help our research by sharing your results on Social Media.'}
+                                        </p>
+                                    </div>
+
+                                    <div className="p-8">
+                                        {shareStatus === "idle" && (
+                                            <div className="space-y-4">
+                                                <button
+                                                    onClick={() => handleSMShareSubmit('twitter')}
+                                                    // disabled={isLoading}
+                                                    className="w-full flex items-center justify-center gap-3 bg-slate-900 text-white py-4 rounded-xl font-bold hover:bg-slate-700 transition-all disabled:opacity-50"
+                                                >
+                                                    {/* {isLoading ? "Generating Image..." : "Twitter (X)"} */}
+                                                    <svg
+                                                        className="w-5 h-5 fill-current"
+                                                        viewBox="0 0 24 24"
+                                                        aria-hidden="true"
+                                                    >
+                                                        <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+                                                    </svg>
+                                                    Twitter (X)
+                                                </button>
+
+
+                                                <button
+                                                    onClick={() => router.push('/survey/success')}
+                                                    className="w-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 text-sm font-semibold py-3 rounded-xl transition-all duration-200 text-center border border-transparent hover:border-slate-100"
+                                                >
+                                                    Skip
+                                                </button>
+                                            </div>
+                                        )}
+
+                                        {shareStatus === 'loading' && (
+                                            <div className="text-center py-10">
+                                                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+                                                <p className="text-slate-600 font-medium">Generating your tweet...</p>
+                                            </div>
+                                        )}
+
+                                        {shareStatus === 'success' && (
+                                            <div className="space-y-4 animate-in fade-in zoom-in duration-300">
+                                                <div className="bg-green-50 border border-green-100 p-4 rounded-xl text-center mb-4">
+                                                    <p className="text-green-700 text-sm font-medium">Your tweet is ready!</p>
+                                                </div>
+
+                                                <a
+                                                    href={finalTwitterUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    onClick={() => {
+                                                        setTimeout(() => router.push('/survey/success'), 3000);
+                                                    }}
+                                                    className="w-full flex items-center justify-center bg-black text-white py-4 rounded-xl font-bold hover:bg-slate-800 transition-all"
+                                                >
+                                                    Share Tweet
+                                                </a>
+
+                                                <button
+                                                    onClick={() => router.push('/survey/success')}
+                                                    className="w-full text-slate-400 text-sm"
+                                                >
+                                                    Skip
+                                                </button>
+                                            </div>
+                                        )}
+
+                                    </div>
+                                </div>
+                            </div>
+                        )}
                     </section>
+                </div>
 
 
 
-                    {/* <div className="mt-12 h-px bg-slate-100 w-full" /> */}
-                </main>
+
+                {/* <div className="mt-12 h-px bg-slate-100 w-full" /> */}
 
             </main>
 

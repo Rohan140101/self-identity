@@ -53,8 +53,8 @@ export default function SubscribePage() {
 
         <div className="min-h-screen bg-white flex flex-col font-sans">
             <Header />
-            <main className="grow flex items-center justify-center bg-slate-50/50 py-10 px-6">
-                <div className="max-w-xl w-full">
+            <main className="grow flex flex-col items-center bg-slate-50/50 py-10 px-6 max-w-full overflow-x-hidden">
+                <div className="w-full max-w-4xl mx-auto py-10">
 
                     <div className="text-center mb-8">
                         <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">

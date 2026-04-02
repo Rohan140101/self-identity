@@ -33,7 +33,7 @@ const Content = function () {
           </p>
         </div> */}
  
-        <div className="bg-white rounded-xl border border-slate-200 p-6 flex flex-col gap-3 shadow-sm hover:shadow-md transition-shadow">
+        {/* <div className="bg-white rounded-xl border border-slate-200 p-6 flex flex-col gap-3 shadow-sm hover:shadow-md transition-shadow">
           <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600">
             <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
@@ -55,7 +55,7 @@ const Content = function () {
           <p className="text-slate-500 text-sm leading-relaxed">
             Your answers are fully confidential and your results are private.
           </p>
-        </div>
+        </div> */}
  
       </div>
     </section>

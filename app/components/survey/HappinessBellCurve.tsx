@@ -124,12 +124,10 @@ const HappinessBellCurve = ({ actual = 28, optimized = 62 }: BellCurveProps) => 
   };
 
   return (
-    /* FIX: Ensure parent has a explicit height and min-width to solve console error */
-    <div className="w-full min-h-125 max-w-4xl mx-auto p-8 bg-white rounded-4xl border border-slate-100 shadow-xl flex flex-col">
+    <div className="w-full min-h-125 max-w-5xl mx-auto py-3 px-1 sm:p-8 bg-white rounded-4xl border border-slate-100 shadow-xl flex flex-col">
 
-      {/* Legend & Growth Badge */}
       <div className="flex flex-wrap items-center justify-between mb-8 px-2">
-        <div className="flex gap-6">
+        <div className="flex flex-col sm:flex-row gap-6">
           {[
             { label: 'Population Avg', color: '#94a3b8', type: 'dashed' },
             { label: 'Current Actual', color: '#2791F5', type: 'solid' },
@@ -143,18 +141,17 @@ const HappinessBellCurve = ({ actual = 28, optimized = 62 }: BellCurveProps) => 
                   borderColor: type === 'dashed' ? color : 'transparent'
                 }}
               />
-              <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">{label}</span>
+              <span className="text-[9px] sm:text-[10px] font-black uppercase tracking-widest text-slate-400">{label}</span>
             </div>
           ))}
         </div>
 
-        <div className="bg-emerald-50 px-4 py-1.5 rounded-full border border-emerald-100">
-          <span className="text-[10px] font-black text-emerald-600 uppercase tracking-widest">Growth: </span>
-          <span className="text-sm font-black text-emerald-700">+{Math.round(optimized - actual)}%</span>
+        <div className="bg-emerald-50 px-2 py-1 sm:px-4 sm:py-1.5 rounded-full border border-emerald-100">
+          <span className="text-[9px] sm:text-[12px] font-black text-emerald-600 uppercase tracking-widest">Growth: </span>
+          <span className="text-[9px] sm:text-[12px]  font-black text-emerald-700">+{Math.round(optimized - actual)}%</span>
         </div>
       </div>
 
-      {/* FIX: Use a div with explicit height for ResponsiveContainer */}
       <div className="grow h-87.5 w-full min-w-0">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 40, right: 30, left: 30, bottom: 0 }}>
@@ -165,7 +162,6 @@ const HappinessBellCurve = ({ actual = 28, optimized = 62 }: BellCurveProps) => 
               </linearGradient>
             </defs>
 
-            {/* FIX: Ensure XAxis is present with a type 'number' for ReferenceLines to anchor properly */}
             <XAxis dataKey="x" type="number" domain={[0, 100]} hide />
             <YAxis domain={yDomain} hide />
 
@@ -178,7 +174,6 @@ const HappinessBellCurve = ({ actual = 28, optimized = 62 }: BellCurveProps) => 
               isAnimationActive={false}
             />
 
-            {/* Vertical Lines - always rendered on top */}
             <ReferenceLine
               x={mean}
               stroke="#94a3b8"
@@ -205,7 +200,6 @@ const HappinessBellCurve = ({ actual = 28, optimized = 62 }: BellCurveProps) => 
         </ResponsiveContainer>
       </div>
 
-      {/* Axis Labels */}
       <div className="flex justify-between px-8 mt-6 border-t border-slate-50 pt-6">
         <div className="text-center">
           <p className="text-[9px] font-black text-slate-300 uppercase tracking-widest">Lower Range</p>

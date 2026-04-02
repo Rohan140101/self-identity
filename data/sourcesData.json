@@ -2,11 +2,13 @@
     "sources": [
         {
             "title": "Human Identities across Nations of the Earth, Ngram Investigator (HINENI)",
-            "url": "https://jasonjones.ninja/hineni/"
+            "url": "https://jasonjones.ninja/hineni/",
+            "description": "Track the prevalence of identity terms in social media biographies between 2012 and 2023, for over thirty different countries."
         },
         {
             "title": "Ipseology Central",
-            "url": "https://jasonjones.ninja/ipseology-central/"
+            "url": "https://jasonjones.ninja/ipseology-central/",
+            "description": "A broad collection of resources and data about the study of human identity (Ipseology), maintained by Prof. Jeffrey Jones of Stony Brook University."
         }
 
     ]

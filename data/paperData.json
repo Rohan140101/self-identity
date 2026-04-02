@@ -2,27 +2,35 @@
     "papers": [
         {
             "title": "Statewise: Human Identity Investigator for the United States",
-            "authors": "Dakota Handzlik, Jason Jeffrey Jones, Steven S Skiena",
+            "authors": "Dakota Handzlik, Jason J Jones, Steven S Skiena",
             "venue": "Vol. 19 (2025): Proceedings of the Nineteenth International AAAI Conference on Web and Social Media",
-            "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=fnE2dSoAAAAJ&sortby=pubdate&citation_for_view=fnE2dSoAAAAJ:vytXtR8tOLIC"
+            "url": "https://ojs.aaai.org/index.php/ICWSM/article/view/35949",
+            "googleScholarUrl": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=fnE2dSoAAAAJ&sortby=pubdate&citation_for_view=fnE2dSoAAAAJ:vytXtR8tOLIC"
+
         },
         {
-            "title": "The evolution of occupational identity in twitter biographies",
+            "title": "The Evolution of Occupational Identity in Twitter Biographies",
             "authors": "Xingzhi Guo, Dakota Handzlik, Jason J Jones, Steven S Skiena",
             "venue": "Vol. 18 (2024): Proceedings of the Eighteenth International AAAI Conference on Web and Social Media",
-            "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=fnE2dSoAAAAJ&sortby=pubdate&citation_for_view=fnE2dSoAAAAJ:uL3q62Y73bEC"
+            "url": "https://ojs.aaai.org/index.php/ICWSM/article/view/31330",
+            "googleScholarUrl": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=fnE2dSoAAAAJ&sortby=pubdate&citation_for_view=fnE2dSoAAAAJ:uL3q62Y73bEC"
+
         },
         {
-            "title": "HINENI: Human Identity across the Nations of the Earth Ngram Investigator",
-            "authors": "Dakota Handzlik, Jason Jeffrey Jones, Steven S Skiena",
+            "title": "HINENI: Human Identity Across the Nations of the Earth Ngram Investigator",
+            "authors": "Dakota Handzlik, Jason J Jones, Steven S Skiena",
             "venue": "Vol. 18 (2024): Proceedings of the Eighteenth International AAAI Conference on Web and Social Media",
-            "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=fnE2dSoAAAAJ&sortby=pubdate&citation_for_view=fnE2dSoAAAAJ:sBSA6aAHrTwC"
+            "url": "https://ojs.aaai.org/index.php/ICWSM/article/view/31331",
+            "googleScholarUrl": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=fnE2dSoAAAAJ&sortby=pubdate&citation_for_view=fnE2dSoAAAAJ:sBSA6aAHrTwC"
+
         },
         {
-            "title": "Online identities are increasingly political: evidence from 30 countries",
-            "authors": "Anna Clemente, Dakota Handzlik, JJ Jones, SS Skiena",
-            "venue": " (2024): New Media and Society",
-            "url": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=fnE2dSoAAAAJ&sortby=pubdate&citation_for_view=fnE2dSoAAAAJ:2lNr6VoPGyEC"
+            "title": "Online Identities are Increasingly Political: Evidence from 30 Countries",
+            "authors": "Anna Clemente, Dakota Handzlik, Jason J Jones, Steven S Skiena",
+            "venue": " (2024): SocArXiv 68zjx",
+            "url": "https://osf.io/preprints/socarxiv/68zjx_v1",
+            "googleScholarUrl": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=fnE2dSoAAAAJ&sortby=pubdate&citation_for_view=fnE2dSoAAAAJ:2lNr6VoPGyEC"
+
         }
 
     ]

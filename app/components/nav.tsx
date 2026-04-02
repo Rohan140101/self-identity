@@ -38,7 +38,8 @@ const NavLinks = ({ isMobile = false }: { isMobile?: boolean }) => {
   return (
     <div className={containerStyle}>
       <Link href="/survey/short_survey" className={linkStyle}>Survey</Link>
-      <Link href="/blog" className={linkStyle}>Blog</Link>
+      {/* <Link href="/blog" className={linkStyle}>Blog</Link> */}
+      <Link href="https://stevenskiena.substack.com/" className={linkStyle}>Blog</Link>
       <Link href="/data" className={linkStyle}>Data</Link>
       <Link href="/press" className={linkStyle}>Press</Link>
       <Link href="/team" className={linkStyle}>Team</Link>
@@ -61,7 +62,7 @@ const NavLinks = ({ isMobile = false }: { isMobile?: boolean }) => {
             <Link href="/tst/intro" className={`${linkStyle} py-3 justify-start`}>
               Twenty Statements Test
             </Link>
-            <Link href="/gradeSocialMedia" className={`${linkStyle} py-3 justify-start`}>
+            <Link href="/gradeSocialMedia/intro" className={`${linkStyle} py-3 justify-start`}>
               Grade Your Social Media Profile
             </Link>
             <Link href="/survey/full_survey" className={`${linkStyle} py-3 justify-start`}>
@@ -80,11 +81,11 @@ const Nav = function () {
  
   return (
     <nav className="flex justify-end items-center">
-      <div className="hidden justify-between md:flex">
+      <div className="hidden justify-between lg:flex">
         <NavLinks />
       </div>
  
-      <div className="md:hidden">
+      <div className="lg:hidden">
         <button onClick={() => setIsOpen(!isOpen)} className="text-(--brand-light) p-2">
           <Menu size={28} />
         </button>
@@ -100,7 +101,7 @@ const Nav = function () {
       <div
         className={`fixed top-0 left-0 h-full w-72 bg-(--brand-dark) z-50 transform transition-transform duration-300 ease-in-out ${
           isOpen ? "translate-x-0" : "-translate-x-full"
-        } md:hidden p-6 shadow-2xl overflow-y-auto`}
+        } lg:hidden p-6 shadow-2xl overflow-y-auto`}
       >
         <div className="flex justify-between items-center mb-8">
           <span className="text-(--brand-light) font-bold">MENU</span>

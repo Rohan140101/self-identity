@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { GoogleAnalytics } from '@next/third-parties/google'
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -19,6 +20,7 @@ export const metadata: Metadata = {
     shortcut: "icon.png",
     apple: "icon.png",
   },
+  metadataBase: new URL('https://self-identity.me'),
 };
 
 export default function RootLayout({
@@ -26,6 +28,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const gaId = process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS_CODE ?? ""
   return (
     <html lang="en">
       <body
@@ -33,6 +36,9 @@ export default function RootLayout({
       >
         {children}
       </body>
+      {gaId && <GoogleAnalytics gaId={gaId}/>}
+      
+
     </html>
   );
 }

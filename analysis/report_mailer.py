@@ -91,11 +91,15 @@ def generate_email_html(data, user_name: str):
 
 
 def send_email_with_report(data, user_name, user_email, report_path, generated_images):
-    sender_email = os.getenv("GMAIL_USER")
-    app_password = os.getenv("GMAIL_APP_PASSWORD")
+    website_name = os.getenv("WEBSITE_NAME")
+    sender_display_email = os.getenv("SENDER_DISPLAY_EMAIL")
+    ses_email_id = os.getenv("SES_EMAIL_ID")
+    ses_email_password = os.getenv("SES_EMAIL_PASSWORD")
+    ses_endpoint = os.getenv("SES_ENDPOINT")
+
 
     message = MIMEMultipart("related")
-    message["From"] =f"{os.getenv("REPORT_SENDER_NAME")} <{sender_email}>"
+    message["From"] =f"{website_name} <{sender_display_email}>"
 
     message["To"] = user_email
     message["Subject"] = "Your Personal Self-Identity Analysis"
@@ -138,9 +142,10 @@ def send_email_with_report(data, user_name, user_email, report_path, generated_i
 
 
     try:
-        with smtplib.SMTP_SSL("smtp.gmail.com", 465) as server:
-            server.login(sender_email, app_password)
-            server.sendmail(sender_email, user_email, message.as_string())
+        with smtplib.SMTP_SSL(ses_endpoint, 465) as server:
+            server.login(ses_email_id, ses_email_password)
+            server.sendmail(sender_display_email, user_email, message.as_string())
         print(f"Email sent successfully to {user_email}")
+        os.remove(report_path)
     except Exception as e:
         print(f"Error sending email: {e}")

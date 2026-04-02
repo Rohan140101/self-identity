@@ -111,7 +111,7 @@ def get_bell_curve(actual: float, optimized: float, wb_cat_name: string):
     fig.update_layout(
         plot_bgcolor='white',
         paper_bgcolor='white',
-        margin=dict(t=130, b=60, l=50, r=50), 
+        margin=dict(t=60, b=60, l=50, r=50), 
         height=600,
         width=1000,
         showlegend=True,
@@ -129,7 +129,7 @@ def get_bell_curve(actual: float, optimized: float, wb_cat_name: string):
             range=[0, 100],
             showgrid=False,
             zeroline=False,
-            tickvals=[0, 50, 100],
+            tickvals=[10, 50, 90],
             ticktext=[f'<b>LOW {wb_cat_name.upper()}</b>', '<b>POPULATION AVERAGE</b>', f'<b>HIGH {wb_cat_name.upper()}</b>'],
             tickfont=dict(size=11, color='#94a3b8')
         ),
@@ -222,9 +222,9 @@ def generate_full_identity_report_sync(data, user_email, filename):
                     Identity Optimization Analysis
                 </h2>
 
-                <p class="text-slate-700 mt-2 pb-10">
-                    Now that we know the aspects of your personal identity that you feel are most important, we can make inferences about several aspects of your personality and well-being.   For each of these attributes (happiness, goodness, success, resilience, extrovertedness) we show where you sit relative to the U.S. population, and where you could be with minor changes in which identity components you prioritize.
-                </p> """
+                <p className="text-slate-800 italic font-bold mt-2 pb-10">
+                    Our model uses the answers you gave on our <a target="_blank"   href='https://www.self-identity.me/' className='text-blue-900 hover:text-blue-600 underline font-black'>identity survey</a> to make inferences about several aspects of your personality and well-being. For each of these attributes (happiness, goodness, success, resilience, extrovertedness), we show where you sit relative to the U.S. population, and where you could be with minor changes in the identity components which you prioritize.  Identities that revolve around interactions with other people, including family, religion, and work, generally serve to help increase well-being.
+                </p>"""
 
     i = 1
     for key, optimized_result_data in data['optimized_result'].items():
@@ -315,7 +315,7 @@ def generate_full_identity_report_sync(data, user_email, filename):
                 <span class="w-1.5 h-6 bg-emerald-500 rounded-full"></span>
                 Expected vs. Actual Identity
             </h2>
-            <p class="text-slate-600 mt-2 pb-10 leading-relaxed">
+            <p class="text-slate-800 italic font-bold mt-2 pb-10">
                 We formed an idea about how strongly you would value different facets of your identity based on our understanding of you. 
                 This did not completely predict the five identity components that you selected. 
                 Compare our model's sense of you with your self-declared identity.
