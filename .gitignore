@@ -50,3 +50,8 @@ next-env.d.ts
 
 #folder
 /csv
+
+
+#python
+/analysis/tester.ipynb
+/analysis/tester.py
