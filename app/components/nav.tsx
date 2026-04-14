@@ -39,9 +39,9 @@ const NavLinks = ({ isMobile = false }: { isMobile?: boolean }) => {
     <div className={containerStyle}>
       <Link href="/survey/short_survey" className={linkStyle}>Survey</Link>
       {/* <Link href="/blog" className={linkStyle}>Blog</Link> */}
-      <Link href="https://stevenskiena.substack.com/" className={linkStyle}>Blog</Link>
+      <Link href="https://stevenskiena.substack.com/" target="_blank" className={linkStyle}>Blog</Link>
       <Link href="/data" className={linkStyle}>Data</Link>
-      <Link href="/press" className={linkStyle}>Press</Link>
+      <Link href="/media" className={linkStyle}>Media</Link>
       <Link href="/team" className={linkStyle}>Team</Link>
       <Link href="/contact" className={linkStyle}>Contact</Link>
  
@@ -68,6 +68,9 @@ const NavLinks = ({ isMobile = false }: { isMobile?: boolean }) => {
             <Link href="/survey/full_survey" className={`${linkStyle} py-3 justify-start`}>
               Full Research Identity Survey (15 minutes)
             </Link>
+            {/* <Link href="/wordPersonality" className={`${linkStyle} py-3 justify-start`}>
+              Word Personality and Half Life
+            </Link> */}
           </div>
         )}
       </div>

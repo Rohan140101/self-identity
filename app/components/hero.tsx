@@ -19,7 +19,7 @@ const Hero = function () {
 
         // </section>
 
-        <section className="max-h-[90vh] sm:min-h-[40vh] sm:max-h-[90vh] w-full bg-black flex items-center justify-center px-[5vw] py-12">
+        <section className="max-h-[90vh] sm:min-h-[40vh] sm:max-h-[90vh] w-full bg-black flex items-center justify-center px-[5vw] py-6 sm:py-12">
             <div className="flex flex-col md:flex-row items-center justify-between w-full max-w-400 gap-8">
                 <div className="hidden md:block w-[30vw] max-w-120 transition-transform duration-500 hover:scale-105">
                     <img src={woman.src} alt="Woman" className="w-full h-auto drop-shadow-[0_0_30px_rgba(59,130,246,0.5)]" />
@@ -34,10 +34,10 @@ const Hero = function () {
                     </h3>
                     <button
                         onClick={() => router.push("/survey/short_survey")}
-                        className="w-full mt-10 bg-yellow-500 text-(--brand-dark) text-lg font-bold px-10 py-4 rounded-4xl tracking-widest transition-all hover:bg-yellow-400 hover:scale-105 shadow-md flex items-center justify-center gap-2"
+                        className="w-full mt-5 sm:mt-10 bg-yellow-500 text-(--brand-dark) text-lg font-bold px-6 sm:px-10 py-3 sm:py-4 rounded-4xl tracking-widest transition-all hover:bg-yellow-400 hover:scale-105 shadow-md flex items-center justify-center gap-2"
                     >
                         DISCOVER WHO YOU ARE
-                        <ArrowRight size={18} className="shrink-0" />
+                        <ArrowRight size={25} className="shrink-0" />
                     </button>
                     
                 </div>

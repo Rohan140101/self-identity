@@ -7,9 +7,10 @@ from pdf_generator import generate_full_identity_report
 from report_mailer import send_email_with_report
 from datetime import datetime
 from sm_image_generator import S3_Instance
-from message_generator import twitter_message_generator
+from message_generator import social_media_message_generator
 from tst_email_mailer import send_tst_confirmation_email
 from grsm_email_mailer import send_bio_grading_email
+from word_personality_processor import WordPersonalityAnalyzer
 app = FastAPI()
 
 app.add_middleware(
@@ -23,7 +24,7 @@ app.add_middleware(
 
 analyzer = IdentityAnalyzer('data/prolific_data.csv', 'data/survey_data.csv', 'data/did_option_dict.json')
 s3_instance = S3_Instance()
-
+word_personality_analyzer = WordPersonalityAnalyzer('data/words_personality_and_half_life_scores.csv', 'data/word_personality_pvalues.csv')
 class SurveyInput(BaseModel):
     finalRankedChoices: list
 
@@ -77,11 +78,11 @@ async def handle_share_social_media(data:dict):
     timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
     user_email = data.get("email")
     image_urls = s3_instance.get_sm_image_paths(data=data, timestamp=timestamp, user_email=user_email)
-    twitter_msg = twitter_message_generator(data)
+    sm_msg = social_media_message_generator(data)
     
     return {
         "image_urls": image_urls,
-        "twitter_msg": twitter_msg
+        "sm_msg": sm_msg
     }
 
 @app.post("/mail_tst_results")
@@ -110,6 +111,22 @@ async def mail_grade_social_media_results(data: dict):
     return {
         "status": "success", "message": f"Grade Social Media Bio Email Generated and Sent"
     }
+
+
+@app.post("/word_personality_half_life_analysis")
+async def word_personality_half_life_analysis(data: dict):
+    word_list = data.get("word_list")
+    categories = data.get("categories")
+    personality_percentile_table, personality_pvalue_table = word_personality_analyzer.get_personality_scores(word_list, categories)
+    km_curve_params = word_personality_analyzer.get_km_curve_params(word_list)
+    
+    
+    return {
+        "personality_percentile_table": personality_percentile_table,
+        "personality_pvalue_table": personality_pvalue_table,
+        "km_curve_params": km_curve_params
+    }
+
 
 
 # @app.post("/get_twitter_message")

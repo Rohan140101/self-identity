@@ -4,7 +4,7 @@ import Footer from "../components/footer"
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { saveSocialMediaBio } from "../actions/save_social_media_bio";
-
+import { Reveal } from "../components/Reveal";
 export default function GradeSocialPage() {
     const [socialMediaBio, setSocialMediaBio] = useState("");
     // const [name, setName] = useState("");
@@ -70,13 +70,16 @@ export default function GradeSocialPage() {
             <Header />
             <main className="grow flex items-center justify-center bg-slate-50/50 py-10 px-6">
                 <div className="max-w-4xl w-full">
-
-                    <div className="text-center mb-8">
-                        <h1 className="text-6xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
+                    <Reveal delay={0.2}>
+                        <div className="text-center mb-8">
+                        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
                             Grade Your Social Media Bio
                         </h1>
                     </div>
-                    <div className="bg-white border border-slate-200 rounded-[2.5rem] p-0.5 sm:p-7 md:p-10 shadow-xl shadow-slate-200/50 text-center relative overflow-hidden">
+                    </Reveal>
+                    
+                    <Reveal delay={0.4}>
+                        <div className="bg-white border border-slate-200 rounded-[2.5rem] p-0.5 sm:p-7 md:p-10 shadow-xl shadow-slate-200/50 text-center relative overflow-hidden">
 
                         {/* <div className="absolute top-0 left-0 w-full h-2 bg-linear-to-r from-blue-500 via-indigo-600 to-purple-500"></div> */}
                         <form onSubmit={handleSubmit} className="p-8">
@@ -128,7 +131,7 @@ export default function GradeSocialPage() {
                                     </label>
                                     <textarea
                                         required
-                                        placeholder="Paste your bio here to help us analyze your identity markers..."
+                                        placeholder="Paste your bio here to help us analyze your identity..."
                                         rows={4}
                                         className="w-full border border-blue-200 rounded-xl px-4 py-3.5 focus:ring-4 focus:ring-blue-500/5 focus:border-blue-500 outline-none text-slate-900 transition-all placeholder:text-slate-300 bg-slate-50/30 focus:bg-white"
                                         onChange={(e) => setSocialMediaBio(e.target.value)}
@@ -149,6 +152,8 @@ export default function GradeSocialPage() {
 
 
                     </div>
+                    </Reveal>
+                    
 
 
 
@@ -248,7 +253,10 @@ export default function GradeSocialPage() {
                     </div>
                 )}
             </main>
-            <Footer />
+            <Reveal delay={1}>
+                <Footer />
+            </Reveal>
+            
         </div>
     )
 

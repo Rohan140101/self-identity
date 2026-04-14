@@ -3,7 +3,7 @@ import Footer from "../components/footer"
 import rkuckian from "./images/rkuckian.jpg"
 import skiena from "./images/skiena.jpg"
 import { Linkedin, Github } from "lucide-react";
-
+import { Reveal } from "../components/Reveal";
 export default function TeamPage() {
     const bigRow = [
         {
@@ -31,21 +31,23 @@ export default function TeamPage() {
     return (
         <div className="min-h-screen bg-white flex flex-col font-sans">
             <Header />
-            <main className="grow bg-slate-50/50">
-                <div className="py-20 px-1">
-                    <div className="max-w-7xl mx-auto">
-                        <div className="text-center mb-16">
-                            <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
+
+            <main className="grow flex flex-col items-center bg-slate-50/50 py-5 sm:py-10 px-2 sm:px-6 max-w-full overflow-x-hidden">
+                <div className="w-full max-w-6xl mx-auto py-5 sm:py-10">
+                    <Reveal delay={0.2}>
+                        <div className="mb-6 sm:mb-12 text-center">
+                            <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-2 sm:mb-4">
                                 About Us
                             </h1>
-                            {/* <div className="w-20 h-1.5 bg-blue-600 mx-auto rounded-full"></div> */}
                         </div>
+                    </Reveal>
 
+                    <Reveal delay={0.4}>
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                             {bigRow.map((person, index) => (
                                 <div
                                     key={index}
-                                    className="group bg-white border border-slate-200 rounded-2xl overflow-hidden p-5 shadow-sm hover:shadow-md hover:border-blue-200 transition-all duration-300 flex flex-col sm:flex-row gap-6 items-center sm:items-start"
+                                    className="group bg-white border border-slate-200 rounded-2xl overflow-hidden p-4 sm:p-5 shadow-sm hover:shadow-md hover:border-blue-200 transition-all duration-300 flex flex-col sm:flex-row gap-6 items-center sm:items-start"
                                 >
                                     <div className="relative shrink-0">
                                         <img
@@ -76,7 +78,7 @@ export default function TeamPage() {
                                                     rel="noreferrer"
                                                     className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-black uppercase tracking-widest text-slate-500 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all"
                                                 >
-                                                    <link.icon size={20}/>
+                                                    <link.icon size={20} />
                                                 </a>
                                             ))}
                                         </div>
@@ -84,10 +86,14 @@ export default function TeamPage() {
                                 </div>
                             ))}
                         </div>
-                    </div>
+                    </Reveal>
+
                 </div>
             </main>
-            <Footer />
+            <Reveal delay={1}>
+                <Footer />
+            </Reveal>
+
         </div>
     )
 

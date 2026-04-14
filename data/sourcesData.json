@@ -1,5 +1,6 @@
 {
     "sources": [
+         
         {
             "title": "Human Identities across Nations of the Earth, Ngram Investigator (HINENI)",
             "url": "https://jasonjones.ninja/hineni/",
@@ -8,7 +9,12 @@
         {
             "title": "Ipseology Central",
             "url": "https://jasonjones.ninja/ipseology-central/",
-            "description": "A broad collection of resources and data about the study of human identity (Ipseology), maintained by Prof. Jeffrey Jones of Stony Brook University."
+            "description": "A broad collection of resources and data about the study of human identity (Ipseology), maintained by Prof. Jason Jones of Stony Brook University."
+        },
+        {
+            "title": "Identity Keyword Analysis Dashboard",
+            "url": "https://www.self-identity.me/wordPersonality",
+            "description": "Monitor the well-being implication of identity terms in social media biographies"
         }
 
     ]

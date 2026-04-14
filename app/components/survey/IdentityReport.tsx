@@ -119,7 +119,7 @@ const ComprehensiveOptimization: React.FC<ComprehensiveOptimizationProps> = ({ a
             </h2>
 
             <p className="text-slate-800 italic font-bold mt-2 pb-10">
-                Our model uses the answers you gave on our <a target="_blank"   href='https://www.self-identity.me/' className='text-blue-900 hover:text-blue-600 underline font-black'>identity survey</a> to make inferences about several aspects of your personality and well-being. For each of these attributes (happiness, goodness, success, resilience, extrovertedness), we show where you sit relative to the U.S. population, and where you could be with minor changes in the identity components which you prioritize.  Identities that revolve around interactions with other people, including family, religion, and work, generally serve to help increase well-being.
+                Our model uses the answers you gave on our <a target="_blank" href='https://www.self-identity.me/' className='text-blue-900 hover:text-blue-600 underline font-black'>identity survey</a> to make inferences about several aspects of your personality and well-being. For each of these attributes (happiness, goodness, success, resilience, extrovertedness), we show where you sit relative to the U.S. population, and where you could be with minor changes in the identity components which you prioritize.  Identities that revolve around interactions with other people, including family, religion, and work, generally serve to help increase well-being.
             </p>
 
 
@@ -216,6 +216,9 @@ export default function IdentityReport(
     const [consent, setConsent] = useState("yes");
     const [shareStatus, setShareStatus] = useState<'idle' | 'loading' | 'success'>('idle')
     const [finalTwitterUrl, setFinalTwitterUrl] = useState("");
+    const [finalFacebookUrl, setFinalFacebookUrl] = useState("");
+    const [finalLinkedinUrl, setFinalLinkedinUrl] = useState("");
+    const [selectedPlatform, setSelectedPlatform] = useState("");
     const router = useRouter();
 
 
@@ -285,6 +288,7 @@ export default function IdentityReport(
         const domain = "https://self-identity.me";
         setShareStatus("loading")
         setIsLoading(true);
+        setSelectedPlatform(platform);
         const data = {
             email: email,
             optimized_result
@@ -303,19 +307,24 @@ export default function IdentityReport(
                 const firstImageUrl = Object.values(result.image_urls)[0] as string;
                 const fileName = firstImageUrl.split('/').pop()
                 const hash = fileName?.split('_')[0];
+                const msg = result.sm_msg
+                const sharePageUrl = `https://self-identity.me/share/${hash}`;
+                const smText = encodeURIComponent(
+                    `I just analyzed my Self-Identity Profile!\n\n${msg}\n\nAnalyze yourself today at ${domain}\n\n`
+                );
                 if (platform === "twitter") {
-                    const msg = result.twitter_msg
-                    const sharePageUrl = `https://self-identity.me/share/${hash}`;
-                    const tweetText = encodeURIComponent(
-                        `I just analyzed my Self-Identity Profile!\n\n${msg}\n\nAnalyze yourself today at ${domain}\n\n`
-                    );
-                    // optimized_result['Happy']
-                    const twitterUrl = `https://twitter.com/intent/tweet?text=${tweetText}&url=${encodeURIComponent(sharePageUrl)}`;
-                    // window.location.href = twitterUrl
-                    // window.open(twitterUrl, '_blank', 'noopener,noreferrer');
+                    const twitterUrl = `https://twitter.com/intent/tweet?text=${smText}&url=${encodeURIComponent(sharePageUrl)}`;
                     setFinalTwitterUrl(twitterUrl)
                     setShareStatus("success")
 
+                } else if (platform === "facebook") {
+                    const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(sharePageUrl)}`;
+                    setFinalFacebookUrl(fbUrl)
+                    setShareStatus("success")
+                } else if (platform === "linkedin") {
+                    const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(sharePageUrl)}`;
+                    setFinalLinkedinUrl(linkedinUrl)
+                    setShareStatus("success")
                 }
 
             }
@@ -673,7 +682,7 @@ export default function IdentityReport(
                                             {shareStatus === 'success' ? 'Ready to Post!' : 'Share your Results'}
                                         </h2>
                                         <p className="text-white/80 text-sm">
-                                            {shareStatus === 'success' ? 'Check your new browser tab to finish tweeting.' : 'Help our research by sharing your results on Social Media.'}
+                                            {shareStatus === 'success' ? 'Check your new browser tab to finish sharing.' : 'Help our research by sharing your results on Social Media.'}
                                         </p>
                                     </div>
 
@@ -682,38 +691,64 @@ export default function IdentityReport(
                                             <div className="space-y-4">
                                                 <button
                                                     onClick={() => handleSMShareSubmit('twitter')}
-                                                    // disabled={isLoading}
-                                                    className="w-full flex items-center justify-center gap-3 bg-slate-900 text-white py-4 rounded-xl font-bold hover:bg-slate-700 transition-all disabled:opacity-50"
+                                                    className="w-full flex items-center justify-center gap-3 bg-[#000000] text-white py-4 rounded-xl font-bold transition-all scale-95 hover:scale-100 duration-200 shadow-md hover:shadow-lg disabled:opacity-50"
                                                 >
-                                                    {/* {isLoading ? "Generating Image..." : "Twitter (X)"} */}
-                                                    <svg
-                                                        className="w-5 h-5 fill-current"
-                                                        viewBox="0 0 24 24"
-                                                        aria-hidden="true"
-                                                    >
+                                                    <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
                                                         <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                                                     </svg>
-                                                    Twitter (X)
+                                                    Share on Twitter
+                                                </button>
+                                                <button
+                                                    onClick={() => handleSMShareSubmit('facebook')}
+                                                    className="w-full flex items-center justify-center gap-3 bg-[#1877F2] text-white py-4 rounded-xl font-bold transition-all scale-95 hover:scale-100 duration-200 shadow-md hover:shadow-lg disabled:opacity-50"
+                                                >
+                                                    <svg className="w-6 h-6 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                                                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                                                    </svg>
+                                                    Share on Facebook
+                                                </button>
+                                                <button
+                                                    onClick={() => handleSMShareSubmit('linkedin')}
+                                                    className="w-full flex items-center justify-center gap-3 bg-[#0077B5] text-white py-4 rounded-xl font-bold transition-all scale-95 hover:scale-100 duration-200 shadow-md hover:shadow-lg disabled:opacity-50"
+                                                >
+                                                    <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24" aria-hidden="true">
+                                                        <path d="M22.23 0H1.77C.8 0 0 .77 0 1.72v20.56C0 23.23.8 24 1.77 24h20.46c.98 0 1.77-.77 1.77-1.72V1.72C24 .77 23.2 0 22.23 0zM7.12 20.45H3.56V9h3.56v11.45zM5.34 7.43c-1.14 0-2.06-.92-2.06-2.06 0-1.14.92-2.06 2.06-2.06 1.14 0 2.06.92 2.06 2.06 0 1.14-.92 2.06-2.06 2.06zM20.45 20.45h-3.56v-5.6c0-1.34-.03-3.06-1.87-3.06-1.87 0-2.15 1.46-2.15 2.96v5.7h-3.56V9h3.42v1.56h.05c.48-.9 1.63-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29z" />
+                                                    </svg>
+                                                    Share on LinkedIn
                                                 </button>
 
 
                                                 <button
                                                     onClick={() => router.push('/survey/success')}
-                                                    className="w-full text-slate-600 hover:text-slate-900 hover:bg-slate-100 text-sm font-semibold py-3 rounded-xl transition-all duration-200 text-center border border-transparent hover:border-slate-100"
+                                                    className="w-full flex items-center justify-center gap-3 bg-white text-black hover:bg-gray-100 py-4 rounded-xl font-bold transition-all scale-95 hover:scale-100 duration-200 shadow-md hover:shadow-lg disabled:opacity-50"
                                                 >
                                                     Skip
                                                 </button>
                                             </div>
                                         )}
 
-                                        {shareStatus === 'loading' && (
+                                        {shareStatus === 'loading' && selectedPlatform === "twitter" && (
                                             <div className="text-center py-10">
                                                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
                                                 <p className="text-slate-600 font-medium">Generating your tweet...</p>
                                             </div>
                                         )}
 
-                                        {shareStatus === 'success' && (
+                                        {shareStatus === 'loading' && selectedPlatform === "facebook" && (
+                                            <div className="text-center py-10">
+                                                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+                                                <p className="text-slate-600 font-medium">Generating your Facebook Post...</p>
+                                            </div>
+                                        )}
+
+                                        {shareStatus === 'loading' && selectedPlatform === "linkedin" && (
+                                            <div className="text-center py-10">
+                                                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600 mx-auto mb-4"></div>
+                                                <p className="text-slate-600 font-medium">Generating your Linkedin Post...</p>
+                                            </div>
+                                        )}
+
+                                        {shareStatus === 'success' && selectedPlatform === "twitter" && (
                                             <div className="space-y-4 animate-in fade-in zoom-in duration-300">
                                                 <div className="bg-green-50 border border-green-100 p-4 rounded-xl text-center mb-4">
                                                     <p className="text-green-700 text-sm font-medium">Your tweet is ready!</p>
@@ -729,6 +764,60 @@ export default function IdentityReport(
                                                     className="w-full flex items-center justify-center bg-black text-white py-4 rounded-xl font-bold hover:bg-slate-800 transition-all"
                                                 >
                                                     Share Tweet
+                                                </a>
+
+                                                <button
+                                                    onClick={() => router.push('/survey/success')}
+                                                    className="w-full text-slate-400 text-sm"
+                                                >
+                                                    Skip
+                                                </button>
+                                            </div>
+                                        )}
+
+                                        {shareStatus === 'success' && selectedPlatform === "facebook" && (
+                                            <div className="space-y-4 animate-in fade-in zoom-in duration-300">
+                                                <div className="bg-green-50 border border-green-100 p-4 rounded-xl text-center mb-4">
+                                                    <p className="text-green-700 text-sm font-medium">Your Facebook Post is ready!</p>
+                                                </div>
+
+                                                <a
+                                                    href={finalFacebookUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    onClick={() => {
+                                                        setTimeout(() => router.push('/survey/success'), 3000);
+                                                    }}
+                                                    className="w-full flex items-center justify-center bg-black text-white py-4 rounded-xl font-bold hover:bg-slate-800 transition-all"
+                                                >
+                                                    Share Facebook Post
+                                                </a>
+
+                                                <button
+                                                    onClick={() => router.push('/survey/success')}
+                                                    className="w-full text-slate-400 text-sm"
+                                                >
+                                                    Skip
+                                                </button>
+                                            </div>
+                                        )}
+
+                                        {shareStatus === 'success' && selectedPlatform === "linkedin" && (
+                                            <div className="space-y-4 animate-in fade-in zoom-in duration-300">
+                                                <div className="bg-green-50 border border-green-100 p-4 rounded-xl text-center mb-4">
+                                                    <p className="text-green-700 text-sm font-medium">Your LinkedIn Post is ready!</p>
+                                                </div>
+
+                                                <a
+                                                    href={finalLinkedinUrl}
+                                                    target="_blank"
+                                                    rel="noopener noreferrer"
+                                                    onClick={() => {
+                                                        setTimeout(() => router.push('/survey/success'), 3000);
+                                                    }}
+                                                    className="w-full flex items-center justify-center bg-black text-white py-4 rounded-xl font-bold hover:bg-slate-800 transition-all"
+                                                >
+                                                    Share LinkedIn Post
                                                 </a>
 
                                                 <button

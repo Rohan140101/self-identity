@@ -67,7 +67,7 @@ export default function TopFiveQuestion({ question, options, answers, selectedVa
                 </p>
             </div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-x-5 sm:gap-x-3 gap-y-5 sm:gap-y-3">
                 {shuffledOptions.map((option) => {
                     const isSelected = selectedValues.includes(option)
                     const disabled = !isSelected && !canSelectMore
@@ -77,15 +77,15 @@ export default function TopFiveQuestion({ question, options, answers, selectedVa
                             key={option}
                             disabled={disabled}
                             onClick={() => onToggle(option)}
-                            className={`p-4 text-center border-2 rounded-xl transition-all h-32 flex flex-col items-center justify-center text-sm font-bold gap-2
+                            className={`p-1 sm:p-4 text-center border-2 rounded-xl transition-all h-24 sm:h-28 flex flex-col items-center justify-center text-xs sm:text-sm font-bold gap-2
     ${isSelected ? "border-slate-900 bg-slate-900 text-white shadow-md scale-[1.05]" :
                                     disabled ? "border-gray-50 bg-gray-50 text-gray-300 cursor-not-allowed" :
                                         `border-gray-100 ${categoryStyles[option]} opacity-75 hover:border-slate-300`
                                 }`}
                         >
-                            <p className={`w-8 h-8 flex items-center justify-center rounded-full border-2 border-white text-xs mb-1`}>
+                            {/* <p className={`w-8 h-8 flex items-center justify-center rounded-full border-2 border-white text-xs mb-1`}>
                                 {categoryLikertVal[option]}
-                            </p>
+                            </p> */}
 
                             <span>{option}</span>
                         </button>

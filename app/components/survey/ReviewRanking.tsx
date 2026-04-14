@@ -122,7 +122,7 @@ export default function ReviewRanking({ choices, onComplete, surveyType, allAnsw
                 <h2 className="text-2xl font-bold mb-8">
                     To help us understand which aspects are most important to your identity, please select which one in each pair is more important to you.
                 </h2>
-                <div className="flex justify-center gap-8 items-center h-64">
+                <div className="flex flex-col sm:flex-row justify-center gap-8 items-center h-64">
                     <ComparisonCard label={pairs[pairIndex][0]} onClick={() => handleComparison(pairs[pairIndex][0], pairs[pairIndex][1])} />
                     <span className="text-gray-300 font-black italic text-4xl ">
                         VS
@@ -183,7 +183,7 @@ export default function ReviewRanking({ choices, onComplete, surveyType, allAnsw
 
 function ComparisonCard({ label, onClick }: { label: string, onClick: () => void }) {
     return (
-        <button onClick={onClick} className="w-64 h-48 bg-white border-2 border-gray-100 rounded-2xl shadow-sm hover:border-slate-900 hover:shadow-xl transition-all flex items-center justify-center p-6">
+        <button onClick={onClick} className="w-64 h-48 bg-white border-2 border-gray-300 rounded-2xl shadow-sm hover:border-slate-900 hover:shadow-xl transition-all flex items-center justify-center p-6">
             <span className="text-xl font-bold text-slate-800 uppercase tracking-tight">
                 {label}
             </span>

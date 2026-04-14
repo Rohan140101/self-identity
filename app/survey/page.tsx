@@ -15,7 +15,7 @@ import TextInputQuestion from "../components/survey/TextInputQuestion";
 import TopFiveQuestion from "../components/survey/TopFiveQuestion";
 import ReviewRanking from "../components/survey/ReviewRanking";
 import IdentityReport from "../components/survey/IdentityReport";
-
+import { Reveal } from "../components/Reveal";
 // const mockQuestions = [
 //   {
 //     id: "q1",
@@ -336,107 +336,110 @@ function SurveyManager() {
 
                         {/* Orchestrator */}
 
-                        {currentQuestion.id === "T5" && (
-                            <TopFiveQuestion question={currentQuestion.question}
-                                options={currentQuestion.options}
-                                selectedValues={currentAnswer || []}
-                                answers={answers}
-                                onToggle={(val: string) => {
-                                    const prev = currentAnswer || [];
-                                    const updated = prev.includes(val)
-                                        ? prev.filter((x: any) => x != val)
-                                        : [...prev, val]
-                                    if (updated.length <= 5) {
-                                        setAnswers({ ...answers, [currentQuestion.id]: updated })
+
+
+                            {currentQuestion.id === "T5" && (
+                                <TopFiveQuestion question={currentQuestion.question}
+                                    options={currentQuestion.options}
+                                    selectedValues={currentAnswer || []}
+                                    answers={answers}
+                                    onToggle={(val: string) => {
+                                        const prev = currentAnswer || [];
+                                        const updated = prev.includes(val)
+                                            ? prev.filter((x: any) => x != val)
+                                            : [...prev, val]
+                                        if (updated.length <= 5) {
+                                            setAnswers({ ...answers, [currentQuestion.id]: updated })
+                                        }
                                     }
-                                }
-                                }
-                            />
-                        )}
+                                    }
+                                />
+                            )}
 
-                        {currentQuestion.id === "Review" && (
-                            <ReviewRanking
-                                choices={answers['T5'] || []}
-                                surveyType={surveyType}
-                                allAnswers={answers}
-                                onComplete={async (finalOrder) => handleFinalSubmission(finalOrder)}
-                            />
-                        )}
-                        {currentQuestion.type === "radio" && (
-                            <RadioQuestion question={currentQuestion.question}
-                                options={currentQuestion.options || []}
-                                selectedValue={currentAnswer}
-                                onSelect={handleSelect} />
-                        )}
+                            {currentQuestion.id === "Review" && (
+                                <ReviewRanking
+                                    choices={answers['T5'] || []}
+                                    surveyType={surveyType}
+                                    allAnswers={answers}
+                                    onComplete={async (finalOrder) => handleFinalSubmission(finalOrder)}
+                                />
+                            )}
+                            {currentQuestion.type === "radio" && (
+                                <RadioQuestion question={currentQuestion.question}
+                                    options={currentQuestion.options || []}
+                                    selectedValue={currentAnswer}
+                                    onSelect={handleSelect} />
+                            )}
 
-                        {currentQuestion.type === "checkbox" && (
-                            <CheckBoxQuestion question={currentQuestion.question}
-                                options={currentQuestion.options || []}
-                                selectedValues={currentAnswer || []}
-                                onToggle={handleSelect} />
-                        )}
-
-
-                        {(currentQuestion.type === "dlikert") && (
-
-                            <DefinedLikertQuestion
-                                category={currentQuestion.category}
-                                definition={currentQuestion.definition}
-                                selectedValue={currentAnswer}
-                                onSelect={handleSelect}
-                                labels={currentQuestion.labels}
-
-                            />
-                        )}
-
-                        {(currentQuestion.type === "likert" || currentQuestion.type === "likertTrait") && (
-
-                            <LikertQuestion question={currentQuestion.question}
-                                selectedValue={currentAnswer}
-                                onSelect={handleSelect}
-                                labels={currentQuestion.labels} />
+                            {currentQuestion.type === "checkbox" && (
+                                <CheckBoxQuestion question={currentQuestion.question}
+                                    options={currentQuestion.options || []}
+                                    selectedValues={currentAnswer || []}
+                                    onToggle={handleSelect} />
+                            )}
 
 
+                            {(currentQuestion.type === "dlikert") && (
 
-                        )}
+                                <DefinedLikertQuestion
+                                    category={currentQuestion.category}
+                                    definition={currentQuestion.definition}
+                                    selectedValue={currentAnswer}
+                                    onSelect={handleSelect}
+                                    labels={currentQuestion.labels}
 
-                        {currentQuestion.type === "choose" && (
-                            <RadioQuestion question={currentQuestion.question}
-                                options={getSectionTraits(currentQuestion.section) || []}
-                                selectedValue={currentAnswer}
-                                onSelect={handleSelect} />
-                        )}
+                                />
+                            )}
 
-                        {currentQuestion.type === "dropdown" && (
-                            <DropdownQuestion question={currentQuestion.question}
-                                options={currentQuestion.options}
-                                selectedValue={currentAnswer}
-                                onSelect={handleSelect} />
-                        )}
+                            {(currentQuestion.type === "likert" || currentQuestion.type === "likertTrait") && (
 
-                        {currentQuestion.type === "text" && (
-                            <TextInputQuestion question={currentQuestion.question}
-                                value={currentAnswer || ""}
-                                onChange={handleSelect}
-                                placeholder={currentQuestion.placeholder} />
-                        )}
+                                <LikertQuestion question={currentQuestion.question}
+                                    selectedValue={currentAnswer}
+                                    onSelect={handleSelect}
+                                    labels={currentQuestion.labels} />
 
+
+
+                            )}
+
+                            {currentQuestion.type === "choose" && (
+                                <RadioQuestion question={currentQuestion.question}
+                                    options={getSectionTraits(currentQuestion.section) || []}
+                                    selectedValue={currentAnswer}
+                                    onSelect={handleSelect} />
+                            )}
+
+                            {currentQuestion.type === "dropdown" && (
+                                <DropdownQuestion question={currentQuestion.question}
+                                    options={currentQuestion.options}
+                                    selectedValue={currentAnswer}
+                                    onSelect={handleSelect} />
+                            )}
+
+                            {currentQuestion.type === "text" && (
+                                <TextInputQuestion question={currentQuestion.question}
+                                    value={currentAnswer || ""}
+                                    onChange={handleSelect}
+                                    placeholder={currentQuestion.placeholder} />
+                            )}
 
 
 
 
 
-                        {/* Next Button */}
-                        {currentQuestion.id != "Review" &&
-                            <div className="flex justify-center py-8">
-                                <button
-                                    disabled={!isAnswered()}
-                                    onClick={handleNext}
-                                    className={`px-12 py-4 rounded-full font-bold text-lg transition-all ${isAnswered() ? "bg-(--brand-dark) text-white hover:bg-slate-800 shadow-xl" : "bg-gray-100 text-gray-400 cursor-not-allowed"}`}
-                                >
-                                    {currentIndex === questions.length - 1 ? "Finish" : "Next"}
-                                </button>
-                            </div>}
+
+                            {/* Next Button */}
+                            {currentQuestion.id != "Review" &&
+                                <div className="flex justify-center py-8">
+                                    <button
+                                        disabled={!isAnswered()}
+                                        onClick={handleNext}
+                                        className={`px-12 py-4 rounded-full font-bold text-lg transition-all ${isAnswered() ? "bg-(--brand-dark) text-white hover:bg-slate-800 shadow-xl" : "bg-gray-100 text-gray-400 cursor-not-allowed"}`}
+                                    >
+                                        {currentIndex === questions.length - 1 ? "Finish" : "Next"}
+                                    </button>
+                                </div>}
+
 
 
 

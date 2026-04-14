@@ -4,7 +4,7 @@ import Footer from "../components/footer"
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { saveToMailingList } from "../actions/save_user_maliling_list";
-
+import { Reveal } from "../components/Reveal";
 export default function SubscribePage() {
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
@@ -52,19 +52,23 @@ export default function SubscribePage() {
     return (
 
         <div className="min-h-screen bg-white flex flex-col font-sans">
-            <Header />
-            <main className="grow flex flex-col items-center bg-slate-50/50 py-10 px-6 max-w-full overflow-x-hidden">
-                <div className="w-full max-w-4xl mx-auto py-10">
-
-                    <div className="text-center mb-8">
-                        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-4">
+                <Header />
+            
+            <main className="grow flex flex-col items-center bg-slate-50/50 py-5 sm:py-10 px-4 sm:px-6 max-w-full overflow-x-hidden">
+                <div className="w-full max-w-5xl mx-auto py-5 sm:py-10">
+                    <Reveal delay={0.2}>
+                        <div className="mb-6 sm:mb-12 text-center">
+                        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-2 sm:mb-4">
                             Subscribe to Us
                         </h1>
                     </div>
-                    <div className="bg-white border border-slate-200 rounded-[2.5rem] p-7 md:p-10 shadow-xl shadow-slate-200/50 text-center relative overflow-hidden">
+                    </Reveal>
+                    
+                    <Reveal delay={0.4}>
+                        <div className="bg-white border border-slate-200 rounded-[2.5rem] p-2 sm:p-10 shadow-xl shadow-slate-200/50 text-center relative overflow-hidden">
 
                         {/* <div className="absolute top-0 left-0 w-full h-2 bg-linear-to-r from-blue-500 via-indigo-600 to-purple-500"></div> */}
-                        <form onSubmit={handleSubscribeSubmit} className="p-8">
+                        <form onSubmit={handleSubscribeSubmit} className="p-5 sm:p-8">
                             <div className="space-y-5">
                                 <div>
                                     <label className="block mb-1.5 text-sm font-semibold text-slate-700">
@@ -109,12 +113,17 @@ export default function SubscribePage() {
 
 
                     </div>
+                    </Reveal>
+                    
 
 
 
                 </div>
             </main>
-            <Footer />
+            <Reveal delay={1}>
+                <Footer />
+            </Reveal>
+            
         </div>
     )
 

@@ -4,6 +4,7 @@ import Footer from "@/app/components/footer";
 import React from 'react';
 import { ArrowLeft, Play, Timer, ShieldCheck } from 'lucide-react';
 import { useRouter } from "next/navigation";
+import { Reveal } from "@/app/components/Reveal";
 
 const FullSurveyIntro = () => {
     const router = useRouter();
@@ -11,8 +12,8 @@ const FullSurveyIntro = () => {
         <div className="min-h-screen bg-white flex flex-col">
             <Header />
             <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-start sm:justify-center px-[5vw]  py-12 font-sans relative overflow-hidden">
-
-                <div className="w-[90vw] md:w-[60vw] lg:w-[45vw] max-w-187.5 min-w-[320px] bg-white rounded-4xl md:rounded-[3rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-slate-100 p-8 text-center relative z-10 transition-all duration-500">
+                <Reveal delay={0.2}>
+                    <div className="w-[90vw] md:w-[60vw] lg:w-[45vw] max-w-187.5 min-w-[320px] bg-white rounded-4xl md:rounded-[3rem] shadow-[0_20px_50px_rgba(0,0,0,0.05)] border border-slate-100 p-8 text-center relative z-10 transition-all duration-500">
 
                     <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 text-blue-600 rounded-full text-[10px] md:text-[11px] font-black uppercase tracking-[0.2em] mb-6 md:mb-10">
                         <Timer size={14} /> 15 Minutes
@@ -35,8 +36,14 @@ const FullSurveyIntro = () => {
                         Ready to Start? <Play size={20} fill="currentColor" />
                     </button>
                 </div>
+
+                </Reveal>
+                
             </div>
-            <Footer />
+            <Reveal delay={1}>
+                <Footer />
+            </Reveal>
+            
         </div>
 
 

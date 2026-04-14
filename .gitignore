@@ -55,3 +55,5 @@ next-env.d.ts
 #python
 /analysis/tester.ipynb
 /analysis/tester.py
+/analysis/data/deft-cove-493201-s4-db47c88b6ce1.json
+/analysis/data/upbeat-button-487617-j0-e0520fb97469.json

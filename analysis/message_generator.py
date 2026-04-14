@@ -9,7 +9,7 @@ import base64
 from io import BytesIO
 
 
-def twitter_message_generator(data: dict):
+def social_media_message_generator(data: dict):
     optimized_result_data = data['optimized_result']['Happy']
     actual  = optimized_result_data['percentiles']['actual_pct']
     optimized=optimized_result_data['percentiles']['optimized_pct']
