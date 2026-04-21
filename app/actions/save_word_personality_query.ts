@@ -2,6 +2,8 @@
 
 import { google } from 'googleapis'
 
+
+// Save Word Personality Query
 export async function saveWordPersonalityQuery(word_string: string, selectedCategories: string[]) {
     const selectedCategoriesString = selectedCategories.join()
     const row = [new Date().toLocaleString(), word_string, selectedCategoriesString]    

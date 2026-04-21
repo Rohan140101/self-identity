@@ -37,14 +37,40 @@ def get_google_analytics_data():
 
     response = client.run_report(request)
     page_paths_visitors = {}
-    total_users = 0
     for row in response.rows:
         page_path = row.dimension_values[0].value
         users = int(row.metric_values[0].value)
         page_paths_visitors[page_path] = users
-        total_users += users
 
-    return total_users, page_paths_visitors
+
+    # Get Total Unique Users
+    
+    request = RunReportRequest(
+        property=f"properties/{PROPERTY_ID}",
+        dimensions=[],
+        metrics=[Metric(name="activeUsers")],
+        date_ranges=[DateRange(start_date="7daysAgo", end_date="today")],
+    )
+    response = client.run_report(request)
+    
+    total_users = response.rows[0].metric_values[0].value
+
+    city_wise_visitors = {}
+    request = RunReportRequest(
+        property=f"properties/{PROPERTY_ID}",
+        dimensions=[Dimension(name="city")],
+        metrics=[Metric(name="activeUsers")],
+        date_ranges=[DateRange(start_date="7daysAgo", end_date="today")],
+    )
+    response = client.run_report(request)
+    for row in response.rows:
+        city = row.dimension_values[0].value
+        users = int(row.metric_values[0].value)
+        city_wise_visitors[city] = users
+
+    city_data_sorted = sorted(city_wise_visitors.items(), key=lambda x: x[1], reverse=True)[:10]
+    city_wise_visitors = {k: v for (k, v) in city_data_sorted}
+    return total_users, page_paths_visitors, city_wise_visitors
 
 # def g
 
@@ -142,7 +168,7 @@ def get_words_search_data():
 
 
 def generate_email_html():
-    total_users, page_path_visitors = get_google_analytics_data()
+    total_users, page_path_visitors, city_wise_visitors = get_google_analytics_data()
     survey_data = get_survey_counts()
     words_search_data = get_words_search_data()
 
@@ -161,6 +187,17 @@ def generate_email_html():
     for page, visitors in page_path_visitors.items():
         html += f'<p style="margin: 4px 0; font-size: 14px;">{page}: <span style="color: #2563eb;">{visitors}</span></p>'
 
+    html += """
+            </div>
+            <div style="background-color: #f1f5f9; padding: 15px; border-radius: 6px;">
+                <p style="margin-top: 0; font-weight: bold;">CityWise Breakdown:</p>
+    """
+
+
+    for city, visitors in city_wise_visitors.items():
+        html += f'<p style="margin: 4px 0; font-size: 14px;">{city}: <span style="color: #2563eb;">{visitors}</span></p>'
+    
+    
     html += """
             </div>
 
@@ -234,6 +271,7 @@ def send_email():
     ses_email_password = os.getenv("SES_EMAIL_PASSWORD")
     ses_endpoint = os.getenv("SES_ENDPOINT")
     user_emails = ["skiena@gmail.com"]
+    # user_emails = ["rkuckian@cs.stonybrook.edu"]
     message = MIMEMultipart("related")
     message["From"] =f"{website_name} <{sender_display_email}>"
 

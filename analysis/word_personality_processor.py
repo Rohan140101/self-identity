@@ -30,7 +30,7 @@ class WordPersonalityAnalyzer:
         pvalues_table = []
         for word in word_list:
             clean_word = word.strip().lower()
-            clean_word = re.sub(r'[!"#$%&\'()*+,-./:;<=>?@\[\\\]^_`{|}~]', '', clean_word)
+            clean_word = re.sub(r'[!"#$%&\'()*+,./:;<=>?@\[\\\]^_`{|}~]', '', clean_word)
             print(word, clean_word)
             if clean_word in self.words_data.index:
                 row_data = {"word": clean_word}
@@ -57,8 +57,14 @@ class WordPersonalityAnalyzer:
                 results_table.append(row_data)
                 pvalues_table.append(row_pvalue_data)
             else:
-                results_table.append({"word": word, "error": "Not in database"})
-                
+                # pass
+                row_data = {"word": clean_word, "error": "Not in Database"}
+                for cat in categories:
+                    row_data[cat] = "-"
+                row_data['Half-Life'] = "-"
+                row_data['Prevalence'] = "-"
+                results_table.append(row_data)
+                pass
         return results_table, pvalues_table
 
     def get_km_curve_params(self, word_list):

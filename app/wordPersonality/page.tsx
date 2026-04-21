@@ -20,12 +20,12 @@ export default function WordPersonalityPage() {
         {
             "name": "Personality Traits",
             "description": "Personality Traits: Introvert, Extrovert, Dumb, Smart ...",
-            "inputString": "Introvert, Extrovert, Dumb, Smart, Chaotic, Structured, Cautious, Adventurous, Lazy, Hardworking",
+            "inputString": "Introvert, Extrovert, Dumb, Smart, Chaotic, Adventurous, Lazy, Hardworking",
         },
         {
             "name": "Professions",
             "description": "Professions: Professor, Manager, Worker, Businessman ...",
-            "inputString": "Professor, Manager, Worker, Businessman, Caregiver, Laborer, Doctor, Engineer, Student, Retired",
+            "inputString": "Professor, Manager, Worker, Businessman, Caregiver, Doctor, Engineer, Student, Retired",
         },
         {
             "name": "Ethnicity",

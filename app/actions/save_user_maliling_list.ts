@@ -2,6 +2,8 @@
 
 import { google } from 'googleapis'
 
+
+// Save Mailing List/Subscribe Data
 export async function saveToMailingList(user_name: any, user_email: any) {
     
 

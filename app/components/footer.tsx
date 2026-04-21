@@ -1,5 +1,7 @@
 import { Youtube, Twitter } from "lucide-react";
 
+
+// Footer for All Pages
 const Footer = function() {
     return (
         <footer className="bg-(--brand-dark) text-(--brand-light) py-4 px-4 border-t border-gray-700">

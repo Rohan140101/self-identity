@@ -30,33 +30,33 @@ class S3_Instance:
         if not os.path.exists("images"):
             os.makedirs("images")
 
-        
-        for key, optimized_result_data in data['optimized_result'].items():
-            catDescData = reportCatDescriptions[key]
-            actual_top5 = optimized_result_data["actual_top5"]
-            optimized_top5 = optimized_result_data["optimized_top5"]
-            fig = get_bell_curve(actual=optimized_result_data['percentiles']['actual_pct'],
-                                optimized=optimized_result_data['percentiles']['optimized_pct'],
-                                wb_cat_name=catDescData['category'])
-            image_name = f"{sha256_hash}_{key}.png"
-            file_path = f"images/{image_name}"
-            fig.write_image(file_path, scale=3, height=630, width=1200)
-            try:
-                self.s3.upload_file(
-                    file_path,
-                    self.bucket_name,
-                    image_name,
-                    ExtraArgs={"ContentType": "image/png"}
-                )
+        key = "Happy"
+        # for key, optimized_result_data in data['optimized_result'].items():
+        optimized_result_data = data['optimized_result'][key]
+        catDescData = reportCatDescriptions[key]
+        actual_top5 = optimized_result_data["actual_top5"]
+        optimized_top5 = optimized_result_data["optimized_top5"]
+        fig = get_bell_curve(actual=optimized_result_data['percentiles']['actual_pct'],
+                            optimized=optimized_result_data['percentiles']['optimized_pct'],
+                            wb_cat_name=catDescData['category'])
+        image_name = f"{sha256_hash}_{key}.png"
+        file_path = f"images/{image_name}"
+        fig.write_image(file_path, scale=3, height=630, width=1200)
+        try:
+            self.s3.upload_file(
+                file_path,
+                self.bucket_name,
+                image_name,
+                ExtraArgs={"ContentType": "image/png"}
+            )
+            url = f"https://{self.bucket_name}.s3.amazonaws.com/{image_name}"
+            image_path_dict[key] = url
 
-                url = f"https://{self.bucket_name}.s3.amazonaws.com/{image_name}"
-                image_path_dict[key] = url
-
-            except Exception as e:
-                print(f"S3 Upload Error: {e}")
-            finally:
-                if os.path.exists(file_path):
-                    os.remove(file_path)
+        except Exception as e:
+            print(f"S3 Upload Error: {e}")
+        finally:
+            if os.path.exists(file_path):
+                os.remove(file_path)
 
             
         return image_path_dict

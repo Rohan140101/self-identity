@@ -2,6 +2,8 @@
 
 import { google } from 'googleapis'
 
+
+// Saving Twenty Statements Test Results
 export async function saveTst(statements: string[], email: string, name: string, researchConsent: string) {
 
     const row = [new Date().toLocaleString(), ...statements, email, name, researchConsent]    

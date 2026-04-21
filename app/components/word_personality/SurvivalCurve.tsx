@@ -5,8 +5,29 @@ import {
   Tooltip, ResponsiveContainer, ReferenceLine
 } from 'recharts';
 import { useState, useEffect } from 'react';
-const WORD_COLORS = ["#6366f1", "#ec4899", "#8b5cf6", "#10b981", "#f59e0b", "#3b82f6"];
-
+// const WORD_COLORS = ["#6366f1", "#ec4899", "#8b5cf6", "#10b981", "#f59e0b", "#3b82f6"];
+const WORD_COLORS = [
+  "#6366f1", // indigo
+  "#ec4899", // pink
+  "#8b5cf6", // violet
+  "#10b981", // emerald
+  "#f59e0b", // amber
+  "#3b82f6", // blue
+  "#ef4444", // red
+  "#14b8a6", // teal
+  "#f97316", // orange
+  "#84cc16", // lime
+  "#06b6d4", // cyan
+  "#d946ef", // fuchsia
+  "#0ea5e9", // sky
+  "#22c55e", // green
+  "#e11d48", // rose
+  "#eab308", // yellow
+  "#64748b", // slate
+  "#a16207", // brown
+  "#0d9488", // dark teal
+  "#7c3aed", // purple
+];
 const normalCDF = (x: number) => {
   const t = 1 / (1 + 0.2316419 * Math.abs(x));
   const d = 0.3989423 * Math.exp(-x * x / 2);
@@ -50,17 +71,21 @@ export const SurvivalCurve = ({ wordsData }: { wordsData: any[] }) => {
   return (
     <div className="w-full h-137.5 bg-white rounded-[2.5rem] border border-slate-100 shadow-xl px-0.5 py-4 sm:px-8 sm:py-8 flex flex-col">
       <div className="mb-8 flex flex-wrap gap-6 px-4">
-        {wordsData.map((word, idx) => (
-          <div key={word.word} className="flex items-center gap-2">
-            <div
-              className="h-1.5 w-6 rounded-full"
-              style={{ backgroundColor: word.error ? "#cbd5e1" : WORD_COLORS[idx % WORD_COLORS.length] }}
-            />
-            <span className="text-[11px] font-black text-slate-500 uppercase tracking-widest">
-              {word.word} {word.unique_users ? `` : ''}
-            </span>
-          </div>
-        ))}
+        {wordsData.map((word, idx) => {
+          if (word.error) return null;
+
+          return (
+            <div key={word.word} className="flex items-center gap-2">
+              <div
+                className="h-1.5 w-6 rounded-full"
+                style={{ backgroundColor: WORD_COLORS[idx % WORD_COLORS.length] }}
+              />
+              <span className="text-[11px] font-black text-slate-500 uppercase tracking-widest">
+                {word.word} {word.unique_users ? `` : ''}
+              </span>
+            </div>
+          );
+        })}
       </div>
 
       <div className="grow w-full">

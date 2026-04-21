@@ -1,5 +1,7 @@
 import Link from "next/link";
 
+
+// Banner - Left Side of Navbar
 const Banner = function () {
   return (
     <div className="h-16 flex items-center">

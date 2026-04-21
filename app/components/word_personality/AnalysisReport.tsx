@@ -5,8 +5,28 @@ import { SurvivalCurve } from "./SurvivalCurve";
 import { useState, useEffect } from "react";
 import { saveWordPersonalityQuery } from "../../actions/save_word_personality_query"
 
-const WORD_COLORS = ["#6366f1", "#ec4899", "#8b5cf6", "#10b981", "#f59e0b", "#3b82f6"];
-
+const WORD_COLORS = [
+  "#6366f1", // indigo
+  "#ec4899", // pink
+  "#8b5cf6", // violet
+  "#10b981", // emerald
+  "#f59e0b", // amber
+  "#3b82f6", // blue
+  "#ef4444", // red
+  "#14b8a6", // teal
+  "#f97316", // orange
+  "#84cc16", // lime
+  "#06b6d4", // cyan
+  "#d946ef", // fuchsia
+  "#0ea5e9", // sky
+  "#22c55e", // green
+  "#e11d48", // rose
+  "#eab308", // yellow
+  "#64748b", // slate
+  "#a16207", // brown
+  "#0d9488", // dark teal
+  "#7c3aed", // purple
+];
 export default function AnalysisReport({ prevInputString, selectedCategories, data, onBack }: { prevInputString: string, selectedCategories: string[], data: any, onBack: () => void }) {
     const [reportData, setReportData] = useState(data);
     let [inputString, setInputString] = useState(prevInputString);
@@ -154,6 +174,8 @@ export default function AnalysisReport({ prevInputString, selectedCategories, da
                                         <td className="p-4 font-bold text-xl" style={{ color: WORD_COLORS[idx % WORD_COLORS.length] }}>
                                             {row.word}
                                         </td>
+
+
                                         {Object.entries(row)
                                             .filter(([k]) => !['word', 'error', 'Half-Life', 'Prevalence'].includes(k))
                                             .map(([key, val]: any) => (

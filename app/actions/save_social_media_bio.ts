@@ -2,6 +2,7 @@
 
 import { google } from 'googleapis'
 
+// Saving Social Media Bio Data
 export async function saveSocialMediaBio(bio: string, instagramId: string, facebookId: string, twitterId: string, email: string, name: string, researchConsent: string) {
 
     const row = [new Date().toLocaleString(), bio, instagramId, facebookId, twitterId, email, name, researchConsent]    
