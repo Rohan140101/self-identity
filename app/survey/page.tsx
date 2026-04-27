@@ -1,4 +1,5 @@
 "use client";
+import type { ComponentProps } from "react";
 import { useMemo, useState, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import RadioQuestion from "../components/survey/RadioQuestion";
@@ -15,7 +16,6 @@ import TextInputQuestion from "../components/survey/TextInputQuestion";
 import TopFiveQuestion from "../components/survey/TopFiveQuestion";
 import ReviewRanking from "../components/survey/ReviewRanking";
 import IdentityReport from "../components/survey/IdentityReport";
-import { Reveal } from "../components/Reveal";
 // const mockQuestions = [
 //   {
 //     id: "q1",
@@ -42,6 +42,29 @@ const isValidIdentityTrait = (val: string) => {
     return val && !junk.includes(val.toLowerCase())
 }
 
+type SurveyAnswer = string | number | string[] | null | undefined;
+type SurveyAnswers = Record<string, SurveyAnswer>;
+
+type SurveyQuestion = {
+    id: string;
+    type: string;
+    question: string;
+    options?: string[];
+    labels?: { left: string; right: string };
+    jump?: Record<string, string> | null;
+    showOnly?: Record<string, string> | null;
+    section?: unknown;
+    category?: string;
+    definition?: string;
+    placeholder?: string;
+}
+
+type AnalysisResult = ComponentProps<typeof IdentityReport>;
+
+const toStringArray = (answer: SurveyAnswer): string[] => {
+    return Array.isArray(answer) ? answer.filter((item): item is string => typeof item === "string") : [];
+}
+
 function SurveyManager() {
 
     const searchParams = useSearchParams()
@@ -50,20 +73,23 @@ function SurveyManager() {
 
     const data = surveyType == "long" ? longSurveyData : shortSurveyData
 
-    const questions = useMemo(() => transformSurveyData(data), [])
+    const questions = useMemo(() => transformSurveyData(data) as SurveyQuestion[], [data])
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [answers, setAnswers] = useState<Record<string, any>>({
+    const [questionHistory, setQuestionHistory] = useState<number[]>([]);
+    const [answers, setAnswers] = useState<SurveyAnswers>({
         surveyType: surveyType
     });
     const [isReportMode, setIsReportMode] = useState(false);
-    const [finalRankedIdentity, setFinalRankedIdentity] = useState<string[]>([])
-    const [analysisResult, setAnalysisResult] = useState<any>(null);
-    const [isLoading, setIsLoading] = useState(false);
+    const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
 
     const currentQuestion = questions[currentIndex];
     const currentAnswer = answers[currentQuestion.id];
+    const selectedStringAnswer = typeof currentAnswer === "string" ? currentAnswer : null;
+    const selectedNumberAnswer = typeof currentAnswer === "number" ? currentAnswer : null;
+    const selectedStringAnswers = toStringArray(currentAnswer);
+    const topFiveAnswers = toStringArray(answers['T5']);
 
-    const shouldShowQuestion = (question: any) => {
+    const shouldShowQuestion = (question: SurveyQuestion) => {
         if (!question.showOnly) {
             return true
         }
@@ -83,10 +109,11 @@ function SurveyManager() {
         console.log('here5', qtype)
         if (qtype === "likert" || qtype === "likertTrait") {
             let selectedChoice = ""
-            if (userSelection >= 1 && userSelection <= 2) {
-                selectedChoice = parentQuestion.labels.left
-            } else if (userSelection >= 6 && userSelection <= 7) {
-                selectedChoice = parentQuestion.labels.right
+            const score = Number(userSelection)
+            if (score >= 1 && score <= 2) {
+                selectedChoice = parentQuestion.labels?.left || ""
+            } else if (score >= 6 && score <= 7) {
+                selectedChoice = parentQuestion.labels?.right || ""
             }
             return selectedChoice === requiredValue
         }
@@ -99,7 +126,7 @@ function SurveyManager() {
 
     }
 
-    const getSectionTraits = (sectionName: string) => {
+    const getSectionTraits = (sectionName: unknown) => {
         const traits: string[] = []
         questions.forEach((q) => {
             const answer = answers[q.id]
@@ -119,9 +146,13 @@ function SurveyManager() {
                 } else if (q.type === "likertTrait") {
                     const score = Number(answer)
                     if (score >= 1 && score <= 2) {
-                        traits.push(q.labels.left)
+                        if (q.labels?.left) {
+                            traits.push(q.labels.left)
+                        }
                     } else if (score >= 6 && score <= 7) {
-                        traits.push(q.labels.right)
+                        if (q.labels?.right) {
+                            traits.push(q.labels.right)
+                        }
                     }
 
                 }
@@ -135,21 +166,51 @@ function SurveyManager() {
     }
 
 
-    const handleSelect = (value: any) => {
-        if (currentQuestion.type == "checkbox") {
-            const currentArray = (currentAnswer as string[]) || [];
-            const updatedArray = currentArray.includes(value) ? currentArray.filter((item) => item !== value) :
-                [...currentArray, value];
+    const pruneFutureAnswers = (nextAnswers: SurveyAnswers) => {
+        const prunedAnswers = { ...nextAnswers };
+        questions.slice(currentIndex + 1).forEach((question) => {
+            delete prunedAnswers[question.id];
+        });
+        return prunedAnswers;
+    }
 
-            setAnswers({ ...answers, [currentQuestion.id]: updatedArray })
+    const updateCurrentAnswer = (value: SurveyAnswer) => {
+        setAnswers((prev) => pruneFutureAnswers({ ...prev, [currentQuestion.id]: value }))
+    }
+
+    const handleSelect = (value: string | number) => {
+        if (currentQuestion.type == "checkbox") {
+            setAnswers((prev) => {
+                const currentArray = (prev[currentQuestion.id] as string[]) || [];
+                const stringValue = String(value);
+                const updatedArray = currentArray.includes(stringValue) ? currentArray.filter((item) => item !== stringValue) :
+                    [...currentArray, stringValue];
+
+                return pruneFutureAnswers({ ...prev, [currentQuestion.id]: updatedArray });
+            })
         } else {
-            setAnswers({ ...answers, [currentQuestion.id]: value })
+            updateCurrentAnswer(value)
         }
 
 
 
 
 
+    }
+
+    const goToQuestion = (nextIndex: number) => {
+        setQuestionHistory((prev) => [...prev, currentIndex]);
+        setCurrentIndex(nextIndex);
+    }
+
+    const handleBack = () => {
+        if (questionHistory.length === 0) {
+            return;
+        }
+
+        const previousIndex = questionHistory[questionHistory.length - 1];
+        setQuestionHistory(questionHistory.slice(0, -1));
+        setCurrentIndex(previousIndex);
     }
 
     const handleNext = () => {
@@ -164,7 +225,7 @@ function SurveyManager() {
         let nextIndex = currentIndex + 1;
 
 
-        if (currentQuestion.jump && currentAnswer && currentQuestion.jump[currentAnswer]) {
+        if (currentQuestion.jump && typeof currentAnswer === "string" && currentQuestion.jump[currentAnswer]) {
             const target = currentQuestion.jump[currentAnswer]
             const foundIndex = questions.findIndex(q => q.id === target)
             if (foundIndex != -1) {
@@ -192,7 +253,7 @@ function SurveyManager() {
                     if (availableTraits.length === 1) {
                         setAnswers(prev => ({ ...prev, [nextQuestion.id]: availableTraits[0] }))
                     }
-                    setCurrentIndex(nextIndex + 1);
+                    goToQuestion(nextIndex + 1);
                     console.log(answers)
                     return;
                 }
@@ -206,7 +267,7 @@ function SurveyManager() {
         if (nextIndex >= questions.length) {
             setIsReportMode(true)
         } else {
-            setCurrentIndex(nextIndex)
+            goToQuestion(nextIndex)
         }
 
 
@@ -217,7 +278,7 @@ function SurveyManager() {
     }
 
 
-    const getReport = async (answers: any) => {
+    const getReport = async (answers: SurveyAnswers): Promise<{ success: true; data: AnalysisResult } | { success: false; error: string }> => {
         // const localPath = process.env.NEXT_PUBLIC_LOCAL_API_PATH + "/analyze"
         // const globalPath = process.env.NEXT_PUBLIC_GLOBAL_API_PATH + "/analyze"
         const path = process.env.NEXT_PUBLIC_API_PATH + '/analyze'
@@ -230,7 +291,7 @@ function SurveyManager() {
 
             if (!response.ok) throw new Error('Analysis failed');
 
-            const analysisData = await response.json();
+            const analysisData = await response.json() as AnalysisResult;
 
             return { success: true, data: analysisData }
         }
@@ -242,8 +303,6 @@ function SurveyManager() {
     }
 
     const handleFinalSubmission = async (finalOrder: string[]) => {
-        setIsLoading(true);
-        setFinalRankedIdentity(finalOrder)
         const finalAnswers = { ...answers, finalRankedChoices: finalOrder };
         sessionStorage.setItem("user_answers", JSON.stringify(finalAnswers))
         // const response = await fetch('http://localhost:8000/analyze', {
@@ -265,7 +324,6 @@ function SurveyManager() {
         } else {
             alert("Something went wrong calculating your report.");
         }
-        setIsLoading(false);
 
 
 
@@ -275,10 +333,10 @@ function SurveyManager() {
 
     const isAnswered = () => {
         if (currentQuestion.id === "T5") {
-            return (currentAnswer || []).length === 5
+            return selectedStringAnswers.length === 5
         }
         if (currentQuestion.type === "text") {
-            return (currentAnswer || "").trim().length > 0;
+            return typeof currentAnswer === "string" && currentAnswer.trim().length > 0;
         }
         if (!currentAnswer) {
             return false
@@ -333,6 +391,17 @@ function SurveyManager() {
                             <div className="h-full bg-slate-900 transition-all duration-500" style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }} />
 
                         </div>
+                        <div className="mb-6 h-8">
+                            {questionHistory.length > 0 && (
+                                <button
+                                    type="button"
+                                    onClick={handleBack}
+                                    className="text-sm font-semibold text-slate-500 hover:text-slate-900 transition-colors"
+                                >
+                                    ← Back
+                                </button>
+                            )}
+                        </div>
 
                         {/* Orchestrator */}
 
@@ -340,16 +409,16 @@ function SurveyManager() {
 
                             {currentQuestion.id === "T5" && (
                                 <TopFiveQuestion question={currentQuestion.question}
-                                    options={currentQuestion.options}
-                                    selectedValues={currentAnswer || []}
+                                    options={currentQuestion.options || []}
+                                    selectedValues={selectedStringAnswers}
                                     answers={answers}
                                     onToggle={(val: string) => {
-                                        const prev = currentAnswer || [];
+                                        const prev = selectedStringAnswers;
                                         const updated = prev.includes(val)
-                                            ? prev.filter((x: any) => x != val)
+                                            ? prev.filter((x) => x != val)
                                             : [...prev, val]
                                         if (updated.length <= 5) {
-                                            setAnswers({ ...answers, [currentQuestion.id]: updated })
+                                            updateCurrentAnswer(updated)
                                         }
                                     }
                                     }
@@ -358,23 +427,24 @@ function SurveyManager() {
 
                             {currentQuestion.id === "Review" && (
                                 <ReviewRanking
-                                    choices={answers['T5'] || []}
+                                    choices={topFiveAnswers}
                                     surveyType={surveyType}
                                     allAnswers={answers}
+                                    onBack={handleBack}
                                     onComplete={async (finalOrder) => handleFinalSubmission(finalOrder)}
                                 />
                             )}
                             {currentQuestion.type === "radio" && (
                                 <RadioQuestion question={currentQuestion.question}
                                     options={currentQuestion.options || []}
-                                    selectedValue={currentAnswer}
+                                    selectedValue={selectedStringAnswer}
                                     onSelect={handleSelect} />
                             )}
 
                             {currentQuestion.type === "checkbox" && (
                                 <CheckBoxQuestion question={currentQuestion.question}
                                     options={currentQuestion.options || []}
-                                    selectedValues={currentAnswer || []}
+                                    selectedValues={selectedStringAnswers}
                                     onToggle={handleSelect} />
                             )}
 
@@ -382,9 +452,9 @@ function SurveyManager() {
                             {(currentQuestion.type === "dlikert") && (
 
                                 <DefinedLikertQuestion
-                                    category={currentQuestion.category}
-                                    definition={currentQuestion.definition}
-                                    selectedValue={currentAnswer}
+                                    category={currentQuestion.category || ""}
+                                    definition={currentQuestion.definition || ""}
+                                    selectedValue={selectedNumberAnswer}
                                     onSelect={handleSelect}
                                     labels={currentQuestion.labels}
 
@@ -394,7 +464,7 @@ function SurveyManager() {
                             {(currentQuestion.type === "likert" || currentQuestion.type === "likertTrait") && (
 
                                 <LikertQuestion question={currentQuestion.question}
-                                    selectedValue={currentAnswer}
+                                    selectedValue={selectedNumberAnswer}
                                     onSelect={handleSelect}
                                     labels={currentQuestion.labels} />
 
@@ -405,20 +475,20 @@ function SurveyManager() {
                             {currentQuestion.type === "choose" && (
                                 <RadioQuestion question={currentQuestion.question}
                                     options={getSectionTraits(currentQuestion.section) || []}
-                                    selectedValue={currentAnswer}
+                                    selectedValue={selectedStringAnswer}
                                     onSelect={handleSelect} />
                             )}
 
                             {currentQuestion.type === "dropdown" && (
                                 <DropdownQuestion question={currentQuestion.question}
-                                    options={currentQuestion.options}
-                                    selectedValue={currentAnswer}
+                                    options={currentQuestion.options || []}
+                                    selectedValue={selectedStringAnswer}
                                     onSelect={handleSelect} />
                             )}
 
                             {currentQuestion.type === "text" && (
                                 <TextInputQuestion question={currentQuestion.question}
-                                    value={currentAnswer || ""}
+                                    value={selectedStringAnswer || ""}
                                     onChange={handleSelect}
                                     placeholder={currentQuestion.placeholder} />
                             )}

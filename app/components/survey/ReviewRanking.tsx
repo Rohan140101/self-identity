@@ -1,11 +1,21 @@
 "use client";
-import { useState, useMemo, useEffect } from "react";
+import { useCallback, useState, useMemo, useEffect } from "react";
 
-interface TopFiveQuestionProps {
-    question: string;
-    options: string[];
-    selectedValues: string[];
-    onToggle: (value: string) => void;
+type PairResult = {
+    winner: string;
+    loser: string;
+}
+
+type RankedOrderResponse = {
+    sorted_data: [string, unknown][];
+}
+
+type ReviewRankingProps = {
+    choices: string[];
+    onComplete: (finalOrder: string[]) => void;
+    surveyType: string;
+    allAnswers: Record<string, unknown>;
+    onBack?: () => void;
 }
 
 function generatePairs(items: string[]) {
@@ -26,26 +36,19 @@ function generatePairs(items: string[]) {
 }
 
 
-export default function ReviewRanking({ choices, onComplete, surveyType, allAnswers }: { choices: string[], onComplete: (finalOrder: string[]) => void, surveyType: string, allAnswers: any }) {
+export default function ReviewRanking({ choices, onComplete, surveyType, allAnswers, onBack }: ReviewRankingProps) {
     const [step, setStep] = useState<'loading' | 'comparison' | 'review'>(
         surveyType === "short" ? 'loading' : 'comparison'
     );
     const [pairIndex, setPairIndex] = useState(0);
-    const [results, setResults] = useState<{ winner: string, loser: string }[]>([]);
+    const [results, setResults] = useState<PairResult[]>([]);
     const [finalOrder, setFinalOrder] = useState<string[]>([]);
-
-    useEffect(() => {
-        if (surveyType === "short") {
-            fetchRankedOrder();
-        }
-    }, []);
 
     const pairs = useMemo(() => {
         return generatePairs(choices)
     }, [choices])
 
-    const fetchRankedOrder = async () => {
-
+    const fetchRankedOrder = useCallback(async () => {
         const path = process.env.NEXT_PUBLIC_API_PATH + '/getRankedOrder'
         try {
             const response = await fetch(path, {
@@ -54,8 +57,8 @@ export default function ReviewRanking({ choices, onComplete, surveyType, allAnsw
                 "body": JSON.stringify(allAnswers)
             });
 
-            const data = await response.json();
-            const serverOrder = data.sorted_data.map((item: any) => item[0]);
+            const data = await response.json() as RankedOrderResponse;
+            const serverOrder = data.sorted_data.map((item) => item[0]);
             
             setFinalOrder(serverOrder);
             setStep('review');
@@ -63,7 +66,17 @@ export default function ReviewRanking({ choices, onComplete, surveyType, allAnsw
             console.error("Error triggering ranking:", error);
             setStep('comparison')
         }
-    }
+    }, [allAnswers])
+
+    useEffect(() => {
+        if (surveyType === "short") {
+            const timeoutId = window.setTimeout(() => {
+                void fetchRankedOrder();
+            }, 0);
+
+            return () => window.clearTimeout(timeoutId);
+        }
+    }, [fetchRankedOrder, surveyType]);
 
     
 
@@ -77,7 +90,7 @@ export default function ReviewRanking({ choices, onComplete, surveyType, allAnsw
             calculateFinalRanking(newResults)
         }
     }
-    const calculateFinalRanking = (allResults: { winner: string, loser: string }[]) => {
+    const calculateFinalRanking = (allResults: PairResult[]) => {
         const scores: Record<string, number> = {}
         choices.forEach(c => scores[c] = 0)
 
@@ -100,6 +113,30 @@ export default function ReviewRanking({ choices, onComplete, surveyType, allAnsw
 
     }
 
+    const handleBack = () => {
+        if (step === "comparison") {
+            if (pairIndex === 0) {
+                onBack?.();
+                return;
+            }
+
+            setResults((prev) => prev.slice(0, -1));
+            setPairIndex((prev) => prev - 1);
+            return;
+        }
+
+        if (step === "review") {
+            if (surveyType === "short") {
+                onBack?.();
+                return;
+            }
+
+            setResults((prev) => prev.slice(0, -1));
+            setPairIndex(Math.max(pairs.length - 1, 0));
+            setStep("comparison");
+        }
+    }
+
     const moveItem = (index: number, direction: number) => {
         const newOrder = [...finalOrder]
         const element = newOrder.splice(index, 1)[0]
@@ -119,6 +156,15 @@ export default function ReviewRanking({ choices, onComplete, surveyType, allAnsw
     if (step === "comparison") {
         return (
             <div className="text-center animate-in fade-in duration-500">
+                <div className="mb-6 flex justify-start">
+                    <button
+                        type="button"
+                        onClick={handleBack}
+                        className="text-sm font-semibold text-slate-500 hover:text-slate-900 transition-colors"
+                    >
+                        ← Back
+                    </button>
+                </div>
                 <h2 className="text-2xl font-bold mb-8">
                     To help us understand which aspects are most important to your identity, please select which one in each pair is more important to you.
                 </h2>
@@ -139,6 +185,15 @@ export default function ReviewRanking({ choices, onComplete, surveyType, allAnsw
     if (step === "review") {
         return (
             <div className="w-full max-w-md mx-auto">
+                <div className="mb-6 flex justify-start">
+                    <button
+                        type="button"
+                        onClick={handleBack}
+                        className="text-sm font-semibold text-slate-500 hover:text-slate-900 transition-colors"
+                    >
+                        ← Back
+                    </button>
+                </div>
                 <h2 className="text-2xl font-bold mb-6 text-center">
                     Final Identity Priority
                 </h2>
