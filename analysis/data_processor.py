@@ -12,7 +12,7 @@ from lightgbm import LGBMRanker, train
 import re
 import numpy as np
 import itertools
-
+import os
 
 class IdentityAnalyzer:
     def __init__(self, prolific_path, survey_path, did_option_dict_path):
@@ -120,7 +120,7 @@ class IdentityAnalyzer:
 
         self.well_being_vars_top5_df = pd.DataFrame(self.well_being_vars_top5).T
 
-        self.monte_carlo_samples_df, self.monte_carlo_samples_metrics = self.monte_carlo_simulation_samples(10000)
+        self.monte_carlo_samples_metrics = self.monte_carlo_simulation_samples(10000)
         self.model, self.id_to_name, self.feature_cols = self._train_ranker()
 
         
@@ -340,43 +340,51 @@ class IdentityAnalyzer:
             user_wb_percentiles[wb] = self._get_pct(raw_score, mu, std)
         return user_wb_percentiles, user_wb_scores
         
-    def monte_carlo_simulation_samples(self, iterations=1000):
-        category_positional_counts_df = pd.DataFrame(self.pos_counts).T
-        category_positional_counts_df = category_positional_counts_df+1
-        category_positional_probs_df = category_positional_counts_df/category_positional_counts_df.sum()
+    def monte_carlo_simulation_samples(self, iterations=100000):
+        metrics_path = f"data/monte_carlo_samples_metrics_{iterations}.json"
+        if os.path.exists(metrics_path):
+            with open(metrics_path, "r") as f:
+                metrics = json.load(f)
+        else:
+            category_positional_counts_df = pd.DataFrame(self.pos_counts).T
+            category_positional_counts_df = category_positional_counts_df+1
+            category_positional_probs_df = category_positional_counts_df/category_positional_counts_df.sum()
 
-        samples = dict()
-        for i in range(iterations):
-            rankedChoices = []
-            for rank in category_positional_probs_df.columns:
-                while True:
-                    choice = np.random.choice(category_positional_probs_df.index, p=category_positional_probs_df[rank])
-                    if choice not in rankedChoices:
-                        rankedChoices.append(choice)
-                        break
+            samples = dict()
+            for i in range(iterations):
+                rankedChoices = []
+                for rank in category_positional_probs_df.columns:
+                    while True:
+                        choice = np.random.choice(category_positional_probs_df.index, p=category_positional_probs_df[rank])
+                        if choice not in rankedChoices:
+                            rankedChoices.append(choice)
+                            break
 
-#                 choice = np.random.choice(category_positional_probs_df.index, p=category_positional_probs_df[rank], replace=False)
+    #                 choice = np.random.choice(category_positional_probs_df.index, p=category_positional_probs_df[rank], replace=False)
 
 
-            user_wb_percentiles, user_wb_scores = self.get_user_wb_percentile_scores(rankedChoices)
-            cur_sample = {}
-            for j in range(len(rankedChoices)):
-                cur_sample[j+1] = rankedChoices[j]
+                user_wb_percentiles, user_wb_scores = self.get_user_wb_percentile_scores(rankedChoices)
+                cur_sample = {}
+                for j in range(len(rankedChoices)):
+                    cur_sample[j+1] = rankedChoices[j]
+                    
+                for wb, score in user_wb_scores.items():
+                    
+                    cur_sample[wb] = score
+                    
+                samples[len(samples)] = cur_sample
                 
-            for wb, score in user_wb_scores.items():
-                
-                cur_sample[wb] = score
-                
-            samples[len(samples)] = cur_sample
-            
-        samples_df = pd.DataFrame(samples).T
-        metrics = defaultdict(lambda: defaultdict(float))
+            samples_df = pd.DataFrame(samples).T
+            metrics = defaultdict(lambda: defaultdict(float))
 
-        for wb in self.well_being_variables:
-            metrics[wb]["mu"] = samples_df[wb].mean()
-            metrics[wb]["std"] = samples_df[wb].std()
+            for wb in self.well_being_variables:
+                metrics[wb]["mu"] = samples_df[wb].mean()
+                metrics[wb]["std"] = samples_df[wb].std()
 
-        return samples_df, metrics
+            with open(metrics_path, "w") as f:
+                json.dump(metrics, f)
+
+        return metrics
     
 
 
