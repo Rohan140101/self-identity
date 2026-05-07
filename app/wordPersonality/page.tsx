@@ -127,6 +127,7 @@ export default function WordPersonalityPage() {
 
     return (
         <div className="min-h-screen bg-white flex flex-col font-sans">
+            {/**Importing Header */}
             <Header />
 
             <main className="grow flex flex-col items-center bg-slate-50/50 py-10 px-6 overflow-hidden">
@@ -173,7 +174,7 @@ export default function WordPersonalityPage() {
                                     </div>
                                     {/* <button
                                         onClick={toggleAll}
-                                        className="text-xl font-bold text-blue-900 hover:text-blue-600 transition-colors bg-blue-50 px-4 py-2 rounded-full">
+                                        className="text-xl font-bold text-(--brand-dark) hover:text-(--brand-hover) transition-colors bg-blue-50 px-4 py-2 rounded-full">
                                         {selectedCategories.length === allCategories.length ? "Deselect All" : "Select All"}
                                     </button> */}
                                 </div>
@@ -201,7 +202,7 @@ export default function WordPersonalityPage() {
                                 disabled={disableSearchBtn}
                                 onClick={() => handleSubmit()}
 
-                                className="w-full bg-slate-900 hover:bg-blue-600 text-white py-5 rounded-2xl font-black tracking-widest transition-all shadow-xl shadow-blue-100 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed ">
+                                className="w-full bg-slate-900 hover:bg-(--brand-hover) text-white py-5 rounded-2xl font-black tracking-widest transition-all shadow-xl shadow-blue-100 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed ">
                                 Search Words
                             </button>
 
@@ -223,11 +224,11 @@ export default function WordPersonalityPage() {
                                 <ul className="space-y-3">
                                     {examples.map((example) => (
                                         <li key={example.name} className="flex items-start group">
-                                            <span className="mr-3 mt-2 h-1.5 w-1.5 rounded-full bg-blue-900 group-hover:bg-blue-600 transition-colors shrink-0" />
+                                            <span className="mr-3 mt-2 h-1.5 w-1.5 rounded-full bg-(--brand-dark) group-hover:bg-(--brand-hover) transition-colors shrink-0" />
 
                                             <button
                                                 onClick={() => submitExample(example.inputString)}
-                                                className="text-left text-sm md:text-base font-medium text-slate-900 hover:text-blue-600 underline underline-offset-4 decoration-slate-200 hover:decoration-blue-600 transition-all duration-200 ease-in-out"
+                                                className="text-left text-sm md:text-base font-medium text-slate-900 hover:text-(--brand-hover) underline underline-offset-4 decoration-slate-200 hover:decoration(--brand-hover) transition-all duration-200 ease-in-out"
                                             >
                                                 {example.description}
                                             </button>

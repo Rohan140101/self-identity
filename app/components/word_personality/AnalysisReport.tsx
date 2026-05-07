@@ -39,7 +39,7 @@ export default function AnalysisReport({ prevInputString, selectedCategories, da
     console.log("personality_pvalue_table:", personality_pvalue_table)
     const get_percentile_color = (percentile: number) => {
         if (percentile < 45) {
-            return "text-blue-600"
+            return "text-(--brand-hover)"
         } else if (percentile > 55) {
             return "text-red-600"
         } 
@@ -117,7 +117,7 @@ export default function AnalysisReport({ prevInputString, selectedCategories, da
     return (
         <div className='w-full max-w-5xl mx-auto'>
             <header className="mb-10 border-b border-slate-100 pb-6 flex items-center">
-                <button onClick={onBack} className="p-2 bg-slate-900 hover:bg-blue-600 text-white transition-colors rounded-lg mr-4">
+                <button onClick={onBack} className="p-2 bg-slate-900 hover:bg-(--brand-hover) text-white transition-colors rounded-lg mr-4">
                     <ArrowLeft size={20} />
                 </button>
                 <h1 className="text-2xl font-extrabold text-slate-900 tracking-tight">
@@ -137,7 +137,7 @@ export default function AnalysisReport({ prevInputString, selectedCategories, da
                     <button
                         onClick={handleSubmit}
                         disabled={isLoading || disableSearchBtn}
-                        className="bg-blue-900 hover:bg-blue-600 text-white px-8 py-3 rounded-xl font-bold transition-all disabled:opacity-50"
+                        className="bg-(--brand-dark) hover:bg-(--brand-hover) text-white px-8 py-3 rounded-xl font-bold transition-all disabled:opacity-50"
                     >
                         {isLoading ? "Analyzing..." : "Update Report"}
                     </button>
@@ -199,7 +199,7 @@ export default function AnalysisReport({ prevInputString, selectedCategories, da
 
                 <section className="mt-16 mb-20">
                     <h2 className="text-lg font-bold mb-5 text-slate-800 flex items-center gap-2">
-                        <span className="w-1.5 h-6 bg-blue-600 rounded-full"></span>
+                        <span className="w-1.5 h-6 bg-(--brand-hover) rounded-full"></span>
                         Identity Half-Life Analysis
                     </h2>
                     <p className="text-slate-800 italic font-bold mt-2 pb-10">

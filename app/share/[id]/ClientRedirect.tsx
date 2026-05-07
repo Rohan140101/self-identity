@@ -12,6 +12,7 @@ export default function ClientRedirect({ id }: { id: string }) {
 
     return (
         <div className="min-h-screen bg-white flex flex-col font-sans">
+            {/**Importing Header */}
             <Header />
             <main className="grow flex flex-col items-center bg-slate-50/50 py-10 px-6 max-w-full overflow-x-hidden">
                 <div className="w-full max-w-5xl mx-auto py-10">
@@ -35,7 +36,7 @@ export default function ClientRedirect({ id }: { id: string }) {
                             <div className="space-x-4">
                                 <button
                                     onClick={() => router.push('/')}
-                                    className="bg-blue-900 hover:bg-blue-600 transition-all duration-200 text-white px-6 py-2 rounded-full font-bold"
+                                    className="bg-(--brand-dark) hover:bg-(--brand-hover) transition-all duration-200 text-white px-6 py-2 rounded-full font-bold"
                                 >
                                     Take the Survey Yourself
                                 </button>

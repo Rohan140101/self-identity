@@ -6,18 +6,13 @@ import { Reveal } from "./components/Reveal";
 export default function Page() {
     return (
         <div className="min-h-screen bg-white flex flex-col">
-
+            {/**Importing Header */}
             <Header />
 
 
             <main className="min-h-screen bg-white text-black max-w-full overflow-x-hidden">
-
                 <Hero />
-
-
-                
-                    <Content />
-
+                <Content />
 
             </main>
             <Reveal delay={1}>

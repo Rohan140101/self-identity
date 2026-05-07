@@ -110,7 +110,7 @@ export default function ReviewRanking({ choices, onComplete, surveyType, allAnsw
     if (step === "loading") {
         return (
             <div className="text-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-(--brand-hover) mx-auto mb-4"></div>
                 <p className="text-slate-500 font-medium">Calculating Identity Priority...</p>
             </div>
         );
@@ -149,18 +149,18 @@ export default function ReviewRanking({ choices, onComplete, surveyType, allAnsw
                 <div className="space-y-3">
                     {finalOrder.map((item, i) => (
                         <div key={item} className="flex items-center text-(--brand-dark) bg-white p-4 rounded-xl shadow-sm border border-slate-900 ">
-                            <span className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center mr-4 font-bold text-blue-600">
+                            <span className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center mr-4 font-bold text-(--brand-hover)">
                                 {i + 1}
                             </span>
                             <span className="font-medium text-lg flex-1">{item}</span>
                             <div className="flex gap-2">
                                 <button onClick={() => moveItem(i, -1)} disabled={i === 0} title="Move Up"
-                                    className="flex items-center justify-center w-8 h-8 rounded bg-blue-50 text-blue-600 hover:text-white hover:bg-blue-600 transition-colors disabled:opacity-30 disabled:hover:bg-blue-50 disabled:hover:text-blue-600" >
+                                    className="flex items-center justify-center w-8 h-8 rounded bg-blue-50 text-(--brand-hover) hover:text-white hover:bg-(--brand-hover) transition-colors disabled:opacity-30 disabled:hover:bg-blue-50 disabled:hover:text-(--brand-hover)" >
                                     ▲
                                 </button>
 
                                 <button onClick={() => moveItem(i, 1)} disabled={i === finalOrder.length - 1} title="Move Down"
-                                    className="flex items-center justify-center w-8 h-8 rounded bg-blue-50 text-blue-600 hover:bg-blue-600 hover:text-white transition-colors disabled:opacity-30 disabled:hover:bg-blue-50 disabled:hover:text-blue-600" >
+                                    className="flex items-center justify-center w-8 h-8 rounded bg-blue-50 text-(--brand-hover) hover:bg-(--brand-hover) hover:text-white transition-colors disabled:opacity-30 disabled:hover:bg-blue-50 disabled:hover:text-(--brand-hover)" >
                                     ▼
                                 </button>
 
@@ -168,7 +168,7 @@ export default function ReviewRanking({ choices, onComplete, surveyType, allAnsw
                         </div>
                     ))}
                 </div>
-                <button onClick={() => onComplete(finalOrder)} className="w-full mt-10 bg-blue-600 text-white py-4 rounded-full font-bold">
+                <button onClick={() => onComplete(finalOrder)} className="w-full mt-10 bg-(--brand-dark) hover:bg-(--brand-hover) text-white py-4 rounded-full font-bold">
                     See My Report
                 </button>
             </div>

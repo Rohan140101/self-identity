@@ -62,7 +62,7 @@ export default function TopFiveQuestion({ question, options, answers, selectedVa
         <div className="w-full">
             <div className="mb-8">
                 <h2 className="text-3xl font-bold text-slate-900 leading-tight">{question}</h2>
-                <p className="text-blue-600 font-medium mt-2">
+                <p className="text-(--brand-hover) font-medium mt-2">
                     {selectedValues.length} of 5 selected {selectedValues.length === 5 && "✓"}
                 </p>
             </div>

@@ -89,6 +89,7 @@ export default function TSTPage() {
 
     return (
         <div className="min-h-screen bg-white flex flex-col">
+            {/**Importing Header */}
             <Header />
 
             <main className="grow flex flex-col items-center bg-slate-50/50 py-3 px-1 sm:py-10 sm:px-6 max-w-full overflow-x-hidden">
@@ -102,14 +103,14 @@ export default function TSTPage() {
 
 
                 {/* <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 border border-blue-100 mb-8 animate-pulse">
-                        <span className="w-2 h-2 rounded-full bg-blue-600"></span>
-                        <span className="text-xs font-bold text-blue-600 uppercase tracking-widest">
+                        <span className="w-2 h-2 rounded-full bg-(--brand-hover)"></span>
+                        <span className="text-xs font-bold text-(--brand-hover) uppercase tracking-widest">
                             In Development
                         </span>
                     </div>
 
                     <h1 className="text-xl md:text-2xl font-black text-slate-900 leading-tight mb-6">
-                        <span className="text-transparent bg-clip-text bg-linear-to-r from-blue-600 to-indigo-500">
+                        <span className="text-transparent bg-clip-text bg-linear-to-r from(--brand-hover) to-indigo-500">
                             This page is under development and should be available soon
                         </span>
                     </h1> */}
@@ -161,7 +162,7 @@ export default function TSTPage() {
                                     <button
                                         onClick={(e) => handleSubmit(e)}
                                         type="submit"
-                                        className="px-12 py-5 bg-slate-900 text-white rounded-2xl font-black text-sm  tracking-widest hover:bg-blue-600 hover:-translate-y-1 transition-all duration-300 shadow-xl shadow-blue-200 active:scale-95"
+                                        className="px-12 py-5 bg-slate-900 text-white rounded-2xl font-black text-sm  tracking-widest hover:bg-(--brand-hover) hover:-translate-y-1 transition-all duration-300 shadow-xl shadow-blue-200 active:scale-95"
                                     >
                                         Submit Test
                                     </button>
@@ -183,7 +184,7 @@ export default function TSTPage() {
                     <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-50 p-4 overflow-y-auto transition-all">
                         <Reveal delay={0.2}>
                             <div className="bg-white rounded-4xl sm:rounded-3xl max-w-md w-full my-auto shadow-2xl overflow-hidden border border-slate-100 relative">
-                                <div className="bg-linear-to-br from-blue-600 to-indigo-700 p-6 sm:p-8 text-center">
+                                <div className="bg-linear-to-br from(--brand-hover) to-indigo-700 p-6 sm:p-8 text-center">
                                     <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-full mb-3 sm:mb-4">
                                         <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -236,7 +237,7 @@ export default function TSTPage() {
                                                         name="consent"
                                                         value="yes"
                                                         defaultChecked
-                                                        className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+                                                        className="w-4 h-4 text-(--brand-hover) focus:ring-blue-500"
                                                         onChange={(e) => setConsent(e.target.value)}
                                                     />
                                                     <span className="text-sm font-medium text-slate-700">Yes</span>
@@ -246,7 +247,7 @@ export default function TSTPage() {
                                                         type="radio"
                                                         name="consent"
                                                         value="no"
-                                                        className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+                                                        className="w-4 h-4 text-(--brand-hover) focus:ring-blue-500"
                                                         onChange={(e) => setConsent(e.target.value)}
                                                     />
                                                     <span className="text-sm font-medium text-slate-700">No</span>
@@ -258,7 +259,7 @@ export default function TSTPage() {
                                     <div className="mt-6 sm:mt-8 flex flex-col gap-2">
                                         <button
                                             type="submit"
-                                            className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3.5 sm:py-4 rounded-xl font-bold shadow-lg shadow-blue-200 transition-all active:scale-[0.98] text-sm sm:text-base"
+                                            className="w-full bg-(--brand-hover) hover:bg-blue-700 text-white py-3.5 sm:py-4 rounded-xl font-bold shadow-lg shadow-blue-200 transition-all active:scale-[0.98] text-sm sm:text-base"
                                         >
                                             Generate & Send My Report
                                         </button>

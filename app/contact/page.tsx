@@ -26,6 +26,7 @@ export default function ContactPage() {
     return (
 
         <div className="min-h-screen bg-white flex flex-col font-sans">
+            {/**Importing Header */}
             <Header />
 
             <main className="grow flex flex-col items-center bg-slate-50/50 py-5 sm:py-10 px-4 sm:px-6">
@@ -47,17 +48,17 @@ export default function ContactPage() {
                                 <div className="p-4 md:p-12 space-y-6 text-center sm:col-span-3">
                                     <div className="space-y-1 text-left">
 
-                                        <h1 className="text-xl md:text-xl font-medium text-slate-900 tracking-tight hover:text-blue-600 transition-all duration-200">
+                                        <h1 className="text-xl md:text-xl font-medium text-slate-900 tracking-tight hover:text-(--brand-hover) transition-all duration-200">
                                             <a href={nameLink} target="_blank">{name}</a>
 
 
                                         </h1>
                                         <div className="space-y-1">
                                             <p>
-                                                <a href={departmentLink} target="_blank" className="text-slate-900 text-xl font-medium hover:text-blue-600 transition-all duration-100">{department}</a>
+                                                <a href={departmentLink} target="_blank" className="text-slate-900 text-xl font-medium hover:text-(--brand-hover) transition-all duration-100">{department}</a>
                                             </p>
                                             <p>
-                                                <a href={universityLink} target="_blank" className="text-slate-900 text-xl font-medium hover:text-blue-600 transition-all duration-100">{university}</a>
+                                                <a href={universityLink} target="_blank" className="text-slate-900 text-xl font-medium hover:text-(--brand-hover) transition-all duration-100">{university}</a>
 
                                             </p>
 
@@ -75,7 +76,7 @@ export default function ContactPage() {
                                     <div className="flex flex-col items-left gap-1">
                                         <a href={personalWebsite}
                                             target="_blank"
-                                            className="text-m md:text-lg font-bold text-blue-900 hover:text-blue-600 transition-colors flex items-center gap-2 group"
+                                            className="text-m md:text-lg font-bold text-blue-900 hover:text-(--brand-hover) transition-colors flex items-center gap-2 group"
                                         >
                                             {personalWebsite}
                                             {/* <ExternalLink size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" /> */}
@@ -83,7 +84,7 @@ export default function ContactPage() {
 
                                         <a href={twitterUrl}
                                             target="_blank"
-                                            className="text-m md:text-lg font-bold text-blue-900 hover:text-blue-600 transition-colors flex items-center gap-2 group"
+                                            className="text-m md:text-lg font-bold text-blue-900 hover:text-(--brand-hover) transition-colors flex items-center gap-2 group"
                                         >
                                             {twitterUrl}
                                             {/* <ExternalLink size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" /> */}
@@ -91,7 +92,7 @@ export default function ContactPage() {
 
                                         <a href={mailUrl}
                                             target="_blank"
-                                            className="text-m md:text-lg font-bold text-blue-900 hover:text-blue-600 transition-colors flex items-center gap-2 group"
+                                            className="text-m md:text-lg font-bold text-blue-900 hover:text-(--brand-hover) transition-colors flex items-center gap-2 group"
                                         >
                                             Email:skiena@cs.stonybrook.edu
                                             {/* <ExternalLink size={14} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" /> */}
@@ -113,7 +114,7 @@ export default function ContactPage() {
                             <div className="flex flex-col sm:flex-row items-center justify-between gap-6 border border-slate-200 bg-slate-100 px-8 py-4 md:px-12 rounded-[2.5rem]">
 
                                 <div className="text-center md:text-left space-y-1 ">
-                                    {/* <h3 className="text-xl font-medium text-slate-900 tracking-tight hover:text-blue-600 transition-all duration-200 cursor-pointer">
+                                    {/* <h3 className="text-xl font-medium text-slate-900 tracking-tight hover:text-(--brand-hover) transition-all duration-200 cursor-pointer">
                                     Stay Updated
                                 </h3> */}
                                     <p className="text-slate-900 text-sm md:text-xl font-medium leading-tight max-w-md">
@@ -123,7 +124,7 @@ export default function ContactPage() {
 
                                 <div className="shrink-0">
                                     <a href="/subscribe"
-                                        className="inline-flex items-center gap-3 px-6 py-3 bg-slate-900 text-white rounded-xl font-bold text-sm hover:bg-blue-600 hover:-translate-y-1 transition-all duration-300 shadow-lg shadow-blue-900/10 active:scale-95 w-full sm:w-auto"
+                                        className="inline-flex items-center gap-3 px-6 py-3 bg-slate-900 text-white rounded-xl font-bold text-sm hover:bg-(--brand-hover) hover:-translate-y-1 transition-all duration-300 shadow-lg shadow-(--brand-dark)/10 active:scale-95 w-full sm:w-auto"
                                     >
                                         <Mail size={18} />
                                         Join Mailing List

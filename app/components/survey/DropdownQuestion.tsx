@@ -7,6 +7,8 @@ interface DropdownQuestionProps {
     onSelect: (value: string) => void;
 }
 
+// Dropdown Question in Survey 
+
 export default function DropdownQuestion({ question, options, selectedValue, onSelect }: DropdownQuestionProps) {
     return (
         <div className="w-full">
@@ -14,7 +16,7 @@ export default function DropdownQuestion({ question, options, selectedValue, onS
                 {question}
             </h2>
             <p className="text-gray-500 mb-8">Select one option from the dropdown</p>
-
+            {/*Populating Dropdown Options */}
             <div className="relative max-w-md">
                 <select
                     value={selectedValue || ""} onChange={(e) => onSelect(e.target.value)}

@@ -7,7 +7,7 @@ const Banner = function () {
     <div className="h-16 flex items-center">
       <Link
         href="/"
-        className="text-(--brand-light) text-sm font-bold px-4 h-5/6 flex items-center rounded transition-colors hover:bg-(--brand-hover) hover:text-white"
+        className="text-(--brand-light) font-bold text-sm px-4 h-full flex items-center rounded transition-colors hover:bg-(--brand-hover) hover:text-white"
       >
         Who Are You? The Science of Self-Identity
       </Link>

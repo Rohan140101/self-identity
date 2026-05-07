@@ -149,7 +149,7 @@ def get_bell_curve(actual: float, optimized: float, wb_cat_name: string):
 def get_message(optimization_message, wb_cat_name):
     styles = {
         "variable": "text-purple-600 font-bold",
-        "category": "text-blue-600 font-bold",
+        "category": "text-(--brand-hover) font-bold",
         "number": "text-black font-bold",
     }
 
@@ -223,7 +223,7 @@ def generate_full_identity_report_sync(data, user_email, filename):
                 </h2>
 
                 <p className="text-slate-800 italic font-bold mt-2 pb-10">
-                    Our model uses the answers you gave on our <a target="_blank"   href='https://www.self-identity.me/' className='text-blue-900 hover:text-blue-600 underline font-black'>identity survey</a> to make inferences about several aspects of your personality and well-being. For each of these attributes (happiness, goodness, success, resilience, extrovertedness), we show where you sit relative to the U.S. population, and where you could be with minor changes in the identity components which you prioritize.  Identities that revolve around interactions with other people, including family, religion, and work, generally serve to help increase well-being.
+                    Our model uses the answers you gave on our <a target="_blank"   href='https://www.self-identity.me/' className='text-(--brand-dark) hover:text-(--brand-hover) underline font-black'>identity survey</a> to make inferences about several aspects of your personality and well-being. For each of these attributes (happiness, goodness, success, resilience, extrovertedness), we show where you sit relative to the U.S. population, and where you could be with minor changes in the identity components which you prioritize.  Identities that revolve around interactions with other people, including family, religion, and work, generally serve to help increase well-being.
                 </p>"""
 
     i = 1

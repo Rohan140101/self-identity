@@ -10,6 +10,7 @@ export default function SurveySelection() {
     const router = useRouter();
     return (
         <div className="min-h-screen bg-white flex flex-col">
+            {/**Importing Header */}
             <Header />
             <main className="min-h-screen w-full bg-[#050505] py-20 px-[5vw] flex flex-col items-center justify-center">
 
@@ -38,7 +39,7 @@ export default function SurveySelection() {
 
                             <button
                             onClick={() => router.push("/survey/short_survey")} 
-                            className="w-full py-4 bg-blue-600 hover:bg-blue-500 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 group-hover:shadow-[0_0_20px_rgba(37,99,235,0.4)]">
+                            className="w-full py-4 bg-(--brand-hover) hover:bg-blue-500 text-white font-bold rounded-xl transition-all flex items-center justify-center gap-2 group-hover:shadow-[0_0_20px_rgba(37,99,235,0.4)]">
                                 Start Quick Version <ArrowRight size={18} />
                             </button>
                         </div>
@@ -74,7 +75,7 @@ export default function SurveySelection() {
                 </div>
 
 
-                <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-600/10 blur-[120px] pointer-events-none"></div>
+                <div className="absolute top-1/4 left-1/4 w-64 h-64 bg-(--brand-hover)/10 blur-[120px] pointer-events-none"></div>
                 <div className="absolute bottom-1/4 right-1/4 w-64 h-64 bg-amber-600/10 blur-[120px] pointer-events-none"></div>
 
 

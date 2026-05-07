@@ -6,6 +6,7 @@ interface LikertQuestionProps {
     onSelect: (value: number) => void;
     labels?: { left: string, right: string }
 }
+// Likert Question in Survey
 
 export default function LikertQuestion({ question, selectedValue, onSelect, labels }: LikertQuestionProps) {
     // console.log("Here6: ", question)
@@ -17,11 +18,12 @@ export default function LikertQuestion({ question, selectedValue, onSelect, labe
 
 
             <div className="flex flex-col items-center w-full px-2">
+                {/*Showing Likert values and labels block */}
                 <div className="flex flex-col md:flex-row justify-center items-center w-full max-w-2xl gap-2 mb-4">
                     <span className="hidden md:block text-sm font-medium text-(--brand-dark) uppercase tracking-wider w-40 text-right overflow-hidden">
                         {labels?.left || "Disagree"}
                     </span>
-
+                    
                     <div className="flex flex-row justify-between w-full md:w-auto gap-1 sm:gap-2">
                         {[1, 2, 3, 4, 5, 6, 7].map((num) => (
                             <button key={num}

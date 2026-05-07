@@ -12,7 +12,7 @@ export default function SubscribePage() {
     const [error, setError] = useState("");
 
 
-    const AddMailingList= async () => {
+    const AddMailingList = async () => {
         // const userData = {
         //     username: name,
         //     email: email,
@@ -45,76 +45,77 @@ export default function SubscribePage() {
         e.preventDefault();
         await AddMailingList()
 
-        
+
     };
 
 
     return (
 
         <div className="min-h-screen bg-white flex flex-col font-sans">
-                <Header />
-            
+            {/**Importing Header */}
+            <Header />
+
             <main className="grow flex flex-col items-center bg-slate-50/50 py-5 sm:py-10 px-4 sm:px-6 max-w-full overflow-x-hidden">
                 <div className="w-full max-w-5xl mx-auto py-5 sm:py-10">
                     <Reveal delay={0.2}>
                         <div className="mb-6 sm:mb-12 text-center">
-                        <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-2 sm:mb-4">
-                            Subscribe to Us
-                        </h1>
-                    </div>
+                            <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 tracking-tight mb-2 sm:mb-4">
+                                Subscribe to Us
+                            </h1>
+                        </div>
                     </Reveal>
-                    
+
                     <Reveal delay={0.4}>
                         <div className="bg-white border border-slate-200 rounded-[2.5rem] p-2 sm:p-10 shadow-xl shadow-slate-200/50 text-center relative overflow-hidden">
 
-                        {/* <div className="absolute top-0 left-0 w-full h-2 bg-linear-to-r from-blue-500 via-indigo-600 to-purple-500"></div> */}
-                        <form onSubmit={handleSubscribeSubmit} className="p-5 sm:p-8">
-                            <div className="space-y-5">
-                                <div>
-                                    <label className="block mb-1.5 text-sm font-semibold text-slate-700">
-                                        Full Name <span className="text-slate-400 font-normal">(Optional)</span>
-                                    </label>
-                                    <input
-                                        type="text"
-                                        placeholder="Alex Johnson"
-                                        className="w-full border border-blue-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-900 outline-none text-slate-900 transition-all placeholder:text-slate-300"
-                                        onChange={(e) => setName(e.target.value)}
-                                    />
+                            {/* <div className="absolute top-0 left-0 w-full h-2 bg-linear-to-r from-blue-500 via-indigo-600 to-purple-500"></div> */}
+                            <form onSubmit={handleSubscribeSubmit} className="p-5 sm:p-8">
+                                <div className="space-y-5">
+                                    <div>
+                                        <label className="block mb-1.5 text-sm font-semibold text-slate-700">
+                                            Full Name <span className="text-slate-400 font-normal">(Optional)</span>
+                                        </label>
+                                        <input
+                                            type="text"
+                                            placeholder="Alex Johnson"
+                                            className="w-full border border-blue-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500/20 focus:border-(--brand-dark) outline-none text-slate-900 transition-all placeholder:text-slate-300"
+                                            onChange={(e) => setName(e.target.value)}
+                                        />
+                                    </div>
+
+                                    <div>
+                                        <label className="block mb-1.5 text-sm font-semibold text-slate-700">
+                                            Email Address
+                                        </label>
+                                        <input
+                                            type="email"
+                                            required
+                                            placeholder="name@example.com"
+                                            className="w-full border border-blue-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500/20 focus:border-(--brand-dark) outline-none text-slate-900 transition-all placeholder:text-slate-300"
+                                            onChange={(e) => setEmail(e.target.value)}
+                                        />
+                                    </div>
+
+
                                 </div>
 
-                                <div>
-                                    <label className="block mb-1.5 text-sm font-semibold text-slate-700">
-                                        Email Address
-                                    </label>
-                                    <input
-                                        type="email"
-                                        required
-                                        placeholder="name@example.com"
-                                        className="w-full border border-blue-300 rounded-xl px-4 py-3 focus:ring-2 focus:ring-blue-500/20 focus:border-blue-900 outline-none text-slate-900 transition-all placeholder:text-slate-300"
-                                        onChange={(e) => setEmail(e.target.value)}
-                                    />
+                                <div className="mt-8 flex flex-col gap-3">
+                                    <button
+                                        type="submit"
+                                        className="w-full bg-slate-900 hover:bg-(--brand-hover) text-white py-4 rounded-xl font-bold shadow-lg shadow-blue-200 transition-all active:scale-[0.98]"
+                                    >
+
+                                        Subscribe to Mailing List
+                                    </button>
+                                    {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
+
                                 </div>
+                            </form>
 
 
-                            </div>
-
-                            <div className="mt-8 flex flex-col gap-3">
-                                <button
-                                    type="submit"
-                                    className="w-full bg-slate-900 hover:bg-blue-600 text-white py-4 rounded-xl font-bold shadow-lg shadow-blue-200 transition-all active:scale-[0.98]"
-                                >
-
-                                    Subscribe to Mailing List
-                                </button>
-                                {error && <p className="text-red-500 text-sm mt-2">{error}</p>}
-
-                            </div>
-                        </form>
-
-
-                    </div>
+                        </div>
                     </Reveal>
-                    
+
 
 
 
@@ -123,7 +124,7 @@ export default function SubscribePage() {
             <Reveal delay={1}>
                 <Footer />
             </Reveal>
-            
+
         </div>
     )
 

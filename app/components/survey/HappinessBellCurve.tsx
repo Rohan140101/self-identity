@@ -87,6 +87,7 @@ const GrowthArrow = ({ xAxisMap, actual, optimized }: any) => {
   );
 };
 
+// Happiness Bell Curve in the Identity Report
 
 const HappinessBellCurve = ({ actual = 28, optimized = 62 }: BellCurveProps) => {
   const data = Array.from({ length: 101 }, (_, i) => ({ x: i, y: getY(i) }));
@@ -99,7 +100,6 @@ const HappinessBellCurve = ({ actual = 28, optimized = 62 }: BellCurveProps) => 
 
     return (
       <g>
-        {/* FIX: filter used instead of shadow prop for TS compliance */}
         <rect
           x={x - 22}
           y={y - 35}

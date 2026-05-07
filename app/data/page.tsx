@@ -22,6 +22,7 @@ export default function PressPage() {
 
     return (
         <div className="min-h-screen bg-white flex flex-col font-sans">
+            {/**Importing Header */}
                 <Header />
 
             <main className="grow flex flex-col items-center bg-slate-50/50 py-5 sm:py-10 px-4 sm:px-6">
@@ -50,7 +51,7 @@ export default function PressPage() {
                                                 href={dataObj.url}
                                                 target="_blank"
                                                 rel="noreferrer"
-                                                className="text-xl font-black text-blue-900 group-hover:text-blue-600 transition-colors duration-200 leading-tight"
+                                                className="text-xl font-black text-blue-900 group-hover:text-(--brand-hover) transition-colors duration-200 leading-tight"
                                             >
                                                 {dataObj.title}
                                             </a>
@@ -84,7 +85,7 @@ export default function PressPage() {
                                                         href={dataObj.url}
                                                         target="_blank"
                                                         rel="noreferrer"
-                                                        className="text-xl font-black text-blue-900 group-hover:text-blue-600 transition-colors duration-200 leading-tight"
+                                                        className="text-xl font-black text-blue-900 group-hover:text-(--brand-hover) transition-colors duration-200 leading-tight"
                                                     >
                                                         {dataObj.title}
                                                     </a>
@@ -95,7 +96,7 @@ export default function PressPage() {
                                                         href={dataObj.googleScholarUrl}
                                                         target="_blank"
                                                         rel="noreferrer"
-                                                        className="inline-flex items-center gap-2 px-4 py-1 bg-slate-900 border border-slate-200 rounded-xl text-white font-bold text-xs transition-all duration-300 hover:bg-blue-600 hover:border-blue-400 hover:shadow-lg hover:shadow-blue-200 hover:-translate-y-0.5 active:scale-95"
+                                                        className="inline-flex items-center gap-2 px-4 py-1 bg-slate-900 border border-slate-200 rounded-xl text-white font-bold text-xs transition-all duration-300 hover:bg-(--brand-hover) hover:border-blue-400 hover:shadow-lg hover:shadow-blue-200 hover:-translate-y-0.5 active:scale-95"
                                                     >
                                                         <GraduationCap size={14} />
                                                         Google Scholar

@@ -30,6 +30,8 @@ export default function TeamPage() {
     ];
     return (
         <div className="min-h-screen bg-white flex flex-col font-sans">
+            
+            {/**Importing Header */}
             <Header />
 
             <main className="grow flex flex-col items-center bg-slate-50/50 py-5 sm:py-10 px-2 sm:px-6 max-w-full overflow-x-hidden">
@@ -60,7 +62,7 @@ export default function TeamPage() {
 
                                     <div className="flex flex-col h-full py-1">
                                         <div className="mb-3">
-                                            <h3 className="text-xl font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                                            <h3 className="text-xl font-bold text-slate-900 group-hover:text-(--brand-hover) transition-colors">
                                                 {person.name}
                                             </h3>
                                             <div className="h-px w-10 bg-slate-200 my-2"></div>
@@ -76,7 +78,7 @@ export default function TeamPage() {
                                                     key={i}
                                                     target="_blank"
                                                     rel="noreferrer"
-                                                    className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-black uppercase tracking-widest text-slate-500 hover:bg-blue-600 hover:text-white hover:border-blue-600 transition-all"
+                                                    className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-lg text-[10px] font-black uppercase tracking-widest text-slate-500 hover:bg-(--brand-hover) hover:text-white hover:border-(--brand-hover) transition-all"
                                                 >
                                                     <link.icon size={20} />
                                                 </a>

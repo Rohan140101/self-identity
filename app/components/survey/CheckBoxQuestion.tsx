@@ -7,6 +7,7 @@ interface CheckBoxQuestionProps {
     onToggle: (value: string) => void;
 }
 
+// Checkbox Question in Survey
 export default function CheckBoxQuestion({ question, options, selectedValues, onToggle }: CheckBoxQuestionProps) {
     return (
         <div className="w-full">
@@ -14,7 +15,7 @@ export default function CheckBoxQuestion({ question, options, selectedValues, on
                 {question}
             </h2>
             <p className="text-gray-500 mb-8">Select all that apply</p>
-
+            {/*Printing Checkbox Options in Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {options.map((option) => {
                     const isSelected = selectedValues.includes(option)

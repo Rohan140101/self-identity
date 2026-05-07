@@ -46,13 +46,13 @@ export default function SuccessPage() {
         <div className="py-4 px-6 bg-slate-50 rounded-2xl border border-slate-100">
           <p className="text-slate-500 text-sm font-medium">
             Redirecting to Homepage in 
-            <span className="text-blue-600 font-bold ml-1">{timeLeft}s</span>
+            <span className="text-(--brand-hover) font-bold ml-1">{timeLeft}s</span>
           </p>
         </div>
 
         <a 
           href="/" 
-          className="block w-full py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-blue-600 transition-all active:scale-[0.98] shadow-lg shadow-blue-100"
+          className="block w-full py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-(--brand-hover) transition-all active:scale-[0.98] shadow-lg shadow-blue-100"
         >
           Return Home Now
         </a>

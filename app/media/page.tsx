@@ -18,6 +18,7 @@ export default function mediaPage() {
 
     return (
         <div className="min-h-screen bg-white flex flex-col font-sans">
+            {/**Importing Header */}
             <Header />
 
             <main className="grow flex flex-col items-center bg-slate-50/50 py-5 sm:py-10 px-4 sm:px-6 max-w-full overflow-x-hidden">
@@ -35,7 +36,7 @@ export default function mediaPage() {
 
                             <div className="flex justify-center sm:justify-end sm:col-span-1 w-full mt-6 sm:mt-0">
                                 <a href="/subscribe"
-                                    className="inline-flex items-center justify-center gap-3 px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-blue-600 hover:-translate-y-1 transition-all duration-300 shadow-xl shadow-blue-100 active:scale-95 shrink-0 h-fit"
+                                    className="inline-flex items-center justify-center gap-3 px-6 py-3 bg-slate-900 text-white rounded-2xl font-bold text-sm hover:bg-(--brand-hover) hover:-translate-y-1 transition-all duration-300 shadow-xl shadow-blue-100 active:scale-95 shrink-0 h-fit"
                                 >
                                     <Mail size={18} className="opacity-80" />
                                     Stay Updated
@@ -65,7 +66,7 @@ export default function mediaPage() {
                                             <a href={dataObj.url}
                                                 target="_blank"
                                                 rel="noreferrer"
-                                                className="block text-xl font-black text-blue-900 group-hover:text-blue-600 transition-colors duration-200 leading-snug mb-1"
+                                                className="block text-xl font-black text-blue-900 group-hover:text-(--brand-hover) transition-colors duration-200 leading-snug mb-1"
                                             >
                                                 {dataObj.title}
                                             </a>

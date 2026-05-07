@@ -22,31 +22,34 @@ import { Menu, X, ChevronDown } from "lucide-react"
 
 const NavLinks = ({ isMobile = false }: { isMobile?: boolean }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
- 
+
   const containerStyle = isMobile
     ? "flex flex-col space-y-2 w-full pt-4"
-    : "flex h-12 flex-row items-stretch pr-20";
- 
+    : "flex flex-row items-stretch h-full";
+
   const linkStyle = isMobile
-    ? "text-(--brand-light) text-sm font-bold p-4 w-full flex rounded-md transition-all hover:bg-(--brand-hover) hover:text-white mx-1"
-    : "text-(--brand-light) text-sm font-bold px-4 h-full flex items-center rounded transition-all hover:bg-(--brand-hover) hover:text-white mx-1";
- 
+    ? "text-(--brand-light) text-sm font-normal p-4 w-full flex rounded-md transition-all hover:bg-(--brand-hover) hover:text-white mx-1"
+    : "text-(--brand-light) text-sm font-normal px-4 flex items-center self-stretch transition-all hover:bg-(--brand-hover) hover:text-white";
+
+  const surveyLinkStyle = isMobile
+    ? "text-yellow-400 text-sm font-medium p-4 w-full flex rounded-md transition-all hover:bg-(--brand-hover) hover:text-yellow-300 mx-1"
+    : "text-yellow-400 text-sm font-medium px-4 flex items-center self-stretch transition-all hover:bg-(--brand-hover) hover:text-yellow-300 relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[2px] after:bg-yellow-400 after:opacity-70";
   const dropDownStyle = isMobile
     ? "bg-(--brand-hover) flex flex-col mt-1 ml-4 rounded-md overflow-hidden"
     : "absolute top-full left-0 w-48 bg-[var(--brand-dark)] border border-gray-700 shadow-xl flex flex-col";
- 
+
   return (
     <div className={containerStyle}>
-      <Link href="/survey/short_survey" className={linkStyle}>Survey</Link>
+      <Link href="/survey/short_survey" className={surveyLinkStyle}>Survey</Link>
       {/* <Link href="/blog" className={linkStyle}>Blog</Link> */}
       <Link href="https://stevenskiena.substack.com/" target="_blank" className={linkStyle}>Blog</Link>
       <Link href="/data" className={linkStyle}>Data</Link>
       <Link href="/media" className={linkStyle}>Media</Link>
       <Link href="/team" className={linkStyle}>Team</Link>
       <Link href="/contact" className={linkStyle}>Contact</Link>
- 
+
       <div
-        className={isMobile ? "w-full" : "relative h-full"}
+        className={isMobile ? "w-full" : "relative self-stretch flex items-center"}
         onMouseEnter={() => !isMobile && setIsDropdownOpen(true)}
         onMouseLeave={() => !isMobile && setIsDropdownOpen(false)}
       >
@@ -56,7 +59,7 @@ const NavLinks = ({ isMobile = false }: { isMobile?: boolean }) => {
         >
           Other Tests <ChevronDown size={isMobile ? 20 : 16} />
         </button>
- 
+
         {isDropdownOpen && (
           <div className={dropDownStyle}>
             <Link href="/tst/intro" className={`${linkStyle} py-3 justify-start`}>
@@ -81,30 +84,29 @@ const NavLinks = ({ isMobile = false }: { isMobile?: boolean }) => {
 
 const Nav = function () {
   const [isOpen, setIsOpen] = useState(false);
- 
+
   return (
-    <nav className="flex justify-end items-center">
-      <div className="hidden justify-between lg:flex">
+    <nav className="flex justify-end items-center h-full">
+      <div className="hidden justify-between lg:flex h-full">
         <NavLinks />
       </div>
- 
+
       <div className="lg:hidden">
-        <button onClick={() => setIsOpen(!isOpen)} className="text-(--brand-light) p-2">
+        <button onClick={() => setIsOpen(!isOpen)} className="text-(--brand-light)">
           <Menu size={28} />
         </button>
       </div>
- 
+
       {isOpen && (
         <div
           className="fixed inset-0 bg-black/50 z-40 md:hidden"
           onClick={() => setIsOpen(false)}
         />
       )}
- 
+
       <div
-        className={`fixed top-0 left-0 h-full w-72 bg-(--brand-dark) z-50 transform transition-transform duration-300 ease-in-out ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } lg:hidden p-6 shadow-2xl overflow-y-auto`}
+        className={`fixed top-0 left-0 h-full w-72 bg-(--brand-dark) z-50 transform transition-transform duration-300 ease-in-out ${isOpen ? "translate-x-0" : "-translate-x-full"
+          } lg:hidden p-6 shadow-2xl overflow-y-auto`}
       >
         <div className="flex justify-between items-center mb-8">
           <span className="text-(--brand-light) font-bold">MENU</span>

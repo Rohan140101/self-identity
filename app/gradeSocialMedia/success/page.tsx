@@ -26,7 +26,7 @@ export default function SuccessPage() {
       <div className="max-w-md w-full bg-white border border-slate-200 rounded-[2.5rem] p-10 md:p-12 shadow-xl shadow-slate-200/50 text-center relative overflow-hidden">
       
       <div 
-        className="absolute top-0 left-0 h-1.5 bg-blue-600 transition-all duration-1000 ease-linear"
+        className="absolute top-0 left-0 h-1.5 bg-(--brand-hover) transition-all duration-1000 ease-linear"
         style={{ width: `${(timeLeft / 10) * 100}%` }}
       />
 
@@ -46,13 +46,13 @@ export default function SuccessPage() {
         <div className="py-4 px-6 bg-slate-50 rounded-2xl border border-slate-100">
           <p className="text-slate-500 text-sm font-medium">
             Redirecting to Homepage in 
-            <span className="text-blue-600 font-bold ml-1">{timeLeft}s</span>
+            <span className="text-(--brand-hover) font-bold ml-1">{timeLeft}s</span>
           </p>
         </div>
 
         <a 
           href="/" 
-          className="block w-full py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-blue-600 transition-all active:scale-[0.98] shadow-lg shadow-blue-100"
+          className="block w-full py-4 bg-slate-900 text-white rounded-2xl font-bold hover:bg-(--brand-hover) transition-all active:scale-[0.98] shadow-lg shadow-blue-100"
         >
           Return Home Now
         </a>

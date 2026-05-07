@@ -57,11 +57,11 @@ interface ComprehensiveOptimizationProps {
     allOptimizedData: AllOptimizedData;
 }
 
-
+// Function for Showing Message below the Bell Curve
 const HighlightedMessage = ({ msg, wb_cat_name }: { msg: any, wb_cat_name: string }) => {
     const styles = {
         variable: "text-purple-600 font-bold",
-        category: "text-blue-600 font-bold",
+        category: "text-(--brand-hover) font-bold",
         number: "text-black font-bold",
     };
 
@@ -100,6 +100,8 @@ const HighlightedMessage = ({ msg, wb_cat_name }: { msg: any, wb_cat_name: strin
     );
 };
 
+
+// Function For Showing the Complete Bell Curve and Identity Optimization Element
 const ComprehensiveOptimization: React.FC<ComprehensiveOptimizationProps> = ({ allOptimizedData }) => {
 
     console.log("Here2: ", allOptimizedData)
@@ -119,10 +121,10 @@ const ComprehensiveOptimization: React.FC<ComprehensiveOptimizationProps> = ({ a
             </h2>
 
             <p className="text-slate-800 italic font-bold mt-2 pb-10">
-                Our model uses the answers you gave on our <a target="_blank" href='https://www.self-identity.me/' className='text-blue-900 hover:text-blue-600 underline font-black'>identity survey</a> to make inferences about several aspects of your personality and well-being. For each of these attributes (happiness, goodness, success, resilience, extrovertedness), we show where you sit relative to the U.S. population, and where you could be with minor changes in the identity components which you prioritize.  Identities that revolve around interactions with other people, including family, religion, and work, generally serve to help increase well-being.
+                Our model uses the answers you gave on our <a target="_blank" href='https://www.self-identity.me/' className='text-(--brand-dark) hover:text-(--brand-hover) underline font-black'>identity survey</a> to make inferences about several aspects of your personality and well-being. For each of these attributes (happiness, goodness, success, resilience, extrovertedness), we show where you sit relative to the U.S. population, and where you could be with minor changes in the identity components which you prioritize.  Identities that revolve around interactions with other people, including family, religion, and work, generally serve to help increase well-being.
             </p>
 
-
+            {/* Making Toggle Buttons for different Well Being Categories */}
 
             <div className="flex flex-wrap gap-2 mb-6 p-1 bg-slate-100 rounded-xl w-fit">
                 {categories.map((cat) => (
@@ -139,6 +141,8 @@ const ComprehensiveOptimization: React.FC<ComprehensiveOptimizationProps> = ({ a
                 ))}
             </div>
 
+            {/* Printing Definition of Selected Well Being Category */}
+
             <div className={"p-6 rounded-xl border-l-4 mb-8 shadow-sm bg-yellow-50 border-yellow-500"}>
                 <span className='text-lg font-bold text-purple-600 leading-relaxed'>
                     {catDesc.category + " "}
@@ -149,6 +153,7 @@ const ComprehensiveOptimization: React.FC<ComprehensiveOptimizationProps> = ({ a
 
             </div>
 
+            {/* Making Bell Curve for Selectied Well Being Category */}
             <div className="bg-slate-50 rounded-xl p-1 sm:p-4 border border-slate-100 mb-8">
                 <HappinessBellCurve
                     actual={current.percentiles.actual_pct}
@@ -163,9 +168,13 @@ const ComprehensiveOptimization: React.FC<ComprehensiveOptimizationProps> = ({ a
                 </p>
             </div> */}
 
+            {/* Showing Message for Selected Well Being Category */}
+
             <HighlightedMessage msg={msg}
                 wb_cat_name={catDesc.category} />
 
+
+            {/* Showing Current and Better Identity for User */}
             <div className='overflow-hidden rounded-xl border border-slate-200 shadow-sm bg-white'>
                 <table className='w-full text-left border-collapse'>
                     <thead>
@@ -197,7 +206,7 @@ const ComprehensiveOptimization: React.FC<ComprehensiveOptimizationProps> = ({ a
     );
 };
 
-
+// Function for Identity Report
 export default function IdentityReport(
     { top_identity_table, expected_vs_actual_rank_table, expected_vs_actual_rank_well_being, optimized_result }:
         {
@@ -221,7 +230,7 @@ export default function IdentityReport(
     const [selectedPlatform, setSelectedPlatform] = useState("");
     const router = useRouter();
 
-
+    // Function for saving survey
     const handleFinalSave = async (userEmail: string | null, userName: string | null, researchConsent: string | null) => {
         const storedAnswers = sessionStorage.getItem('user_answers');
         if (!storedAnswers) return;
@@ -237,6 +246,8 @@ export default function IdentityReport(
 
     };
 
+
+    // Function for handling Email Submit in Modal
     const handleEmailSubmit = async (e: React.FormEvent) => {
         console.log("Inside handleEmailSubmit")
         e.preventDefault();
@@ -277,6 +288,7 @@ export default function IdentityReport(
 
     };
 
+    // Handle Skip selection in Modal
     const handleSkip = () => {
         handleFinalSave(null, null, null);
         setIsEmailModalOpen(false);
@@ -284,6 +296,7 @@ export default function IdentityReport(
     };
 
 
+    // Handle Social Media Sharing of Result
     const handleSMShareSubmit = async (platform: string) => {
         const domain = "https://self-identity.me";
         setShareStatus("loading")
@@ -340,6 +353,7 @@ export default function IdentityReport(
 
     return (
         <div className="min-h-screen bg-white flex flex-col">
+            {/**Importing Header */}
             <Header />
             <main className="grow flex flex-col items-center bg-slate-50/50 px-4 sm:px-6 max-w-full overflow-x-hidden">
                 <div className='w-full max-w-4xl mx-auto'>
@@ -355,7 +369,7 @@ export default function IdentityReport(
                             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                                 <button
                                     onClick={() => setIsModalOpen(true)}
-                                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white px-10 py-4 rounded-xl font-bold hover:bg-blue-700 transition-all hover:-translate-y-0.5 shadow-lg shadow-blue-200 active:scale-95"
+                                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-(--brand-hover) text-white px-10 py-4 rounded-xl font-bold hover:bg-blue-700 transition-all hover:-translate-y-0.5 shadow-lg shadow-blue-200 active:scale-95"
                                 >
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
@@ -390,7 +404,7 @@ export default function IdentityReport(
                                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                                         <button
                                             onClick={() => setIsEmailModalOpen(true)}
-                                            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white px-10 py-4 rounded-xl font-bold hover:bg-blue-700 transition-all hover:-translate-y-0.5 shadow-lg shadow-blue-200 active:scale-95"
+                                            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-(--brand-hover) text-white px-10 py-4 rounded-xl font-bold hover:bg-blue-700 transition-all hover:-translate-y-0.5 shadow-lg shadow-blue-200 active:scale-95"
                                         >
                                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
@@ -418,10 +432,11 @@ export default function IdentityReport(
 
                     </header>
 
+                    {/* Showing the Identity Optimization Block*/}
                     <ComprehensiveOptimization allOptimizedData={optimized_result} />
 
 
-
+                    {/* Showing the Expected vs Actual Identity*/}
                     <section className="mt-16">
                         <h2 className="text-lg font-bold mb-5 text-slate-800 flex items-center gap-2">
                             <span className="w-1.5 h-6 bg-green-600 rounded-full"></span>
@@ -432,6 +447,8 @@ export default function IdentityReport(
 
                         </p>
 
+
+                        {/* Showing table of Expected vs Actual Identity*/}
                         <div className="overflow-hidden rounded-xl border border-slate-200 shadow-sm bg-white">
                             <table className="w-full text-left border-collapse">
                                 <thead>
@@ -522,7 +539,7 @@ export default function IdentityReport(
                             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                                 <button
                                     onClick={() => setIsModalOpen(true)}
-                                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white px-10 py-4 rounded-xl font-bold hover:bg-blue-700 transition-all hover:-translate-y-0.5 shadow-lg shadow-blue-200 active:scale-95"
+                                    className="w-full sm:w-auto flex items-center justify-center gap-2 bg-(--brand-hover) text-white px-10 py-4 rounded-xl font-bold hover:bg-blue-700 transition-all hover:-translate-y-0.5 shadow-lg shadow-blue-200 active:scale-95"
                                 >
                                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
@@ -557,7 +574,7 @@ export default function IdentityReport(
                                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                                         <button
                                             onClick={() => setIsEmailModalOpen(true)}
-                                            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 text-white px-10 py-4 rounded-xl font-bold hover:bg-blue-700 transition-all hover:-translate-y-0.5 shadow-lg shadow-blue-200 active:scale-95"
+                                            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-(--brand-hover) text-white px-10 py-4 rounded-xl font-bold hover:bg-blue-700 transition-all hover:-translate-y-0.5 shadow-lg shadow-blue-200 active:scale-95"
                                         >
                                             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
@@ -576,10 +593,12 @@ export default function IdentityReport(
                             </div>
                         </div>
 
+
+                        {/*Modal for Identity Report*/}
                         {isEmailModalOpen && (
                             <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-50 p-4 overflow-y-auto transition-all">
                                 <div className="bg-white rounded-4xl sm:rounded-3xl max-w-md w-full my-auto shadow-2xl overflow-hidden border border-slate-100 relative">
-                                    <div className="bg-linear-to-br from-blue-600 to-indigo-700 p-6 sm:p-8 text-center">
+                                    <div className="bg-linear-to-br from(--brand-hover) to-indigo-700 p-6 sm:p-8 text-center">
                                         <div className="inline-flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-white/20 rounded-full mb-3 sm:mb-4">
                                             <svg className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -632,7 +651,7 @@ export default function IdentityReport(
                                                             name="consent"
                                                             value="yes"
                                                             defaultChecked
-                                                            className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+                                                            className="w-4 h-4 text-(--brand-hover) focus:ring-blue-500"
                                                             onChange={(e) => setConsent(e.target.value)}
                                                         />
                                                         <span className="text-sm font-medium text-slate-700">Yes</span>
@@ -642,7 +661,7 @@ export default function IdentityReport(
                                                             type="radio"
                                                             name="consent"
                                                             value="no"
-                                                            className="w-4 h-4 text-blue-600 focus:ring-blue-500"
+                                                            className="w-4 h-4 text-(--brand-hover) focus:ring-blue-500"
                                                             onChange={(e) => setConsent(e.target.value)}
                                                         />
                                                         <span className="text-sm font-medium text-slate-700">No</span>
@@ -654,7 +673,7 @@ export default function IdentityReport(
                                         <div className="mt-6 sm:mt-8 flex flex-col gap-2">
                                             <button
                                                 type="submit"
-                                                className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3.5 sm:py-4 rounded-xl font-bold shadow-lg shadow-blue-200 transition-all active:scale-[0.98] text-sm sm:text-base"
+                                                className="w-full bg-(--brand-hover) hover:bg-blue-700 text-white py-3.5 sm:py-4 rounded-xl font-bold shadow-lg shadow-blue-200 transition-all active:scale-[0.98] text-sm sm:text-base"
                                             >
                                                 Generate & Send My Report
                                             </button>
@@ -673,7 +692,7 @@ export default function IdentityReport(
 
 
 
-
+                        {/* Modal for Social Media Sharing*/}
                         {isSMShareModalOpen && (
                             <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-md flex items-center justify-center z-50 p-4 overflow-y-auto">
                                 <div className="bg-white rounded-3xl max-w-md w-full shadow-2xl overflow-hidden border border-slate-100">

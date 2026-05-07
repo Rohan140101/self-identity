@@ -304,7 +304,7 @@ function SurveyManager() {
     //                         </div>
     //                     ))}
     //                 </div>
-    //                 <button onClick={() => window.location.reload()} className="text-blue-600 font-bold underline">
+    //                 <button onClick={() => window.location.reload()} className="text-(--brand-hover) font-bold underline">
     //                     Restart Survey
     //                 </button>
     //             </div>
@@ -323,6 +323,7 @@ function SurveyManager() {
 
     return (
         <div className="min-h-screen bg-white flex flex-col">
+            {/**Importing Header */}
             <Header />
             <main className="min-h-screen bg-white text-black">
                 <section className="flex-1 flex items-center justify-center p-4">
@@ -434,7 +435,7 @@ function SurveyManager() {
                                     <button
                                         disabled={!isAnswered()}
                                         onClick={handleNext}
-                                        className={`px-12 py-4 rounded-full font-bold text-lg transition-all ${isAnswered() ? "bg-(--brand-dark) text-white hover:bg-slate-800 shadow-xl" : "bg-gray-100 text-gray-400 cursor-not-allowed"}`}
+                                        className={`px-12 py-4 rounded-full font-bold text-lg transition-all ${isAnswered() ? "bg-(--brand-dark) text-white hover:bg-(--brand-hover) shadow-xl" : "bg-gray-100 text-gray-400 cursor-not-allowed"}`}
                                     >
                                         {currentIndex === questions.length - 1 ? "Finish" : "Next"}
                                     </button>

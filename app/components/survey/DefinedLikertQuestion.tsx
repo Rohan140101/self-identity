@@ -8,16 +8,18 @@ interface LikertQuestionProps {
     labels?: { left: string, right: string }
 }
 
+// Defined Likert in Survey (only used for Short Survey)
+
 export default function DefinedLikertQuestion({ category, definition, selectedValue, onSelect, labels }: LikertQuestionProps) {
     console.log(category)
     return (
         <div className="w-full text-center">
             <div className="mb-6">
-
-                <span className="text-3xl font-black uppercase text-blue-600">
+                {/*Printing Category in Uppercase and Blue */}
+                <span className="text-3xl font-black uppercase text-(--brand-hover)">
                     {category + " "}
                 </span>
-
+                {/*Printing Category in Black*/}
                 <span className="text-3xl font-black text-slate-900 tracking-tight">
 
                     {definition}
@@ -31,6 +33,7 @@ export default function DefinedLikertQuestion({ category, definition, selectedVa
 
 
             <div className="flex flex-col items-center w-full px-2">
+                {/*Printing Likert Labels and Selection Buttons*/}
                 <div className="flex flex-col md:flex-row justify-center items-center w-full max-w-2xl gap-2 mb-4">
                     <span className="hidden md:block text-sm font-medium text-(--brand-dark) uppercase tracking-wider w-40 text-right overflow-hidden">
                         {labels?.left || "Disagree"}

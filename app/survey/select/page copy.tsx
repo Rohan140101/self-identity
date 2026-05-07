@@ -5,6 +5,7 @@ import Footer from "@/app/components/footer";
 export default function SurveySelection() {
     return (
         <div className="min-h-screen bg-white flex flex-col">
+            {/**Importing Header */}
             <Header />
             <main className="min-h-screen bg-white text-black">
                 <div className="flex flex-col items-center justify-center p-4 bg-slate-50">
