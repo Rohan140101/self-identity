@@ -12,7 +12,7 @@ import { Reveal } from "../components/Reveal"
 
 
 
-
+// Twenty Statements Test Component
 export default function TSTPage() {
     const router = useRouter();
     const [statements, setStatements] = useState(Array(20).fill(""));
@@ -285,7 +285,8 @@ export default function TSTPage() {
 
             </main >
             <Reveal delay={1}>
-                <Footer />
+                {/**Importing Footer*/}
+            <Footer />
             </Reveal>
 
         </div >

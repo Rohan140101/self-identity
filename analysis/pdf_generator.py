@@ -8,6 +8,7 @@ from scipy.stats import norm
 import base64
 from io import BytesIO
 
+# Defining Cateogries
 reportCatDescriptions = {
     "Happy": {
         "category": "Happiness",
@@ -33,7 +34,7 @@ reportCatDescriptions = {
 
 
 
-
+# Convering Figure to Base 64
 def get_plot_base64(fig):
     buf = BytesIO()
     fig.write_image(buf, format="png", scale=3)
@@ -41,6 +42,7 @@ def get_plot_base64(fig):
     base64_string = base64.b64encode(buf.read()).decode('utf-8')
     return f"data:image/png;base64,{base64_string}"
 
+# Generaint Plotly Bell Curve Based on Actual and Optimized Trait Valuis
 def get_bell_curve(actual: float, optimized: float, wb_cat_name: string):
     mu, sigma = 50, 14
     x = np.linspace(0, 100, 1000)
@@ -139,13 +141,12 @@ def get_bell_curve(actual: float, optimized: float, wb_cat_name: string):
         )
     )
 
-    # fig.write_image("bell_curve_professional.png", scale=3)
-    # fig.show()
+
     return fig
 
 
 
-
+# Getting the Optimization Message for a trait
 def get_message(optimization_message, wb_cat_name):
     styles = {
         "variable": "text-purple-600 font-bold",
@@ -181,9 +182,10 @@ def get_message(optimization_message, wb_cat_name):
         </div>
     """
 
-
-def generate_full_identity_report_sync(data, user_email, filename):
+# Generating Complete Identity Report
+def generate_full_identity_report_sync(data, filename):
     generated_figs = []
+    # Start HTML Content (Most elements borrowed from the report we see on the screen)
     html_content = f"""
     <!DOCTYPE html>
     <html>

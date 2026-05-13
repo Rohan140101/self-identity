@@ -1,14 +1,6 @@
-import string
-
-import asyncio
-from playwright.sync_api import sync_playwright  
-import plotly.graph_objects as go
-import numpy as np
-from scipy.stats import norm
-import base64
-from io import BytesIO
 
 
+# Function for generating a standard message that will be prefilled on the user's social media link
 def social_media_message_generator(data: dict):
     optimized_result_data = data['optimized_result']['Happy']
     actual  = optimized_result_data['percentiles']['actual_pct']

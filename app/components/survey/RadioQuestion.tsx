@@ -7,6 +7,7 @@ interface RadioQuestionProps {
     onSelect: (value: string) => void;
 }
 
+// Radio Question in Survey
 export default function RadioQuestion({ question, options, selectedValue, onSelect }: RadioQuestionProps) {
     return (
         <div className="w-full">

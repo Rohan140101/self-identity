@@ -4,6 +4,8 @@ import { useRouter } from "next/navigation";
 import Header from "../../components/header"
 import Footer from "../../components/footer"
 
+
+// Page to show the user image that they shared on social media
 export default function ClientRedirect({ id }: { id: string }) {
     const router = useRouter();
     const imageUrl = `https://self-identity-image-storage.s3.amazonaws.com/${id}_Happy.png`;

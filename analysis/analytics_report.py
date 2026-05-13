@@ -17,10 +17,13 @@ from oauth2client.service_account import ServiceAccountCredentials
 import pandas as pd
 from datetime import datetime, timedelta
 from collections import defaultdict
-
 load_dotenv()
 
+
+## Code for sending Google Analytics Report on a Weekly Basis
 script_dir = os.path.dirname(os.path.abspath(__file__))
+
+## Getting Google Analytics Data
 def get_google_analytics_data():
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "data/deft-cove-493201-s4-db47c88b6ce1.json"
     PROPERTY_ID = os.getenv("GOOGLE_ANALYTICS_PROPERTY_ID")
@@ -55,6 +58,7 @@ def get_google_analytics_data():
     
     total_users = response.rows[0].metric_values[0].value
 
+    # City Wise Visitors
     city_wise_visitors = {}
     request = RunReportRequest(
         property=f"properties/{PROPERTY_ID}",
@@ -72,8 +76,7 @@ def get_google_analytics_data():
     city_wise_visitors = {k: v for (k, v) in city_data_sorted}
     return total_users, page_paths_visitors, city_wise_visitors
 
-# def g
-
+## Getting Survey Data from Google Spreadsheet
 def get_survey_counts():
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
     creds = ServiceAccountCredentials.from_json_keyfile_name("data/deft-cove-493201-s4-db47c88b6ce1.json")
@@ -101,7 +104,7 @@ def get_survey_counts():
 
     return survey_data
     
-
+## Getting Word Query Data for Word Personality Dashboard
 def get_words_search_data():
     scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
     creds = ServiceAccountCredentials.from_json_keyfile_name("data/deft-cove-493201-s4-db47c88b6ce1.json")
@@ -166,7 +169,7 @@ def get_words_search_data():
 
 
 
-
+## Generating Email HTML using the analytics, survey and word query data
 def generate_email_html():
     total_users, page_path_visitors, city_wise_visitors = get_google_analytics_data()
     survey_data = get_survey_counts()
@@ -263,7 +266,7 @@ def generate_email_html():
 
 
 
-
+## Function to Send Across the Email to Prof
 def send_email():
     website_name = os.getenv("WEBSITE_NAME")
     sender_display_email = os.getenv("SENDER_DISPLAY_EMAIL")

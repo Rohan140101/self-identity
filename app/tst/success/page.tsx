@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Reveal } from "@/app/components/Reveal";
+// Standard Success Page
 export default function SuccessPage() {
   const router = useRouter();
   const [timeLeft, setTimeLeft] = useState(10);

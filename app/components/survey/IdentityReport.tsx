@@ -862,6 +862,7 @@ export default function IdentityReport(
 
             </main>
 
+            {/**Importing Footer*/}
             <Footer />
 
         </div>

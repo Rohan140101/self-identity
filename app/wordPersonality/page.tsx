@@ -7,6 +7,7 @@ import { Reveal } from "../components/Reveal"
 import AnalysisReport from "../components/word_personality/AnalysisReport"
 import { saveWordPersonalityQuery } from "../actions/save_word_personality_query"
 import { button } from "framer-motion/client";
+// Word Personality Dashboard Component
 export default function WordPersonalityPage() {
     const [inputString, setInputString] = useState("");
     const defaultInputString = "father,mother,brother,sister,husband,wife"
@@ -252,7 +253,8 @@ export default function WordPersonalityPage() {
 
             </main>
             <Reveal delay={1.2}>
-                <Footer />
+                {/**Importing Footer*/}
+            <Footer />
 
             </Reveal>
 

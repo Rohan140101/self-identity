@@ -1,37 +1,25 @@
-from os import replace
-from pydoc import doc
-import string
-from tkinter import W
-
 import pandas as pd
-import json
-from scipy.stats import norm
-from collections import defaultdict
-from sklearn.preprocessing import MinMaxScaler
-from lightgbm import LGBMRanker, train
 import re
-import numpy as np
 import math
-import itertools
 
+# Class for Word Personality Dashboard
 class WordPersonalityAnalyzer:
     def __init__(self, words_data_csv_path, words_pvalues_csv_path):
+        # Taking paths of all files and importing them
         self.words_data = pd.read_csv(words_data_csv_path)
         self.words_data = self.words_data.set_index('word')
         self.well_being_categories = ["Happy", "Stable", "Introvert", "Anxious", "Depressed"]
         self.km_curve_params = ['bio_frequency','km_half_life_days','lognormal_half_life_days','lognormal_mu','lognormal_sigma', 'unique_users']
         self.words_pvalues = pd.read_csv(words_pvalues_csv_path)
         self.words_pvalues = self.words_pvalues.set_index('Word')
-        print(self.words_pvalues.columns)
     
+    # Get Personality Scores for the Word List and the Categories
     def get_personality_scores(self, word_list, categories):
-        print("in get_personality_scores, word_list: ", word_list)
         results_table = []
         pvalues_table = []
         for word in word_list:
             clean_word = word.strip().lower()
             clean_word = re.sub(r'[!"#$%&\'()*+,./:;<=>?@\[\\\]^_`{|}~]', '', clean_word)
-            print(word, clean_word)
             if clean_word in self.words_data.index:
                 row_data = {"word": clean_word}
                 row_pvalue_data = {"word": clean_word}
@@ -67,6 +55,7 @@ class WordPersonalityAnalyzer:
                 pass
         return results_table, pvalues_table
 
+    # Getting Kaplan Meier Curve Parameters
     def get_km_curve_params(self, word_list):
         result_data = []
         required_params = ["lognormal_mu", "lognormal_sigma", "unique_users"]

@@ -4,7 +4,7 @@ import ClientRedirect from "./ClientRedirect";
 type Props = {
     params: Promise<{ id: string }>;
 };
-
+// Generating Metadata for the image for twitter crawler
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const resolvedParams = await params;
     const id = resolvedParams.id;

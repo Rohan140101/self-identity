@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { saveToMailingList } from "../actions/save_user_maliling_list";
 import { Reveal } from "../components/Reveal";
+
+// Join Mailing List Page
 export default function SubscribePage() {
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
@@ -122,7 +124,8 @@ export default function SubscribePage() {
                 </div>
             </main>
             <Reveal delay={1}>
-                <Footer />
+                {/**Importing Footer*/}
+            <Footer />
             </Reveal>
 
         </div>

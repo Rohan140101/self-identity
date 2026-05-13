@@ -11,6 +11,8 @@ from message_generator import social_media_message_generator
 from tst_email_mailer import send_tst_confirmation_email
 from grsm_email_mailer import send_bio_grading_email
 from word_personality_processor import WordPersonalityAnalyzer
+
+# Entry Point for FastAPI
 app = FastAPI()
 
 app.add_middleware(
@@ -21,7 +23,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-
+# Initializing objects
 analyzer = IdentityAnalyzer('data/prolific_data.csv', 'data/survey_data.csv', 'data/did_option_dict.json')
 s3_instance = S3_Instance()
 word_personality_analyzer = WordPersonalityAnalyzer('data/words_personality_and_half_life_scores.csv', 'data/word_personality_pvalues.csv')
@@ -35,9 +37,10 @@ async def get_ranked_order(data: dict):
         "sorted_data": sorted_data
     }
 
+
 @app.post("/analyze")
 async def analyze_survey(data: dict):
-    # print('Here2:,', data)
+    # Analyze Survey and Get Report Data
     data = analyzer.normalize_user_answer_likerts(data)
 
 
@@ -46,7 +49,6 @@ async def analyze_survey(data: dict):
     expected_vs_actual_rank_table, expected_vs_actual_rank_short_table = analyzer.get_expected_vs_actual_rank(data)
     expected_vs_actual_rank_well_being = analyzer.get_expected_vs_actual_well_being(data, expected_vs_actual_rank_table)
     optimized_result = analyzer.get_highest_permutation(data, expected_vs_actual_rank_table)
-    print('Sending Data to Client')
     return {
         "top_identity_table": top_id_table,
         "expected_vs_actual_rank_table": expected_vs_actual_rank_short_table,
@@ -57,6 +59,7 @@ async def analyze_survey(data: dict):
 
 @app.post("/send-report")
 async def handle_report_request(data: dict):
+    # Send Report to User
     user_name = data.get("username")
     user_email = data.get("email")
     if not os.path.exists("generated_reports"):
@@ -74,6 +77,7 @@ async def handle_report_request(data: dict):
 
 @app.post("/share_social_media")
 async def handle_share_social_media(data:dict):
+    # Sharing Happiness on Social Media (Uploading Images to Bucket)
     now = datetime.now()
     timestamp = now.strftime("%Y-%m-%d %H:%M:%S")
     user_email = data.get("email")
@@ -87,7 +91,7 @@ async def handle_share_social_media(data:dict):
 
 @app.post("/mail_tst_results")
 async def mail_tst_results(data: dict):
-    # print(data)
+    # Mailing TST Results
     user_email = data.get("user_email")
     user_name = data.get("user_name")
     statements = data.get("statements")
@@ -100,6 +104,7 @@ async def mail_tst_results(data: dict):
 
 @app.post("/mail_grade_social_media_results")
 async def mail_grade_social_media_results(data: dict):
+    # Mailing Social Media Bio Grading
     user_email = data.get("user_email")
     user_name = data.get("user_name")
     instagramId = data.get("instagramId")
@@ -115,6 +120,7 @@ async def mail_grade_social_media_results(data: dict):
 
 @app.post("/word_personality_half_life_analysis")
 async def word_personality_half_life_analysis(data: dict):
+    # Returning Report Parameters for Word Dashboard
     word_list = data.get("word_list")
     categories = data.get("categories")
     personality_percentile_table, personality_pvalue_table = word_personality_analyzer.get_personality_scores(word_list, categories)

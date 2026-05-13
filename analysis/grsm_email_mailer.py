@@ -2,6 +2,8 @@ import os
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
+# Generating Sample Email for the Bio Grading Test
 def generate_bio_grading_email_html(user_name: str, bio_data: dict):
     """
     bio_data expected keys: 'instagram', 'facebook', 'twitter', 'bio'
@@ -66,7 +68,7 @@ def generate_bio_grading_email_html(user_name: str, bio_data: dict):
     return html
 
 
-
+# Sending Bio Grading Email to the user
 def send_bio_grading_email(user_email, user_name, instagram, facebook, twitter, bio):
     bio_payload = {
         'instagram': instagram,

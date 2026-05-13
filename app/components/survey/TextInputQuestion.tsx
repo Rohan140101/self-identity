@@ -6,7 +6,7 @@ interface TextInputnProps {
     onChange: (value: string) => void;
     placeholder?: string
 }
-
+// Text Input Question for Survey
 export default function TextInputQuestion({ question, value, onChange, placeholder }: TextInputnProps) {
     return (
         <div className="w-full">

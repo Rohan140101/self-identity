@@ -1,4 +1,6 @@
 import dropdownData from "@/data/dropdownOptions.json"
+
+// function for reading Survey Data JSON and transforming to a sequence of questions
 export const transformSurveyData = (data: any) => {
     const flatQuestions: any[] = []
     Object.values(data).forEach((section: any) => {

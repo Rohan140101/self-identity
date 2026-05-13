@@ -42,6 +42,7 @@ const likertStyles: Record<number, string> = {
     7: "bg-red-800 text-white",
 }
 
+// Top five categories, selection Question
 export default function TopFiveQuestion({ question, options, answers, selectedValues, onToggle }: TopFiveQuestionProps) {
 
     const shuffledOptions = useMemo(() => [...options].sort(() => Math.random() - 0.5), [options]);

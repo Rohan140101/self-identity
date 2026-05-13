@@ -124,7 +124,8 @@ export default function PressPage() {
                 </div>
             </main>
             <Reveal delay={1.2}>
-                <Footer />
+                {/**Importing Footer*/}
+            <Footer />
 
             </Reveal>
             

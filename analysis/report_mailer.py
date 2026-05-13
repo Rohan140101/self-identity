@@ -6,11 +6,11 @@ from email.mime.image import MIMEImage
 from email.mime.application import MIMEApplication
 from email import encoders
 from dotenv import load_dotenv
-from matplotlib import use
 import os
 from io import BytesIO
 
 load_dotenv()
+# Function generate the email for the report. Also contains images and data
 def generate_email_html(data, user_name: str):
     user_name_str = f" {user_name}" if user_name else user_name 
     html = f"""
@@ -89,7 +89,7 @@ def generate_email_html(data, user_name: str):
     html += "</div>"
     return html
 
-
+# Sending Email with Report to User
 def send_email_with_report(data, user_name, user_email, report_path, generated_images):
     website_name = os.getenv("WEBSITE_NAME")
     sender_display_email = os.getenv("SENDER_DISPLAY_EMAIL")

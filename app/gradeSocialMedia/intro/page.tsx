@@ -40,7 +40,8 @@ const GradeSocialMediaIntro = () => {
 
             </div>
             <Reveal delay={1}>
-                <Footer />
+                {/**Importing Footer*/}
+            <Footer />
             </Reveal>
 
         </div>

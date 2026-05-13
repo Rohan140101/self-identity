@@ -25,7 +25,7 @@ function generatePairs(items: string[]) {
     ];
 }
 
-
+// Function for Reviewing Ranking of categories and sorting them manually
 export default function ReviewRanking({ choices, onComplete, surveyType, allAnswers }: { choices: string[], onComplete: (finalOrder: string[]) => void, surveyType: string, allAnswers: any }) {
     const [step, setStep] = useState<'loading' | 'comparison' | 'review'>(
         surveyType === "short" ? 'loading' : 'comparison'

@@ -6,6 +6,7 @@ import { ArrowLeft, Play, Timer, ShieldCheck } from 'lucide-react';
 import { useRouter } from "next/navigation";
 import { Reveal } from "@/app/components/Reveal";
 
+// Full Survey Intro Component
 const FullSurveyIntro = () => {
     const router = useRouter();
     return (
@@ -42,7 +43,8 @@ const FullSurveyIntro = () => {
 
             </div>
             <Reveal delay={1}>
-                <Footer />
+                {/**Importing Footer*/}
+            <Footer />
             </Reveal>
 
         </div>

@@ -5,6 +5,8 @@ import React from 'react';
 import { ArrowLeft, Play, Timer, ShieldCheck } from 'lucide-react';
 import { useRouter } from "next/navigation";
 import { Reveal } from "@/app/components/Reveal";
+
+// Intro Component for Twenty Statements Test
 const TSTIntro = () => {
     const router = useRouter();
     return (
@@ -41,7 +43,8 @@ const TSTIntro = () => {
 
             </div>
             <Reveal delay={1}>
-                <Footer />
+                {/**Importing Footer*/}
+            <Footer />
             </Reveal>
 
         </div>

@@ -27,6 +27,8 @@ const WORD_COLORS = [
   "#0d9488", // dark teal
   "#7c3aed", // purple
 ];
+
+// Function for Making Word Personality Analysis Report UI
 export default function AnalysisReport({ prevInputString, selectedCategories, data, onBack }: { prevInputString: string, selectedCategories: string[], data: any, onBack: () => void }) {
     const [reportData, setReportData] = useState(data);
     let [inputString, setInputString] = useState(prevInputString);

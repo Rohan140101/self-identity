@@ -2,6 +2,7 @@ import os
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+# Generating Sample Email for TST
 def generate_tst_email_html(user_name: str, tst_responses: list):
 
     user_name_str = f" {user_name}" if user_name else ""
@@ -51,7 +52,7 @@ def generate_tst_email_html(user_name: str, tst_responses: list):
 
 
 
-
+# Sending TST Confirmation Email
 def send_tst_confirmation_email(user_name, user_email, tst_responses):
     website_name = os.getenv("WEBSITE_NAME")
     sender_display_email = os.getenv("SENDER_DISPLAY_EMAIL")

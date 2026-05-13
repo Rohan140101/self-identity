@@ -86,7 +86,8 @@ export default function mediaPage() {
                 </div>
             </main>
             <Reveal delay={1}>
-                <Footer />
+                {/**Importing Footer*/}
+            <Footer />
             </Reveal>
 
         </div>

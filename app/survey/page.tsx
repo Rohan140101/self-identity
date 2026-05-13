@@ -453,7 +453,8 @@ function SurveyManager() {
 
                 </section>
 
-            </main><Footer />
+            </main>{/**Importing Footer*/}
+            <Footer />
         </div>
 
 

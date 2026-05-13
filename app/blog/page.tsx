@@ -28,6 +28,7 @@ export default function BlogPage() {
                     </h1>
                 </div>
             </main>
+            {/**Importing Footer*/}
             <Footer />
         </div>
     )

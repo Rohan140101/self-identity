@@ -7,8 +7,10 @@ import os
 import hashlib
 import random
 
+# Class to Generate Images for Social Media Sharing
 class S3_Instance:
     def __init__(self):
+        # Connecting to S3 Instance
         self.s3_access_key_id = os.getenv("S3_ACCESS_KEY_ID")
         self.s3_secret_access_key = os.getenv("S3_SECRET_ACCESS_KEY")
         self.bucket_name=os.getenv("S3_BUCKET_NAME")
@@ -30,8 +32,8 @@ class S3_Instance:
         if not os.path.exists("images"):
             os.makedirs("images")
 
+        # Only using Happiness Images for now. Generating Bell Curve using Plotly
         key = "Happy"
-        # for key, optimized_result_data in data['optimized_result'].items():
         optimized_result_data = data['optimized_result'][key]
         catDescData = reportCatDescriptions[key]
         actual_top5 = optimized_result_data["actual_top5"]

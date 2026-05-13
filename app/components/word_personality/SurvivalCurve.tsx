@@ -28,6 +28,8 @@ const WORD_COLORS = [
   "#0d9488", // dark teal
   "#7c3aed", // purple
 ];
+
+// Function for Calculating CDF
 const normalCDF = (x: number) => {
   const t = 1 / (1 + 0.2316419 * Math.abs(x));
   const d = 0.3989423 * Math.exp(-x * x / 2);

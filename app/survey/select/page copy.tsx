@@ -45,6 +45,7 @@ export default function SurveySelection() {
                 </div>
             </main>
 
+            {/**Importing Footer*/}
             <Footer />
         </div>
     )

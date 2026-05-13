@@ -4,6 +4,8 @@ import rkuckian from "./images/rkuckian.jpg"
 import skiena from "./images/skiena.jpg"
 import { Linkedin, Github } from "lucide-react";
 import { Reveal } from "../components/Reveal";
+
+// Page to Display Team
 export default function TeamPage() {
     const bigRow = [
         {
@@ -93,7 +95,8 @@ export default function TeamPage() {
                 </div>
             </main>
             <Reveal delay={1}>
-                <Footer />
+                {/**Importing Footer*/}
+            <Footer />
             </Reveal>
 
         </div>

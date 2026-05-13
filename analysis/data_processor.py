@@ -1,24 +1,23 @@
-from os import replace
-from pydoc import doc
-import string
-from tkinter import W
-
 import pandas as pd
 import json
 from scipy.stats import norm
 from collections import defaultdict
-from sklearn.preprocessing import MinMaxScaler
-from lightgbm import LGBMRanker, train
+from lightgbm import LGBMRanker
 import re
 import numpy as np
 import itertools
 import os
 
+## Class that Includes All Functions for processing and statistical analysis of survey data
 class IdentityAnalyzer:
     def __init__(self, prolific_path, survey_path, did_option_dict_path):
+
+        # Reading Data
         p_data = pd.read_csv(prolific_path)
         s_data = pd.read_csv(survey_path)
 #         s_data['finalRankedChoices'].apply(lambda x: x.replace('Education Level', 'Education'))
+
+        # Defining Categories
         self.all_categories = [
             'Appearance and Age', 'Economic Role and Status', 'Education', 'Entertainment',
             'Ethnicity', 'Family Relations', 'Generation', 'Health', 'Hobbies', 
@@ -27,6 +26,7 @@ class IdentityAnalyzer:
             'Social Media', 'Sports'
         ]
 
+        # Defining Main Questions (Category Likert Choices)
         self.main_questions = {
             'ethMainChoice': 'Ethnicity',
             'sorMainChoice': 'Sexual Orientation',
@@ -50,7 +50,7 @@ class IdentityAnalyzer:
             'sepMainChoice': 'Self Perception'
         }
 
-
+        # Defining Other Likerts (Dichotomy)
         self.other_likerts = {
             'PER1Choice': 'Introvert/Extrovert', 
              'PER2Choice': 'Thinking/Feeling', 
@@ -78,28 +78,32 @@ class IdentityAnalyzer:
              'HOB5Choice': 'Declutterer/Collector'
              }
         
-
+        # Filtering Approved Ids and cleaning data
         approved_ids = p_data[p_data['Status'] == 'APPROVED']['Participant id']
         self.df = s_data[s_data['PROLIFIC_PID'].isin(approved_ids)].copy()
         self.df.replace(float('nan'), '', inplace=True)
+
+        # Normalizing Likerts
         self.normalize_likerts()
 
-        # feature_set_keys = ['Age', 'Gender', 'ETH1'] + list(self.main_questions.keys()) + list(self.other_likerts.keys())
-        feature_set_keys = ['Age', 'Gender', 'ETH1'] + list(self.main_questions.keys())
 
+        # Defining Feature Set for Training Prediction Model
+        feature_set_keys = ['Age', 'Gender', 'ETH1'] + list(self.main_questions.keys())
         self.feature_set = self.df.loc[:, feature_set_keys]
 
-        
         
         
         self.avg_happy = self.df['SEP1Choice'].astype(float).mean()
         self.std_happy = self.df['SEP1Choice'].astype(float).std()
         
+        # Getting Positional and Overall Top 5 Stats for categories
         self.pos_counts = self._get_positional_counts()
         self.cat_stats = self._get_category_stats()
         
-
+        # Loading DID from Survey Exported JSON
         self.did_dict = json.load(open(did_option_dict_path, 'r'))
+
+        # Defining Well Being Variables and their Encodings
         self.well_being_variables  = ['SEP1Choice', 'SEP2Choice', 'ERS4Choice', 'PER4Choice', 'PER1Choice']
         self.well_being_vars_encoded =  {
             'SEP1Choice': 'Happy',
@@ -115,16 +119,21 @@ class IdentityAnalyzer:
             'PER4Choice': 'resilience',
             'PER1Choice': 'extrovertedness'
         }
+
+        # Getting Well Being of Categories when they are in the top 5
         self.well_being_vars_top5 = self._get_well_being_vars_top5()
-
-
         self.well_being_vars_top5_df = pd.DataFrame(self.well_being_vars_top5).T
 
-        self.monte_carlo_samples_metrics = self.monte_carlo_simulation_samples(10000)
+        # Run Monte Carlo Iterations for Normal Distribution
+        self.monte_carlo_samples_metrics = self.monte_carlo_simulation_samples()
+
+        # Training Predictive Model
         self.model, self.id_to_name, self.feature_cols = self._train_ranker()
 
-        
+    # Function for Normalizing Likerts
     def normalize_likerts(self):
+
+        # Considering All Likerts, and then normalizing them to have a mean value of 4 for every user
         all_likerts =list(self.main_questions.keys()) + list(self.other_likerts.keys())
         mainChoices = self.df[all_likerts]
         mainChoices = mainChoices.astype(float)
@@ -139,6 +148,7 @@ class IdentityAnalyzer:
         self.df[mainChoicesNorm.columns] = mainChoicesNorm
 
 
+    # Getting Positional Counts of every category in top 5 
     def _get_positional_counts(self):
         counts = defaultdict(lambda: defaultdict(int))
         for _, row in self.df.iterrows():
@@ -147,6 +157,7 @@ class IdentityAnalyzer:
                 counts[cat][i+1] += 1
         return counts
 
+    # Getting Category Stats (Percentage of times it appears in top 5 & Happiness Percentile when it appears in top 5)
     def _get_category_stats(self):
         stats = {}
         for cat in self.all_categories:
@@ -158,15 +169,18 @@ class IdentityAnalyzer:
             }
         return stats
 
+    # Getting Happiness Percentile from Raw Values
     def _get_pct_happy(self, val):
         z = (val - self.avg_happy) / self.std_happy
         return norm.cdf(z) * 100
         
+    # Getting Percentile of a sample mean based on mu and std
     def _get_pct(self, sample_mean, mu, std):
         zscore = (sample_mean - mu)/std
         percentile = norm.cdf(zscore) * 100
         return percentile
 
+    # Getting Identity Report of how closely user top 5 matches with others
     def get_top_identity_report(self, user_top_5: list):
         report = []
         for i, cat in enumerate(user_top_5):
@@ -179,11 +193,13 @@ class IdentityAnalyzer:
             })
         return report
 
+    # Function For training the predictive model
     def _train_ranker(self):
+        # Creating Feature Set
         cat_cols = self.feature_set.select_dtypes(include=['object', 'category']).columns.tolist()
         feature_set = pd.get_dummies(self.feature_set, columns=cat_cols)
         
-        
+        # Calculating Importance for every category for every user and creating the input 
         all_options = list(self.all_categories)
         name_to_id = {name: i for i, name in enumerate(all_options)}
         id_to_name = {i: name for name, i in name_to_id.items()}
@@ -192,11 +208,6 @@ class IdentityAnalyzer:
             rank_arr = self.df.loc[idx, 'finalRankedChoices'].split('|')
             for opt in all_options:
                 importance = 5 - rank_arr.index(opt) if opt in rank_arr else 0
-                # long_data.append({
-                #     'option_id': name_to_id[opt],
-                #     **feature_set.loc[idx],
-                #     'importance': importance
-                # })
                 long_data.append({
                     'option': opt,
                     **feature_set.loc[idx],
@@ -208,6 +219,7 @@ class IdentityAnalyzer:
         cat_cols_train = df_train.select_dtypes(include=['object', 'category']).columns.tolist()
         df_train = pd.get_dummies(df_train, columns=cat_cols_train)
 
+        # Training a LGBM Model
         X = df_train.drop(columns=['importance'])
         y = df_train['importance'].astype(int)
         model = LGBMRanker(objective="lambdarank", metric="ndcg")
@@ -216,6 +228,7 @@ class IdentityAnalyzer:
     
         return model, id_to_name, X.columns.tolist()
 
+    # Function to Normalize likert values of ongoing survey
     def normalize_user_answer_likerts(self, user_answers_dict: dict):
         all_likerts = list(self.main_questions.keys())
         sumOfLikerts = 0
@@ -231,6 +244,7 @@ class IdentityAnalyzer:
         return user_answers_dict
 
         
+    # Function to shorten the table consisting of Actual vs Expected
     def shorten_expected_vs_actual_rank(self, final_report: list):
         rankedByUser = []
         notRankedByUser = []
@@ -244,9 +258,6 @@ class IdentityAnalyzer:
             elif len(notRankedByUser) < 5:
                 notRankedByUser.append(cur_index)
 
-        print('rankedByUser:', rankedByUser)
-        print()
-        print('notRankedByUser:', notRankedByUser)
         shortened_report = []
         i = 0
         j = 0
@@ -272,42 +283,41 @@ class IdentityAnalyzer:
 
         return shortened_report
             
+    # Function to calculate a user's expected category rank
     def get_expected_vs_actual_rank(self, user_answers_dict: dict):
         clean_input = {}
         all_options = list(self.all_categories)
-        # user_answers_dict = self.normalize_user_answer_likerts(user_answers_dict)
+        # Conveting Input
         for key, value in user_answers_dict.items():
             if isinstance(value, list):
                 continue
             clean_input[key] = value
 
+        # Creating user features dataframe
         user_features = pd.DataFrame([clean_input])
-        
         user_features = user_features.reindex(columns=self.feature_cols[:20], fill_value=0)
 
-        
+        # Creating model input
         all_options_ids = list(self.id_to_name.keys())
         predict_block = pd.DataFrame([user_features.iloc[0]] * 20)
-        # predict_block['option_id'] = all_options_ids
         predict_block['option'] = all_options
-        # predict_block = pd.get_dummies(predict_block, columns=['option_id'])
         predict_block = pd.get_dummies(predict_block, columns=['option'])
-
-
-            
         predict_block = predict_block.reindex(columns=self.feature_cols, fill_value=0)
+
+        # Predicting scores
         scores = self.model.predict(predict_block[self.feature_cols])
-        
         results = pd.DataFrame({
             'category': [self.id_to_name[i] for i in all_options_ids],
             'score': scores
         })
         
+        # Computing Predicted Rank, Based on Predicted Scores 
         results = results.sort_values(by='score', ascending=False).reset_index(drop=True)
         results['predicted_rank'] = results.index + 1
         
+
+        # Generating Table and returning
         user_actual = user_answers_dict.get('finalRankedChoices', [])
-        
         final_report = []
         for _, row in results.iterrows():
             actual_rank = ""
@@ -323,9 +333,11 @@ class IdentityAnalyzer:
         return final_report, shortened_report
         # ret
 
+    # Getting User Well Being Percentiles based on ranked choices
     def get_user_wb_percentile_scores(self, finalRankedChoices):
         user_wb_percentiles = defaultdict(float)
         user_wb_scores = defaultdict(float)
+        # For each Well Being Variable, we calculate its scores, take the weighted average and convert it into percentile
         for wb in self.well_being_variables:
             sumOfScores = 0
             for i in range(len(finalRankedChoices)):
@@ -340,16 +352,20 @@ class IdentityAnalyzer:
             user_wb_percentiles[wb] = self._get_pct(raw_score, mu, std)
         return user_wb_percentiles, user_wb_scores
         
+    # Simulating Monte Carlo Samples for better bell shaped curve distribution
     def monte_carlo_simulation_samples(self, iterations=100000):
+        # If Metrics already exists, then use them, otherwise run the simulation
         metrics_path = f"data/monte_carlo_samples_metrics_{iterations}.json"
         if os.path.exists(metrics_path):
             with open(metrics_path, "r") as f:
                 metrics = json.load(f)
         else:
+            # Calculating Probabilty of a category landing up at a position
             category_positional_counts_df = pd.DataFrame(self.pos_counts).T
             category_positional_counts_df = category_positional_counts_df+1
             category_positional_probs_df = category_positional_counts_df/category_positional_counts_df.sum()
 
+            # Creating Samples Based on the existing Probablilties and calculating well being scores for them
             samples = dict()
             for i in range(iterations):
                 rankedChoices = []
@@ -377,6 +393,7 @@ class IdentityAnalyzer:
             samples_df = pd.DataFrame(samples).T
             metrics = defaultdict(lambda: defaultdict(float))
 
+            # Calculating Metrics and saving
             for wb in self.well_being_variables:
                 metrics[wb]["mu"] = samples_df[wb].mean()
                 metrics[wb]["std"] = samples_df[wb].std()
@@ -388,7 +405,7 @@ class IdentityAnalyzer:
     
 
 
-
+    # Getting Well Being Variables, specifically for the top 5
     def _get_well_being_vars_top5(self):
         well_being_vars_top5 = defaultdict(lambda: defaultdict(float))
         for category in self.all_categories:
@@ -402,6 +419,7 @@ class IdentityAnalyzer:
 
         return well_being_vars_top5
     
+    # Getting Percentiles for a user, based on the Monte Carlo Simulations
     def get_monte_carlo_percentile(self, rankedChoices: list):
         user_wb_percentile = {}
         user_wb_raw = defaultdict(float)
@@ -418,15 +436,11 @@ class IdentityAnalyzer:
             
         return user_wb_percentile
             
-            
-            
-
-        
-
-
+    # Calculating Actual vs Expected Well Being Scores
     def get_expected_vs_actual_well_being(self, user_answers_dict: dict, final_report: list):
         # user_answers_dict = self.normalize_user_answer_likerts(user_answers_dict)
         user_percentiles = []
+        # Getting Actual and Expected top 5 for users and calculating percentiles
         finalRankedChoices = user_answers_dict['finalRankedChoices']
         final_report_df = pd.DataFrame(final_report)
         final_report_df = final_report_df.sort_values(by='predicted_rank', ascending=True)
@@ -435,7 +449,7 @@ class IdentityAnalyzer:
         finalRankedChoicesPercentiles = self.get_monte_carlo_percentile(finalRankedChoices)
         predictedRankedChoicesPercentiles = self.get_monte_carlo_percentile(predictedRankedCategories)
 
-
+        # Adding values for each trait and returning
         for wb in self.well_being_variables:
             user_percentiles.append(
                 {
@@ -447,7 +461,7 @@ class IdentityAnalyzer:
 
         return user_percentiles
     
-    
+    # Calculaitng Kendall Tau Distance between 2 lists
     def _kendall_tau_distance(self, list1, list2):
         distance = 0
         for i, j in itertools.combinations(range(len(list1)), 2):
@@ -459,7 +473,7 @@ class IdentityAnalyzer:
                     distance += 1
         return distance
     
-    
+    # Calculating Happiness for user based on their ranked Choices
     def get_user_happy_score(self, finalRankedChoices):
         sumOfScores = 0
         wb = 'SEP1Choice'
@@ -471,10 +485,8 @@ class IdentityAnalyzer:
         raw_score = sumOfScores / 15
         return raw_score
     
-#     def get_user_happy_percentiles(self, finalRankedChoices):
-#         raw_score  = self.get_user_happy_score(finalRankedChoices)
-#         mu = 
-        
+
+    # Generating Optimization Message that appears on the front end dynamically based on the actual and predicted percentiles
     def generate_optimization_message(self, actual_choices, optimized_result, wb_cat):
         actual_pct = self.get_monte_carlo_percentile(actual_choices)[wb_cat]
         opt_pct = self.get_monte_carlo_percentile(optimized_result[wb_cat]['optimized_top5'])[wb_cat]
@@ -508,6 +520,7 @@ class IdentityAnalyzer:
             }
     
     
+    # Function to get the most optimal iteration for happiness
     def get_highest_happiness_permutations(self, user_answers_dict: dict, final_report: list, max_iterations=3):
         finalRankedChoices = user_answers_dict['finalRankedChoices']
         highest_happiness_cat = None
@@ -517,32 +530,7 @@ class IdentityAnalyzer:
             if wb_dict['SEP1Choice'] > highest_happiness_cat_score:
                 highest_happiness_cat_score = wb_dict['SEP1Choice']
                 highest_happiness_cat = cat
-                
-                
-#         best_perm = list(finalRankedChoices)
-#         best_happiness = self.get_user_happy_score(finalRankedChoices)
-    
-# #         print('Hee:', highest_happiness_cat)
-#         candidate_sets = [finalRankedChoices]
-#         for i in range(len(finalRankedChoices)):
-#             new_set = list(finalRankedChoices)
-#             new_set[i] = highest_happiness_cat 
-#             candidate_sets.append(new_set)
             
-# #         print(candidate_sets)
-#         for c_set in candidate_sets:
-# #             print(c_set)
-#             for perm in itertools.permutations(c_set):
-#                 dist = self._kendall_tau_distance(finalRankedChoices, list(perm))
-# #                 print(perm, dist)
-#                 if dist <= max_iterations:
-#                     current_h = self.get_user_happy_score(perm)
-# #                     print(c_set, current_h)
-#                     if current_h > best_happiness:
-#                         best_happiness = current_h
-#                         best_perm = list(perm)
-
-
 
         # Modified Ranking Calculation
         original_perm = list(finalRankedChoices) + [highest_happiness_cat]
@@ -550,17 +538,13 @@ class IdentityAnalyzer:
         best_happiness = self.get_user_happy_score(best_perm)
         for perm in itertools.permutations(original_perm):
             dist = self._kendall_tau_distance(original_perm, list(perm))
-            
+            # Distance between 2 lists must be lower than or equal to the max iterations defined
             if dist <= max_iterations:
-                # print(perm, dist)
                 current_h = self.get_user_happy_score(perm)
-#                     print(c_set, current_h)
+                # If New Happiness is better, we assign it
                 if current_h > best_happiness:
                     best_happiness = current_h
                     best_perm = list(perm)
-
-
-
 
 
         optimized_result = {}
@@ -587,7 +571,7 @@ class IdentityAnalyzer:
         return optimized_result
 
 
-
+    # Function to get the category score for a ranked list
     def get_user_cat_score(self, finalRankedChoices, wb_cat):
         sumOfScores = 0
         for i in range(len(finalRankedChoices)):
@@ -599,6 +583,7 @@ class IdentityAnalyzer:
         return raw_score
     
 
+    # Getting the best permutation for each trait (whatever permutation will maximize the trait percentile)
     def get_highest_permutation(self, user_answers_dict: dict, final_report: list, max_iterations=3):
         finalRankedChoices = user_answers_dict['finalRankedChoices']
         final_report_df = pd.DataFrame(final_report)
@@ -620,11 +605,10 @@ class IdentityAnalyzer:
             highest_cat_score = self.get_user_cat_score(best_perm, wb_cat)
             for perm in itertools.permutations(original_perm):
                 dist = self._kendall_tau_distance(original_perm, list(perm))
-                
+                # Distance between 2 lists must be lower than or equal to the max iterations defined
                 if dist <= max_iterations:
-                    # print(perm, dist)
                     current_score = self.get_user_cat_score(perm, wb_cat)
-    #                     print(c_set, current_h)
+                    # If New Happiness is better, we assign it
                     if current_score > highest_cat_score:
                         highest_cat_score = current_score
                         best_perm = list(perm)
